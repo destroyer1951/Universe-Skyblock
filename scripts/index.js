@@ -1,0 +1,886 @@
+import { world, system, ItemStack, Player } from '@minecraft/server'
+import { ModalFormData } from '@minecraft/server-ui';
+import { ChestFormData } from './extensions/forms.js';
+
+
+/*
+██    ██     ███████ ████████  █████  ████████ ███████     ██    ██ 
+██    ██     ██         ██    ██   ██    ██    ██          ██    ██ 
+██    ██     ███████    ██    ███████    ██    ███████     ██    ██ 
+ ██  ██           ██    ██    ██   ██    ██         ██      ██  ██  
+  ████       ███████    ██    ██   ██    ██    ███████       ████   
+*/                                                                 
+
+
+function getPlayerDynamicProperty(player, objective) {
+    return world.getDynamicProperty(`${player.name.toLowerCase()}:${objective}`)
+}
+
+function setPlayerDynamicProperty(player, objective, value, add = false) {
+    add && typeof value === 'number' && world.getDynamicProperty(`${player.name.toLowerCase()}:${objective}`) ? world.setDynamicProperty(`${player.name.toLowerCase()}:${objective}`,  world.getDynamicProperty(`${player.name.toLowerCase()}:${objective}`) + value) : world.setDynamicProperty(`${player.name.toLowerCase()}:${objective}`, value)
+}
+
+function getGlobalDynamicProperty(objective) {
+    return world.getDynamicProperty(objective)
+}
+
+function setGlobalDynamicProperty(objective, value, add = false) {
+    add && typeof value === 'number' && world.getDynamicProperty(objective) ? world.setDynamicProperty(objective, world.getDynamicProperty(objective)+value) : world.setDynamicProperty(objective, value)
+}
+
+function getScore(target, objective) {
+    try {
+        if (world.scoreboard.getObjective(objective).getScore(typeof target === 'string' ? target : target.scoreboardIdentity) === undefined) {
+            return 0
+        } else { return world.scoreboard.getObjective(objective).getScore(typeof target === 'string' ? target : target.scoreboardIdentity) }
+    } catch {
+        return 0
+    }
+}
+
+function setScore(target, objective, amount, add = false) {
+    const scoreObj = world.scoreboard.getObjective(objective)
+    const score = (add ? scoreObj?.getScore(target) ?? 0 : 0) + amount
+    scoreObj?.setScore(target, score)
+    return score;
+}
+
+function setStat(player, stat, amount, add = false) {
+    if (typeof amount !== 'number') return
+    if (!add) return setPlayerDynamicProperty(player, stat, amount)
+    const multiplier = getPlayerDynamicProperty(player, `${stat}Mult`)
+    if (!multiplier && multiplier != 0) return setPlayerDynamicProperty(player, stat, amount, true)
+    return setPlayerDynamicProperty(player, stat, amount*multiplier, true)
+}
+
+world.afterEvents.playerSpawn.subscribe(data => {
+    if (!data.initialSpawn) return
+    const player = data.player
+    player.sendMessage('§cThis world uses Data Storage Basket created by destroyer1951. Any username changes will result in §lpermanent§r§c data loss. You have been warned.')
+})
+
+world.beforeEvents.chatSend.subscribe(data => {
+    if (data.message.startsWith('-') && data.sender.hasTag('chatcmds')) {
+        data.cancel = true
+        const player = data.sender
+        switch (data.message.split(' ', 2)[0].toLowerCase().substring(1)) {
+            case 'setlore':{
+                const item = player.getComponent('equippable').getEquipment('Mainhand')
+                system.run(() => {
+                    if (data.message.includes('\\n')) {
+                        const lore = data.message.substring(9).split('\\n')
+                        for (let i = 0; i < lore.length; i++) {
+                            lore[i] = '§r' + lore[i]
+                        }
+                        item.setLore(lore)
+                    } else item.setLore([`§r${data.message.substring(9)}`])
+                    player.getComponent('equippable').setEquipment('Mainhand', item)
+                })
+                return;
+            } case 'rename':{
+                const item = player.getComponent('equippable').getEquipment('Mainhand')
+                system.run(() => {
+                    item.nameTag = `§r§f${data.message.substring(8)}`
+                    player.getComponent('equippable').setEquipment('Mainhand', item)
+                })
+                return;
+            } case 'setplayerprop':{
+                let propData
+                propData = data.message.substring(15).match(/(?:[^\s"]+|"[^"]*")+/g).map(arg => arg.replace(/"/g, ""));
+                const property = propData[1]
+                let name = propData[0].toLowerCase().replace('@', '')
+                let newValue = propData[2]
+                let add
+                if (Number.isFinite(Number(newValue))) {
+                    newValue = Number(newValue)
+                    if (propData[3] == 'add' || propData[3] == 'true') add = true
+                }
+                let oldValue = world.getDynamicProperty(`${name}:${property}`)
+                if (!oldValue && add) oldValue = 0
+                if (add) {
+                    world.setDynamicProperty(`${name}:${property}`, oldValue+newValue)
+                } else {
+                    world.setDynamicProperty(`${name}:${property}`, newValue)
+                }
+                
+
+world.sendMessage(`§aInformation for the player property §e${property}
+
+§aPlayer Name: §e${name}
+§aProperty Name: §e${property}
+§aOld Value: §e${oldValue}
+§aNew Value: §e${world.getDynamicProperty(`${name}:${property}`)}`)
+                return;
+            } case 'getplayerprop':{
+                let propData
+                propData = data.message.substring(15).match(/(?:[^\s"]+|"[^"]*")+/g).map(arg => arg.replace(/"/g, ""));
+                const property = propData[1]
+                let name = propData[0].toLowerCase().replace('@', '')
+                const value = world.getDynamicProperty(`${name}:${property}`)
+
+world.sendMessage(`§aInformation for the player property §e${property}
+
+§aPlayer Name: §e${name}
+§aProperty Name: §e${property}
+§aValue: §e${value}`)
+                return;
+            } case 'setglobalprop':{
+                const propData = data.message.substring(15).split(' ')
+                const property = propData[0]
+                let newValue = propData[1]
+                let add = false
+                if (Number.isFinite(Number(newValue))) {
+                    newValue = Number(newValue)
+                    if (propData[2] == 'add' || propData[2] == 'true') add = true
+                }
+
+
+                const oldValue = getGlobalDynamicProperty(property)
+                setGlobalDynamicProperty(property, newValue, add)
+                world.sendMessage(`§aInformation for the global property §e${property}
+
+§aName: §e${property}
+§aOld Value: §e${oldValue}
+§aNew Value: §e${getGlobalDynamicProperty(property)}`)
+                return;
+            } case 'getglobalprop':{
+                const property = data.message.substring(15)
+                world.sendMessage(`§aInformation for the global property §e${property}
+
+§aName: §e${property}
+§aValue: §e${getGlobalDynamicProperty(property)}`)
+                return;
+            }
+        }
+    }
+})
+
+
+
+/*
+  ██    ██         ███████ ██    ██ ███    ██  ██████ ████████ ██  ██████  ███    ██ ███████     ██    ██ 
+  ██    ██         ██      ██    ██ ████   ██ ██         ██    ██ ██    ██ ████   ██ ██          ██    ██ 
+  ██    ██         █████   ██    ██ ██ ██  ██ ██         ██    ██ ██    ██ ██ ██  ██ ███████     ██    ██ 
+   ██  ██          ██      ██    ██ ██  ██ ██ ██         ██    ██ ██    ██ ██  ██ ██      ██      ██  ██  
+    ████           ██       ██████  ██   ████  ██████    ██    ██  ██████  ██   ████ ███████       ████
+*/
+
+const checkItemAmount = (player, itemId, clearItems = false) => {
+    const inventory = player.getComponent("inventory").container
+    let itemAmount = 0
+    for (let i = 0; i < 36; i++) {
+        let item = inventory.getItem(i)
+        if (item?.typeId !== itemId) continue
+        itemAmount += item.amount
+        if (clearItems) inventory.setItem(i)
+    }
+    return itemAmount
+}
+
+const checkInvEmpty = (player) => {
+    const inventory = player.getComponent("inventory").container
+    for (let i = 0; i < 36; i++) {
+        let item = inventory.getItem(i)
+        if (item) return false
+    }
+    return true
+}
+
+/** @param {Player} player */
+const getFreeSlots = (player) => {
+    const inventory = player.getComponent("inventory").container
+    let slots = 0
+    for (let i = 0; i < 36; i++) {
+        let item = inventory.getItem(i)
+        if (!item) slots++
+    }
+    return slots
+}
+
+
+/*
+██    ██     ██ ████████ ███████ ███    ███ ███████     ██    ██ 
+██    ██     ██    ██    ██      ████  ████ ██          ██    ██ 
+██    ██     ██    ██    █████   ██ ████ ██ ███████     ██    ██ 
+ ██  ██      ██    ██    ██      ██  ██  ██      ██      ██  ██  
+  ████       ██    ██    ███████ ██      ██ ███████       ████   
+*/                                                        
+                                                                 
+
+function makeItem(typeId, configure) {
+  const item = new ItemStack(typeId)
+  configure(item)
+  return item
+}
+
+const items = {}
+system.run(() => {
+    items.lavaBucket = makeItem("minecraft:lava_bucket", item => {
+        item.nameTag = "§r§fLava Bucket"
+    })
+    items.ice = makeItem("minecraft:ice", item => {
+        item.nameTag = "§r§fIce"
+    })
+    items.oakLog = makeItem("minecraft:oak_log", item => {
+        item.nameTag = "§r§fOak Log"
+    })
+    items.grassBlock = makeItem("minecraft:grass_block", item => {
+    item.nameTag = "§r§fGrass Block"
+    })
+    items.dirt = makeItem("minecraft:dirt", item => {
+        item.nameTag = "§r§fDirt"
+    })
+    items.cobblestone = makeItem("minecraft:cobblestone", item => {
+        item.nameTag = "§r§fCobblestone"
+    })
+    items.sand = makeItem("minecraft:sand", item => {
+        item.nameTag = "§r§fSand"
+    })
+    items.boneMeal = makeItem("minecraft:bone_meal", item => {
+        item.nameTag = "§r§fBone Meal"
+    })
+    items.charcoal = makeItem("minecraft:charcoal", item => {
+        item.nameTag = "§r§fCharcoal"
+    })
+    items.oakSapling = makeItem("minecraft:oak_sapling", item => {
+        item.nameTag = "§r§fOak Sapling"
+    })
+    items.darkOakSapling = makeItem("minecraft:dark_oak_sapling", item => {
+        item.nameTag = "§r§fDark Oak Sapling"
+    })
+    items.darkOakLog = makeItem("minecraft:dark_oak_log", item => {
+        item.nameTag = "§r§fDark Oak Log"
+    })
+    items.birchSapling = makeItem("minecraft:birch_sapling", item => {
+        item.nameTag = "§r§fBirch Sapling"
+    })
+    items.birchLog = makeItem("minecraft:birch_log", item => {
+        item.nameTag = "§r§fBirch Log"
+    })
+    items.coal = makeItem("minecraft:coal", item => {
+        item.nameTag = "§r§fCoal"
+    })
+    items.copperIngot = makeItem("minecraft:copper_ingot", item => {
+        item.nameTag = "§r§fCopper Ingot"
+    })
+    items.ironIngot = makeItem("minecraft:iron_ingot", item => {
+        item.nameTag = "§r§fIron Ingot"
+    })
+    items.goldIngot = makeItem("minecraft:gold_ingot", item => {
+        item.nameTag = "§r§fGold Ingot"
+    })
+    items.diamond = makeItem("minecraft:diamond", item => {
+        item.nameTag = "§r§9Diamond"
+        item.setLore(["", "§r§l§9RARE ITEM"])
+    })
+    items.quartzCrystal = makeItem("minecraft:quartz", item => {
+        item.nameTag = "§r§5Quartz Crystal"
+        item.setLore(["", "§r§8Both exceptionally shiny", "§r§8and exceptionally sharp", "", "§r§l§5EPIC ITEM"])
+    })
+    items.padparadscha = makeItem("minecraft:resin_brick", item => {
+        item.nameTag = "§r§6Padparadscha"
+        item.setLore(["", "§r§8A truly incredible gemstone,", "§r§8in difficulty and durability", "", "§r§l§6LEGENDARY ITEM"])
+    })
+    
+})  
+
+
+
+
+/*
+    ██    ██          ██████  ██    ██ ██ ███████         ██    ██ 
+    ██    ██         ██       ██    ██ ██ ██              ██    ██ 
+    ██    ██         ██   ███ ██    ██ ██ ███████         ██    ██ 
+     ██  ██          ██    ██ ██    ██ ██      ██          ██  ██  
+      ████            ██████   ██████  ██ ███████           ████   
+*/
+
+/** @param {Player} player  */
+function mainMenu(player) {
+	new ChestFormData("27")
+		.title('Skyblock Menu')
+		.button(13, 'Your Island', ['', '§7Warp to your Island!'], 'minecraft:compass', 1)
+        .button(14, 'Shop', ['', '§7Buy and Sell some Items!'], 'minecraft:gold_ingot', 1)
+		.show(player).then(a => {
+			if (a.canceled) return;
+			switch (a.selection) {
+                case 13: {
+                    player.teleport(player.getSpawnPoint())
+                    return player.sendMessage("§eWarped to your Island")
+                }
+                case 14: {
+                    return shopMainMenu(player)
+                }
+            }
+		})
+};
+
+/** @param {Player} player  */
+function shopMainMenu(player) {
+    new ChestFormData("27")
+    .title('Shop Menu')
+    .button(11, "Cooking Shop", ["", "§l§5COMING SOON"], 'minecraft:painting')
+    .button(12, 'Fishing Shop', ['', '§7Someone has to throw the rod'], 'minecraft:fishing_rod', 1)
+    .button(13, 'General Shop', ['', '§7Basic Skyblock Necessities'], 'minecraft:lava_bucket', 1)
+    .button(14, 'Farming Shop', ['', '§7Put on your Straw Hats'], 'minecraft:wheat', 1)
+    .button(15, 'Building Shop', ['', '§7Brick by Brick'], 'minecraft:brick_block', 1)
+    .show(player).then(a => {
+        if (a.canceled) return;
+        switch (a.selection) {
+            case 11: {
+                return
+            }
+            case 12: {
+                return
+            }
+            case 13: {
+                return generalShopMenu(player)
+            }
+            case 14: {
+                return
+            }
+            case 15: {
+                return
+            }
+        }
+    })
+}
+
+/** @param {Player} player  */
+function generalShopMenu(player) {
+    new ChestFormData("54")
+    .title('Shop Menu')
+    .button(10, 'Lava Bucket', ["", "§7Buy Price:§6 1000", "§7Sell Price:§6 1000"], 'minecraft:lava_bucket', 1)
+    .button(11, "Ice", ["", "§7Buy Price:§6 1000", "§7Sell Price:§6 1000"], 'minecraft:ice')
+    .button(12, 'Grass Block', ["", "§7Buy Price:§6 1000", "§7Sell Price:§6 1000"], 'minecraft:grass_block', 1)
+    .button(13, 'Dirt', ["", "§7Buy Price:§6 1000", "§7Sell Price:§6 1000"], 'minecraft:dirt', 1)
+    .button(14, 'Cobblestone', ["", "§7Buy Price:§6 1000", "§7Sell Price:§6 1000"], 'minecraft:cobblestone', 1)
+    .button(15, 'Sand', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:sand', 1)
+    .button(16, 'Bone Meal', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:bone_meal', 1)
+
+    .button(19, 'Charcoal', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:charcoal', 1)
+    .button(20, 'Oak Sapling', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:oak_sapling', 1)
+    .button(21, 'Oak Log', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:oak_log', 1)
+    .button(22, 'Dark Oak Sapling', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:dark_oak_sapling', 1)
+    .button(23, 'Dark Oak Log', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:dark_oak_log', 1)
+    .button(24, 'Birch Sapling', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:birch_sapling', 1)
+    .button(25, 'Birch Log', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:birch_log', 1)
+
+    .button(28, 'Coal', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:coal', 1)
+    .button(29, 'Copper Ingot', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:copper_ingot', 1)
+    .button(30, 'Iron Ingot', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:iron_ingot', 1)
+    .button(31, 'Gold Ingot', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:gold_ingot', 1)
+    .button(32, 'Diamond', ["", "§7Buy Price:§c N/A", "§7Sell Price:§6 1"], 'minecraft:diamond', 1)
+    .button(33, 'Quartz Crystal', ["", "§7Buy Price:§c N/A", "§7Sell Price:§6 1"], 'minecraft:quartz', 1)
+    .button(34, 'Padparadscha', ["", "§7Buy Price:§c N/A", "§7Sell Price:§6 1"], 'minecraft:resin_brick', 1)
+
+    /*
+    .button(37, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
+    .button(38, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
+    .button(39, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
+    .button(40, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
+    .button(41, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
+    .button(42, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
+    .button(43, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
+    */
+    
+
+    .show(player).then(a => {
+        if (a.canceled) return;
+        switch (a.selection) {
+            case 10: {
+                return buyUnstackablePreviewMenu(player, 1000, 1, items.lavaBucket)
+            }
+            case 11: {
+                return buyPreviewMenu(player, 1000, 1, items.ice)
+            }
+            case 12: {
+                return buyPreviewMenu(player, 1000, 1, items.grassBlock)
+            }
+            case 13: {
+                return buyPreviewMenu(player, 1000, 1, items.dirt)
+            }
+            case 14: {
+                return buyPreviewMenu(player, 1000, 1, items.cobblestone)
+            }
+            case 15: {
+                return buyPreviewMenu(player, 1, 1, items.sand)
+            }
+            case 16: {
+                return buyPreviewMenu(player, 1, 1, items.boneMeal)
+            }
+            case 19: {
+                return buyPreviewMenu(player, 1, 1, items.charcoal)
+            }
+            case 20: {
+                return buyPreviewMenu(player, 1, 1, items.oakSapling)
+            }
+            case 21: {
+                return buyPreviewMenu(player, 1, 1, items.oakLog)
+            }
+            case 22: {
+                return buyPreviewMenu(player, 1, 1, items.darkOakSapling)
+            }
+            case 23: {
+                return buyPreviewMenu(player, 1, 1, items.darkOakLog)
+            }
+            case 24: {
+                return buyPreviewMenu(player, 1, 1, items.birchSapling)
+            }
+            case 25: {
+                return buyPreviewMenu(player, 1, 1, items.birchLog)
+            }
+            case 28: {
+                return buyPreviewMenu(player, 1, 1, items.coal)
+            }
+            case 29: {
+                return buyPreviewMenu(player, 1, 1, items.copperIngot)
+            }
+            case 30: {
+                return buyPreviewMenu(player, 1, 1, items.ironIngot)
+            }
+            case 31: {
+                return buyPreviewMenu(player, 1, 1, items.goldIngot)
+            }
+            case 32: {
+                return buyUnavailablePreviewMenu(player, 1, items.diamond) 
+            }
+            case 33: {
+                return buyUnavailablePreviewMenu(player, 1, items.quartzCrystal) 
+            }
+            case 34: {
+                return buyUnavailablePreviewMenu(player, 1, items.padparadscha) 
+            }
+        }
+    })
+}
+
+/** 
+ * @param {Player} player
+ * @param {ItemStack} item
+ */
+function buyPreviewMenu(player, buyPrice, sellPrice, item) {
+    const freeSlots = getFreeSlots(player)
+    if (freeSlots == 0) return player.sendMessage("§cYou need free inventory space for this!")
+    let cleanName = item.nameTag.replace(/§./g, "")
+    new ChestFormData("27")
+    .title(`Buy §8${cleanName}`)
+    .button(10, 'Buy 1', [`§8${cleanName}`, "", `§7Buy 1 for: §6${buyPrice}`], "minecraft:yellow_dye", 1)
+    .button(11, 'Buy Custom', [`§8${cleanName}`, "", `§7Per item price: §6${buyPrice}`], "minecraft:red_dye", 1)
+    
+    .button(13, `${item.nameTag}`, item.getLore(), item.typeId, 1)
+
+    .button(15, 'Sell 1', [`§8${cleanName}`, "", `§7Sell 1 for: §6${sellPrice}`], "minecraft:lime_dye", 1)
+    .button(16, 'Sell Custom', [`§8${cleanName}`, "", `§7Per item price: §6${sellPrice}`], "minecraft:green_dye", 1)
+
+    .show(player).then(a => {
+        if (a.canceled) return
+        switch (a.selection) {
+            case 10: {
+                if (getPlayerDynamicProperty(player, "coins") < buyPrice) return cantBuyOneMenu(player)
+                
+                setPlayerDynamicProperty(player, "coins", -buyPrice, true)
+                item.amount = 1
+                player.getComponent("inventory").container.addItem(item)
+                player.playSound("random.orb")
+                player.sendMessage(`§aYou purchased §ex1 ${item.nameTag}§a for §6${buyPrice} coins`)
+                return buyPreviewMenu(player, buyPrice, sellPrice, item)
+
+            } case 11: {
+                if (getPlayerDynamicProperty(player, "coins") < buyPrice*2) return cantBuyMultipleMenu(player)
+                return buyCustomMenu(player, buyPrice, item)
+            } case 15: {
+                
+                if (checkItemAmount(player, item.typeId) >= 1) {
+                    player.runCommand(`clear @s ${item.typeId} 0 1`)
+                    setPlayerDynamicProperty(player, "coins", (sellPrice), true)
+
+                    player.playSound("random.orb")
+                    return player.sendMessage(`§aYou sold §ex1 ${item.nameTag}§a for §6${sellPrice} coins`)
+                } else return cantSellMenu(player)
+
+            } case 16: {
+                if (checkItemAmount(player, item.typeId) < 1) return cantSellMenu(player)
+                return sellCustomMenu(player, sellPrice, item)
+            }
+        }
+    })
+}
+
+function buyUnavailablePreviewMenu(player, sellPrice, item) {
+    let cleanName = item.nameTag.replace(/§./g, "")
+    new ChestFormData("27")
+    .title(`Buy §8${cleanName}`)
+    .button(10, '§dYou can\'t buy this item!', [`§8${cleanName}`, "", `§7This item is too rare to buy!`], "minecraft:barrier", 1)
+    .button(11, '§dYou can\'t buy this item!', [`§8${cleanName}`, "", `§7This item is too rare to buy!`], "minecraft:barrier", 1)
+    
+    .button(13, `${item.nameTag}`, item.getLore(), item.typeId, 1)
+
+    .button(15, 'Sell 1', [`§8${cleanName}`, "", `§7Sell 1 for: §6${sellPrice}`], "minecraft:lime_dye", 1)
+    .button(16, 'Sell Custom', [`§8${cleanName}`, "", `§7Per item price: §6${sellPrice}`], "minecraft:green_dye", 1)
+
+    .show(player).then(a => {
+        if (a.canceled) return
+        switch (a.selection) {
+            case 10: {
+                return buyUnavailablePreviewMenu(player, sellPrice, item)
+            } 
+            case 11: {
+                return buyUnavailablePreviewMenu(player, sellPrice, item)
+            }
+            case 15: {
+                if (checkItemAmount(player, item.typeId) >= 1) {
+                    player.runCommand(`clear @s ${item.typeId} 0 1`)
+                    setPlayerDynamicProperty(player, "coins", (sellPrice), true)
+
+                    player.playSound("random.orb")
+                    return player.sendMessage(`§aYou sold §ex1 ${item.nameTag}§a for §6${sellPrice} coins`)
+                } else return cantSellMenu(player)
+            } 
+            case 16: {
+                if (checkItemAmount(player, item.typeId) < 1) return cantSellMenu(player)
+                return sellCustomMenu(player, sellPrice, item)
+            }
+        }
+    })
+}
+
+
+function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item) {
+    let cleanName = item.nameTag.replace(/§./g, "") 
+    new ChestFormData("27")
+    .title(`Buy §8${cleanName}`)
+    .button(10, 'Buy 1', [`§8${cleanName}`, "", `§7Buy 1 for: §6${buyPrice}`], "minecraft:yellow_dye", 1)
+    .button(11, '§dThis item is unstackable!', [`§8${cleanName}`, "", "§7You cannot buy multiple", "§7of this item!"], "minecraft:barrier", 1)
+    
+    .button(13, `${item.nameTag}`, item.getLore(), item.typeId, 1)
+
+    .button(15, 'Sell 1', [`§8${cleanName}`, "", `§7Sell 1 for: §6${sellPrice}`], "minecraft:lime_dye", 1)
+    .button(16, 'Sell Custom', [`§8${cleanName}`, "", `§7Per item price: §6${sellPrice}`], "minecraft:green_dye", 1)
+
+    .show(player).then(a => {
+        if (a.canceled) return
+        switch (a.selection) {
+            case 10: {
+                if (getPlayerDynamicProperty(player, "coins") < buyPrice) return cantBuyOneMenu(player)
+
+                setPlayerDynamicProperty(player, "coins", -buyPrice, true)
+                item.amount = 1
+                player.getComponent("inventory").container.addItem(item)
+                player.playSound("random.orb")
+                player.sendMessage(`§aYou purchased §ex1 ${item.nameTag}§a for §6${buyPrice} coins`)
+                return buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item)
+
+            } case 11: {
+                return buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item)
+            }
+            case 15: {
+                if (checkItemAmount(player, item.typeId) >= 1) {
+                    player.runCommand(`clear @s ${item.typeId} 0 1`)
+                    setPlayerDynamicProperty(player, "coins", (sellPrice), true)
+
+                    player.playSound("random.orb")
+                    return player.sendMessage(`§aYou sold §ex1 ${item.nameTag}§a for §6${sellPrice} coins`)
+                } else return cantSellMenu(player)
+            }
+            case 16: {
+                if (checkItemAmount(player, item.typeId) < 1) return cantSellMenu(player)
+                return sellCustomMenu(player, sellPrice, item)
+            }
+        }
+    })
+}
+
+/** 
+ * @param {Player} player
+ * @param {ItemStack} item
+ */
+function buyCustomMenu(player, buyPrice, item) {
+    let cleanName = item.nameTag.replace(/§./g, "")
+    let maxBuyable = Math.floor(getPlayerDynamicProperty(player, "coins")/buyPrice)
+    if (maxBuyable > 2304) maxBuyable = 2304
+    const freeSlots = getFreeSlots(player)
+    let index = 0
+
+    const form = new ModalFormData()
+    .title(`§8${cleanName}`)
+    if (maxBuyable > freeSlots*64)  {
+        maxBuyable = freeSlots*64
+        form.label("\n§cYour maximum purchaseable is limited by your inventory space!\n\nFree up inventory slots to buy more items!")
+        index = 1
+    }
+    form.slider("Amount to buy", 1, maxBuyable, {defaultValue: 1, valueStep: 1})
+
+    form.show(player).then(a => {
+        if (a.canceled) return;
+
+        setPlayerDynamicProperty(player, "coins", -(buyPrice*a.formValues[index]), true)
+        let amountLeft = a.formValues[index]
+
+        while (amountLeft > 0) {
+            if (amountLeft >= 64) {
+                item.amount = 64
+                player.getComponent("inventory").container.addItem(item)
+                amountLeft -= 64
+                continue
+            } else {
+                item.amount = amountLeft
+                player.getComponent("inventory").container.addItem(item)
+                amountLeft = 0
+                break
+            }
+        }
+        item.amount = 1
+        player.playSound("random.orb")
+        return player.sendMessage(`§aYou purchased §ex${a.formValues[index]} ${item.nameTag}§a for §6${buyPrice*a.formValues[index]} coins`)
+    })
+}
+
+/** 
+ * @param {Player} player
+ * @param {ItemStack} item
+ */
+function sellCustomMenu(player, sellPrice, item) {
+    let cleanName = item.nameTag.replace(/§./g, "")
+    let maxSellable = checkItemAmount(player, item.typeId)
+
+    const form = new ModalFormData()
+    .title(`§8${cleanName}`)
+    .slider("Amount to sell", 1, maxSellable, {defaultValue: 1, valueStep: 1})
+
+    .show(player).then(a => {
+        if (a.canceled) return;
+
+        player.runCommand(`clear @s ${item.typeId} 0 ${a.formValues[0]}`)
+        setPlayerDynamicProperty(player, "coins", (sellPrice*a.formValues[0]), true)
+
+        player.playSound("random.orb")
+        return player.sendMessage(`§aYou sold §ex${a.formValues[0]} ${item.nameTag}§a for §6${sellPrice*a.formValues[0]} coins`)
+    })
+}
+
+function cantBuyOneMenu(player) {
+    new ChestFormData("27")
+    .title(`Insufficient Funds!`)
+    .button(13, "§cInsufficient Funds!", ["", "§7You can't afford", "§7to purchase this!"], "minecraft:hopper")
+    .show(player).then(a => {
+        return shopMainMenu(player)
+    })
+}
+
+function cantBuyMultipleMenu(player) {
+    new ChestFormData("27")
+    .title(`Insufficient Funds!`)
+    .button(13, "§cInsufficient Funds!", ["", "§7You can't afford to", "§7purchase multiple of this!"], "minecraft:hopper")
+    .show(player).then(a => {
+        return shopMainMenu(player)
+    })
+}
+function cantSellMenu(player) {
+    new ChestFormData("27")
+    .title(`Insufficient Funds!`)
+    .button(13, "§cInsufficient Funds!", ["", "§7You can't afford to", "§7sell this!"], "minecraft:hopper")
+    .show(player).then(a => {
+        return shopMainMenu(player)
+    })
+}
+
+
+/*
+██    ██     ██████   █████  ███    ██ ███    ██ ███████ ██████      ██    ██ 
+██    ██     ██   ██ ██   ██ ████   ██ ████   ██ ██      ██   ██     ██    ██ 
+██    ██     ██████  ███████ ██ ██  ██ ██ ██  ██ █████   ██   ██     ██    ██ 
+ ██  ██      ██   ██ ██   ██ ██  ██ ██ ██  ██ ██ ██      ██   ██      ██  ██  
+  ████       ██████  ██   ██ ██   ████ ██   ████ ███████ ██████        ████   
+*/
+
+
+
+// ban boats, minecarts, nether portals, obsidian, anvil,  more coming soon
+
+
+/*
+██    ██     ███████ ███████ ██████  ██    ██ ███████ ██████      ██    ██ 
+██    ██     ██      ██      ██   ██ ██    ██ ██      ██   ██     ██    ██ 
+██    ██     ███████ █████   ██████  ██    ██ █████   ██████      ██    ██ 
+ ██  ██           ██ ██      ██   ██  ██  ██  ██      ██   ██      ██  ██  
+  ████       ███████ ███████ ██   ██   ████   ███████ ██   ██       ████   
+*/                                                               
+                                                                           
+
+
+
+const achievements = [
+    "How did you mess that up",
+] // achievement idea: "You actually suck", get this by failing the lava thing like 10 times
+
+function achieve(player, name) {
+    switch (name) {
+        case "How did you mess that up":  {
+            if (getPlayerDynamicProperty(player, name)) return
+                world.sendMessage(`${player.name} has reached the achievement §a[${name}]`)
+                player.playSound("random.levelup")
+                setPlayerDynamicProperty(player, name, true)
+                return
+        }
+    }
+}
+
+/*
+system.run(() => {
+    setGlobalDynamicProperty("islandPos", {x: 1100, y: 100, z: 1000})
+    setGlobalDynamicProperty("playerIDIndex", 1)
+})
+*/
+
+world.beforeEvents.playerInteractWithEntity.subscribe(data => {
+    const player = data.player
+    const entity = data.target
+    if (entity.nameTag == "Right Click Me!") {
+        data.cancel = true
+
+        setPlayerDynamicProperty(player, "playerID", getGlobalDynamicProperty("playerIDIndex"))
+        setGlobalDynamicProperty("playerIDIndex", 1, true)
+
+        system.run(() => {
+            const islandPos = getGlobalDynamicProperty("islandPos")
+            if (islandPos.x >= 65000) {
+                islandPos.x = 1100
+                islandPos.z += 700
+            }
+        player.runCommand(`tickingarea add ${islandPos.x} ${islandPos.y} ${islandPos.z} ${islandPos.x+65} ${islandPos.y} ${islandPos.z+65} island true`)
+        player.teleport({x: islandPos.x+32.5, y: islandPos.y+6, z: islandPos.z+32.5})
+        player.setSpawnPoint({x: islandPos.x+32.5, y: islandPos.y+3, z: islandPos.z+32.5, dimension: player.dimension})
+        
+        system.runTimeout(() => {
+            player.runCommand(`structure load island ${islandPos.x} ${islandPos.y} ${islandPos.z}`)
+            setGlobalDynamicProperty("islandPos", islandPos)
+            player.teleport({x: islandPos.x+32.5, y: islandPos.y+6, z: islandPos.z+32.5})
+            player.runCommand(`tickingarea remove island`)
+            islandPos.x += 700
+        }, 10)
+
+        })
+    }
+})
+
+system.runInterval(() => {
+    world.getPlayers({gameMode: "Survival"}).forEach(player => {
+        if (player.location.y < -20) {
+            if (player.getSpawnPoint()) {
+                player.teleport({x: player.getSpawnPoint().x, y: player.getSpawnPoint().y, z: player.getSpawnPoint().z})
+            } else {
+                player.teleport({x:100, y:100, z:100})
+            }
+        }
+    })
+}, 5)
+
+world.afterEvents.itemUse.subscribe(data => {
+    const player = data.source
+    const item = data.itemStack
+
+    switch (item.typeId) {
+        case "minecraft:bucket": {
+            const block = player.getBlockFromViewDirection({maxDistance:7}).block
+            if (block?.typeId == "minecraft:obsidian") {
+
+                block.dimension.setBlockType(block.location, "minecraft:air")
+                player.runCommand("clear @s lava_bucket 0 1")
+                player.getComponent("inventory").container.addItem("minecraft:lava_bucket")
+                achieve(player, "How did you mess that up")
+            }
+            return
+        } case "minecraft:compass": {
+            mainMenu(player)
+            return
+        }
+    }
+})
+
+
+world.afterEvents.entitySpawn.subscribe(data => {
+    try {
+        if (!(data.entity.getComponent("item")?.itemStack?.typeId === "minecraft:element_1")) return;
+    } catch (e) {
+        return
+    }
+    const entity = data.entity
+    const velocity = data.entity.getVelocity()
+
+    const item = new ItemStack("minecraft:diamond", 16)
+    const lore = item.getLore()
+
+    if (lore) {
+        lore[lore.length] = "fxp275"
+    } else lore[0] = "fxp275"
+    item.setLore(lore)
+
+    const newEntity = entity.dimension.spawnItem(item, entity.location)
+    const newVelo = {x: velocity.x*.75, y:velocity.y*.50, z:velocity.z*.75}
+    newEntity.applyImpulse(newVelo)
+    entity.kill()
+})
+
+
+
+world.beforeEvents.entityRemove.subscribe(data => {
+    const entity = data.removedEntity
+    if (!(entity.getComponent("item")?.itemStack)) return
+
+
+    const lore = entity.getComponent("item")?.itemStack.getLore()
+    if (lore[lore.length-1] && lore[lore.length-1].startsWith("fxp")) {
+
+    let xp = 0
+    xp = Number(lore[lore.length-1].substring(3))
+    
+    const players = data.removedEntity.dimension.getPlayers({location: data.removedEntity.location, maxDistance: 5, closest: 1})
+
+    system.run(() => {
+        const inv = players[0].getComponent("inventory").container
+        for (let i = 0; i < 36; i++) {
+            
+            const item = inv.getItem(i)
+            const tLore = item?.getLore()
+
+                if (tLore && tLore[tLore.length-1] && (tLore[tLore.length-1].startsWith("fxp"))) {
+                    tLore.pop()
+                    item.setLore(tLore)
+                    inv.setItem(i, undefined)
+                    inv.addItem(item)
+                }
+            }
+        setScore(players[0], "temp", xp, true)
+    })    
+    }
+
+    try {
+        if (!(data.removedEntity.getComponent("item")?.itemStack?.typeId === "minecraft:element_1")) return;
+    } catch (e) {
+        return
+    }
+    
+
+    const players = entity.dimension.getPlayers({location: data.removedEntity.location, maxDistance: 1.5})
+
+    players.forEach(player => {
+        const inv = player.getComponent("inventory").container
+
+        system.run(() => {
+        player.playSound("note.cow_bell")
+        player.sendMessage("§c§lUh oh! §r§cYou stood too close to the fishing bobber and scared all the fish away!")
+            for (let i = 0; i < 36; i++) {
+                if (!(inv.getItem(i)?.typeId == "minecraft:element_1")) continue
+                inv.setItem(i, undefined)
+            }
+        })
+    })
+})
+
+system.runInterval(() => {
+    const players = world.getPlayers()
+    players.forEach(player => {
+        player.onScreenDisplay.setActionBar(`§6${getPlayerDynamicProperty(player, "coins")}`)
+    })
+}, 4)

@@ -1,0 +1,47 @@
+{
+	"format_version": 2,
+	"header": {
+		"name": "Universe Skyblock",
+		"description": "Utilizing Chest UI",
+		"uuid": "bab76941-4584-47c4-b257-e5ca85c3d534",
+		"version": [ 1, 5, 0 ],
+		"min_engine_version": [ 1, 21, 0 ]
+	},
+	"modules": [
+		{
+			"type": "data",
+			"uuid": "84d5a89b-8dcc-0308-a7d7-fd5f8123bba7",
+			"version": [ 1, 5, 0 ]
+		},
+		{
+			"type": "script",
+			"language": "javascript",
+			"entry": "scripts/index.js",
+			"uuid": "2fa09013-80e6-c43a-e1c7-73dafb30fdd0",
+			"version": [ 1, 5, 0 ]
+		}
+	],
+	"metadata": {
+		"authors": [
+			"destroyer1951",
+			"Herobrine64#3928",
+			"LeGend077"
+		]
+	},
+	"dependencies": [
+		{
+			"uuid": "792bede7-337e-41e9-09c3-dd20395d1263",
+			"version": [ 1, 5, 0 ]
+		},
+		{
+			"description": "@minecraft/server module dependency",
+			"module_name": "@minecraft/server",
+			"version": "beta"
+		},
+		{
+			"description": "@minecraft/server-ui module dependency",
+			"module_name": "@minecraft/server-ui",
+			"version": "beta"
+		}
+	]
+}
