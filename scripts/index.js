@@ -151,6 +151,16 @@ player.sendMessage(`§aInformation for the player property §e${property}
 §aName: §e${property}
 §aValue: §e${getGlobalDynamicProperty(property)}`)
                 return;
+            } case 'item': {
+                const itemData = data.message.substring(6).split(' ')
+                const itemId = itemData[0]
+                let amount = 1
+                if (itemData[1] && Number.isFinite(Number(itemData[1]))) amount = Number(itemData[1])
+                system.run(() => {
+                    const item = items[itemId]
+                    item.amount = amount
+                    player.getComponent('inventory').container.addItem(item)
+                })
             }
         }
     }
@@ -255,10 +265,29 @@ const getFreeSlots = (player) => {
 */                                                        
                                                                  
 
-function makeItem(typeId, configure) {
+function makeItem(typeId, configure) { // i wrote this code and i dont even understand it anymore am i the best developer of all time
   const item = new ItemStack(typeId)
   configure(item)
   return item
+}
+
+function rollStars(maxStars=5) {
+    let stars = 1
+    let starString = "§l"
+
+    for (let i = 2; i <= maxStars; i++) {
+        if (Math.random() < 1 / i) {
+            stars++
+        } else {
+            break
+        }
+  }
+
+    for (let i = stars; i > 0; i--) {
+        starString += "* "
+    }
+
+    return starString.trim()
 }
 
 const items = {}
@@ -318,18 +347,26 @@ system.run(() => {
         item.nameTag = "§r§fGold Ingot"
     })
     items.diamond = makeItem("minecraft:diamond", item => {
-        item.nameTag = "§r§9Diamond"
+        item.nameTag = "§r§fDiamond"
         item.setLore(["", "§r§l§9RARE ITEM"])
     })
     items.quartzCrystal = makeItem("minecraft:quartz", item => {
-        item.nameTag = "§r§5Quartz Crystal"
+        item.nameTag = "§r§fQuartz Crystal"
         item.setLore(["", "§r§8Both exceptionally shiny", "§r§8and exceptionally sharp", "", "§r§l§5EPIC ITEM"])
     })
-    items.padparadscha = makeItem("minecraft:resin_brick", item => {
-        item.nameTag = "§r§6Padparadscha"
-        item.setLore(["", "§r§8A truly incredible gemstone,", "§r§8in difficulty and durability", "", "§r§l§6LEGENDARY ITEM"])
+
+    // evil scary items
+
+    Object.defineProperty(items, "padparadscha", {
+        get() {
+            return makeItem("minecraft:resin_brick", item => {
+                item.nameTag = "§r§fPadparadscha"
+                item.setLore(["", "§r§8A powerful gemstone,", "§r§8in difficulty and durability", "", `§r§e${rollStars()}`])
+            })
+        }
     })
-    
+
+
 })  
 
 
@@ -491,13 +528,13 @@ function generalShopMenu(player) {
                 return buyPreviewMenu(player, 1, 1, items.goldIngot)
             }
             case 32: {
-                return buyUnavailablePreviewMenu(player, 1, items.diamond) 
+                return buyNamedUnavailablePreviewMenu(player, 1, items.diamond) 
             }
             case 33: {
-                return buyUnavailablePreviewMenu(player, 1, items.quartzCrystal) 
+                return buyNamedUnavailablePreviewMenu(player, 1, items.quartzCrystal) 
             }
             case 34: {
-                return buyUnavailablePreviewMenu(player, 1, items.padparadscha) 
+                return buyNamedUnavailablePreviewMenu(player, 1, items.padparadscha) 
             }
         }
     })
