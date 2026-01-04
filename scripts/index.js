@@ -593,6 +593,44 @@ function buyUnavailablePreviewMenu(player, sellPrice, item) {
     })
 }
 
+function buyNamedUnavailablePreviewMenu(player, sellPrice, item) {
+    let cleanName = item.nameTag.replace(/§./g, "")
+    new ChestFormData("27")
+    .title(`Buy §8${cleanName}`)
+    .button(10, '§dYou can\'t buy this item!', [`§8${cleanName}`, "", `§7This item is too rare to buy!`], "minecraft:barrier", 1)
+    .button(11, '§dYou can\'t buy this item!', [`§8${cleanName}`, "", `§7This item is too rare to buy!`], "minecraft:barrier", 1)
+    
+    .button(13, `${item.nameTag}`, item.getLore(), item.typeId, 1)
+
+    .button(15, 'Sell 1', [`§8${cleanName}`, "", `§7Sell 1 for: §6${sellPrice}`], "minecraft:lime_dye", 1)
+    .button(16, 'Sell Custom', [`§8${cleanName}`, "", `§7Per item price: §6${sellPrice}`], "minecraft:green_dye", 1)
+
+    .show(player).then(a => {
+        if (a.canceled) return
+        switch (a.selection) {
+            case 10: {
+                return buyNamedUnavailablePreviewMenu(player, sellPrice, item)
+            } 
+            case 11: {
+                return buyNamedUnavailablePreviewMenu(player, sellPrice, item)
+            }
+            case 15: {
+                if (checkItemAmount(player, item.typeId, false, item.nameTag) >= 1) {
+                    clearItem(player, item.typeId, 1, item.nameTag)
+                    setPlayerDynamicProperty(player, "coins", (sellPrice), true)
+
+                    player.playSound("random.orb")
+                    return player.sendMessage(`§aYou sold §ex1 ${item.nameTag}§a for §6${sellPrice} coins`)
+                } else return cantSellMenu(player)
+            } 
+            case 16: {
+                if (checkItemAmount(player, item.typeId, false, item.nameTag) < 1) return cantSellMenu(player)
+                return sellNamedCustomMenu(player, sellPrice, item)
+            }
+        }
+    })
+}
+
 
 function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item) {
     let cleanName = item.nameTag.replace(/§./g, "") 
@@ -707,6 +745,25 @@ function sellCustomMenu(player, sellPrice, item) {
     })
 }
 
+function sellNamedCustomMenu(player, sellPrice, item) {
+    let cleanName = item.nameTag.replace(/§./g, "")
+    let maxSellable = checkItemAmount(player, item.typeId, false, item.nameTag)
+
+    const form = new ModalFormData()
+    .title(`§8${cleanName}`)
+    .slider("Amount to sell", 1, maxSellable, {defaultValue: 1, valueStep: 1})
+
+    .show(player).then(a => {
+        if (a.canceled) return;
+
+        clearItem(player, item.typeId, a.formValues[0], item.nameTag)
+        setPlayerDynamicProperty(player, "coins", (sellPrice*a.formValues[0]), true)
+
+        player.playSound("random.orb")
+        return player.sendMessage(`§aYou sold §ex${a.formValues[0]} ${item.nameTag}§a for §6${sellPrice*a.formValues[0]} coins`)
+    })
+}
+
 function cantBuyOneMenu(player) {
     new ChestFormData("27")
     .title(`Insufficient Funds!`)
@@ -745,6 +802,7 @@ function cantSellMenu(player) {
 
 
 // ban boats, minecarts, nether portals, obsidian, anvil,  more coming soon
+// restrict crafting recipes like anvil, enchantment table, higher level tools like iron and diamond
 
 
 /*
