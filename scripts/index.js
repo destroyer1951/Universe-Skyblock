@@ -20,6 +20,7 @@ function setPlayerDynamicProperty(player, objective, value, add = false) {
     add && typeof value === 'number' && world.getDynamicProperty(`${player.name.toLowerCase()}:${objective}`) ? world.setDynamicProperty(`${player.name.toLowerCase()}:${objective}`,  world.getDynamicProperty(`${player.name.toLowerCase()}:${objective}`) + value) : world.setDynamicProperty(`${player.name.toLowerCase()}:${objective}`, value)
 }
 
+
 function getGlobalDynamicProperty(objective) {
     return world.getDynamicProperty(objective)
 }
@@ -165,12 +166,13 @@ world.sendMessage(`§aInformation for the player property §e${property}
     ████           ██       ██████  ██   ████  ██████    ██    ██  ██████  ██   ████ ███████       ████
 */
 
-const checkItemAmount = (player, itemId, clearItems = false) => {
+const checkItemAmount = (player, itemId, clearItems = false, itemName="") => {
     const inventory = player.getComponent("inventory").container
     let itemAmount = 0
     for (let i = 0; i < 36; i++) {
         let item = inventory.getItem(i)
         if (item?.typeId !== itemId) continue
+        if (itemName && item.nameTag !== itemName) continue;
         itemAmount += item.amount
         if (clearItems) inventory.setItem(i)
     }
@@ -185,6 +187,52 @@ const checkInvEmpty = (player) => {
     }
     return true
 }
+
+/**
+ * Decreases the specified item on the player by an amount.
+ * 
+ * Decrement of 0 will clear all items of that type.
+ * @param {Player} player The player to edit.
+ * @param {string} itemId The item to remove.
+ * @param {number} decrement The amount of the item to remove.
+ * @returns {boolean} If items were cleared or not.
+ */
+function clearItem(player, itemId, decrement=0, itemName="") { // i think herobrine and ai just writes all of my code for me
+    const inventory = player.getComponent("inventory").container;
+    if (decrement === 0) {
+        let cleared = false
+        for (let i = 0; i < inventory.size; i++) {
+            let item = inventory.getItem(i);
+            if (item?.typeId === itemId) {
+                if (itemName && item.nameTag !== itemName) continue;
+                inventory.setItem(i);
+                cleared = true
+            }
+        }
+        return cleared;
+    }
+    if (checkItemAmount(player, itemId, false, itemName) < decrement) return false;
+
+    for (let i = 0; i < inventory.size; i++) {
+        const item = inventory.getItem(i);
+        if (!item || item.typeId !== itemId) continue;
+        if (itemName && item.nameTag !== itemName) continue;
+
+        if (item.amount <= decrement) {
+            decrement -= item.amount;
+            inventory.setItem(i);
+        } else {
+            item.amount -= decrement;
+            inventory.setItem(i, item);
+            return true;
+        }
+
+        if (decrement === 0) {
+            return true;
+        }
+    }
+    return false;
+};
 
 /** @param {Player} player */
 const getFreeSlots = (player) => {
@@ -795,6 +843,16 @@ world.afterEvents.itemUse.subscribe(data => {
             mainMenu(player)
             return
         }
+    }
+})
+
+world.afterEvents.itemUse.subscribe(data => {
+    const player = data.source
+    const item = data.itemStack
+
+    if (item.typeId === "minecraft:diamond") {
+        //console.warn(clearItem(player, "minecraft:coal", 10, "§r§fcoke"))
+        console.warn(clearItem(player, "minecraft:coal", 10))
     }
 })
 
