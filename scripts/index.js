@@ -540,7 +540,7 @@ function buyPreviewMenu(player, buyPrice, sellPrice, item) {
             } case 15: {
                 
                 if (checkItemAmount(player, item.typeId) >= 1) {
-                    player.runCommand(`clear @s ${item.typeId} 0 1`)
+                    clearItem(player, item.typeId, 1)
                     setPlayerDynamicProperty(player, "coins", (sellPrice), true)
 
                     player.playSound("random.orb")
@@ -578,7 +578,7 @@ function buyUnavailablePreviewMenu(player, sellPrice, item) {
             }
             case 15: {
                 if (checkItemAmount(player, item.typeId) >= 1) {
-                    player.runCommand(`clear @s ${item.typeId} 0 1`)
+                    clearItem(player, item.typeId, 1)
                     setPlayerDynamicProperty(player, "coins", (sellPrice), true)
 
                     player.playSound("random.orb")
@@ -624,7 +624,7 @@ function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item) {
             }
             case 15: {
                 if (checkItemAmount(player, item.typeId) >= 1) {
-                    player.runCommand(`clear @s ${item.typeId} 0 1`)
+                    clearItem(player, item.typeId, 1)
                     setPlayerDynamicProperty(player, "coins", (sellPrice), true)
 
                     player.playSound("random.orb")
@@ -699,7 +699,7 @@ function sellCustomMenu(player, sellPrice, item) {
     .show(player).then(a => {
         if (a.canceled) return;
 
-        player.runCommand(`clear @s ${item.typeId} 0 ${a.formValues[0]}`)
+        clearItem(player, item.typeId, a.formValues[0])
         setPlayerDynamicProperty(player, "coins", (sellPrice*a.formValues[0]), true)
 
         player.playSound("random.orb")
@@ -834,8 +834,8 @@ world.afterEvents.itemUse.subscribe(data => {
             if (block?.typeId == "minecraft:obsidian") {
 
                 block.dimension.setBlockType(block.location, "minecraft:air")
-                player.runCommand("clear @s lava_bucket 0 1")
-                player.getComponent("inventory").container.addItem("minecraft:lava_bucket")
+                clearItem(player, "minecraft:bucket", 1)
+                player.getComponent("inventory").container.addItem(new ItemStack("minecraft:lava_bucket"))
                 achieve(player, "How did you mess that up")
             }
             return
@@ -846,15 +846,6 @@ world.afterEvents.itemUse.subscribe(data => {
     }
 })
 
-world.afterEvents.itemUse.subscribe(data => {
-    const player = data.source
-    const item = data.itemStack
-
-    if (item.typeId === "minecraft:diamond") {
-        //console.warn(clearItem(player, "minecraft:coal", 10, "§r§fcoke"))
-        console.warn(clearItem(player, "minecraft:coal", 10))
-    }
-})
 
 
 world.afterEvents.entitySpawn.subscribe(data => {
