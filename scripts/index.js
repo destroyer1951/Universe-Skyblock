@@ -105,7 +105,7 @@ world.beforeEvents.chatSend.subscribe(data => {
                 }
                 
 
-world.sendMessage(`§aInformation for the player property §e${property}
+player.sendMessage(`§aInformation for the player property §e${property}
 
 §aPlayer Name: §e${name}
 §aProperty Name: §e${property}
@@ -119,7 +119,7 @@ world.sendMessage(`§aInformation for the player property §e${property}
                 let name = propData[0].toLowerCase().replace('@', '')
                 const value = world.getDynamicProperty(`${name}:${property}`)
 
-world.sendMessage(`§aInformation for the player property §e${property}
+player.sendMessage(`§aInformation for the player property §e${property}
 
 §aPlayer Name: §e${name}
 §aProperty Name: §e${property}
@@ -138,7 +138,7 @@ world.sendMessage(`§aInformation for the player property §e${property}
 
                 const oldValue = getGlobalDynamicProperty(property)
                 setGlobalDynamicProperty(property, newValue, add)
-                world.sendMessage(`§aInformation for the global property §e${property}
+                player.sendMessage(`§aInformation for the global property §e${property}
 
 §aName: §e${property}
 §aOld Value: §e${oldValue}
@@ -146,7 +146,7 @@ world.sendMessage(`§aInformation for the player property §e${property}
                 return;
             } case 'getglobalprop':{
                 const property = data.message.substring(15)
-                world.sendMessage(`§aInformation for the global property §e${property}
+                player.sendMessage(`§aInformation for the global property §e${property}
 
 §aName: §e${property}
 §aValue: §e${getGlobalDynamicProperty(property)}`)
