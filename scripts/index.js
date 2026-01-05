@@ -267,9 +267,7 @@ function rollWeightedItem(table) {
     for (const entry of table) {
         roll -= entry.weight
         if (roll <= 0) {
-            return typeof entry.item === "function"
-                ? entry.item()
-                : entry.item
+            return entry.item()
         }
     }
 }
@@ -599,7 +597,7 @@ function codesMenu(player) {
                 setPlayerDynamicProperty(player, coins, 750, true)
                 player.getComponent("inventory").container.addItem(new ItemStack("minecraft:iron_ingot", 6))
             }
-            case 'HACKER': {
+            case 'HACKER': { // you can only get this code from looking at this code file hahahahahaha
                 if (getPlayerDynamicProperty(player, 'HACKER')) return player.sendMessage('§cYou already redeemed this code!')
                 setPlayerDynamicProperty(player, coins, 500, true)
             }
@@ -1257,12 +1255,12 @@ world.afterEvents.itemUse.subscribe(data => {
 })
 
 const fishingLootTable = [
-    { item: items.rawCod, weight: 50 },
-    { item: items.rawSalmon, weight: 30 },
-    { item: items.tropicalFish, weight: 15 },
-    { item: items.cherrySapling, weight: 4 },
-    { item: items.copperIngot, weight: 1 },
-    { item: items.prismarineShard, weight: 0.2 },
+    { item: () => items.rawCod, weight: 50 },
+    { item: () => items.rawSalmon, weight: 30 },
+    { item: () => items.tropicalFish, weight: 15 },
+    { item: () => items.cherrySapling, weight: 4 },
+    { item: () => items.copperIngot, weight: 1 },
+    { item: () => items.prismarineShard, weight: 0.2 },
 ]
 
 world.afterEvents.entitySpawn.subscribe(data => {
@@ -1274,13 +1272,15 @@ world.afterEvents.entitySpawn.subscribe(data => {
     const entity = data.entity
     const velocity = data.entity.getVelocity()
 
-    const item = rollWeightedItem(fishingLootTable) // put random item here then thats basically all you have to do
+    const item = rollWeightedItem(fishingLootTable) 
 
-    const lore = item.getLore()
+    console.warn(typeof item)
+
+    let lore = item.getLore()
 
     if (lore) {
         lore[lore.length] = "fxp275"
-    } else lore[0] = "fxp275"
+    } else lore = ["fxp275"]
     item.setLore(lore)
 
     const newEntity = entity.dimension.spawnItem(item, entity.location)
