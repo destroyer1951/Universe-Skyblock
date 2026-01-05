@@ -379,6 +379,37 @@ system.run(() => {
         item.nameTag = "§r§fSugar Cane"
     })
 
+    // Fishing shop items
+
+    Object.defineProperty(items, "basicRod", {
+        get() {
+            return makeItem("minecraft:fishing_rod", item => {
+                item.nameTag = "§r§fBasic Fishing Rod"
+                item.setLore(["", "§r§8It's not much but", "it gets the job done", '', `§r§e${rollStars()}`])
+            })
+        }
+    })
+
+    items.rawCod = makeItem("minecraft:cod", item => {
+        item.nameTag = "§r§fRaw Cod"
+    })
+    items.rawSalmon = makeItem("minecraft:salmon", item => {
+        item.nameTag = "§r§fRaw Salmon"
+    })
+    items.tropicalFish = makeItem("minecraft:tropical_fish", item => {
+        item.nameTag = "§r§fTropical Fish"
+    })
+    items.inkSac = makeItem("minecraft:ink_sac", item => {
+        item.nameTag = "§r§fInk Sac"
+    })
+    items.cherrySapling = makeItem("minecraft:cherry_sapling", item => {
+        item.nameTag = "§r§fCherry Sapling"
+    })
+    items.cherryLog = makeItem("minecraft:cherry_log", item => {
+        item.nameTag = "§r§fCherry Log"
+    })
+})
+
 const prices = {buy: {}, sell: {}}
 
 // General Shop Items
@@ -408,13 +439,13 @@ prices.buy.charcoal = 100
 prices.sell.charcoal = 12
 
 prices.buy.oakSapling = 1000
-prices.sell.oakSapling = 10
+prices.sell.oakSapling = 5
 
 prices.buy.oakLog = 200
 prices.sell.oakLog = 10
 
 prices.buy.darkOakSapling = 2500
-prices.sell.darkOakSapling = 10
+prices.sell.darkOakSapling = 5
 
 prices.buy.darkOakLog = 200
 prices.sell.darkOakLog = 8
@@ -437,13 +468,13 @@ prices.sell.ironIngot = 35
 prices.buy.goldIngot = 25000
 prices.sell.goldIngot = 50
 
-prices.buy.diamond = "N/A"
+prices.buy.diamond = "§cN/A"
 prices.sell.diamond = 1
 
-prices.buy.quartzCrystal = "N/A"
+prices.buy.quartzCrystal = "§cN/A"
 prices.sell.quartzCrystal = 1
 
-prices.buy.padparadscha = "N/A"
+prices.buy.padparadscha = "§cN/A"
 prices.sell.padparadscha = 1
 
 // Farm shop items
@@ -459,6 +490,29 @@ prices.sell.potato = 3
 
 prices.buy.sugarCane = 5000
 prices.sell.sugarCane = 5
+
+// Fishing shop items
+
+prices.buy.basicRod = 250
+prices.sell.basicRod = 0
+
+prices.buy.rawCod = 50
+prices.sell.rawCod = 10
+
+prices.buy.rawSalmon = 50
+prices.sell.rawSalmon = 12
+
+prices.buy.tropicalFish = 100
+prices.sell.tropicalFish = 20
+
+prices.buy.inkSac = 100
+prices.sell.inkSac = 45
+
+prices.buy.cherrySapling = "§cN/A"
+prices.sell.cherrySapling = 10
+
+prices.buy.cherryLog = "§cN/A"
+prices.sell.cherryLog = 12
 
 
 
@@ -507,7 +561,7 @@ function shopMainMenu(player) {
                 return
             }
             case 12: {
-                return
+                return fishingShopMenu(player)
             }
             case 13: {
                 return generalShopMenu(player)
@@ -673,6 +727,59 @@ function farmShopMenu(player) {
             }
             case 14: {
                 return buyPreviewMenu(player, prices.buy.boneMeal, prices.sell.boneMeal, items.boneMeal)
+            }
+        }
+    })
+}
+
+function fishingShopMenu(player) {
+    new ChestFormData("54")
+    .title('Shop Menu')
+
+    .button(10, 'Basic Fishing Rod', ["", `§7Buy Price:§6 ${prices.buy.basicRod}`, `§7Sell Price:§6 ${prices.sell.basicRod}`], 'minecraft:fishing_rod', 1)
+    .button(11, 'Raw Cod', ["", `§7Buy Price:§6 ${prices.buy.rawCod}`, `§7Sell Price:§6 ${prices.sell.rawCod}`], 'minecraft:cod', 1)
+    .button(12, 'Raw Salmon', ["", `§7Buy Price:§6 ${prices.buy.rawSalmon}`, `§7Sell Price:§6 ${prices.sell.rawSalmon}`], 'minecraft:salmon', 1)
+    .button(13, 'Tropical Fish', ["", `§7Buy Price:§6 ${prices.buy.tropicalFish}`, `§7Sell Price:§6 ${prices.sell.tropicalFish}`], 'minecraft:tropical_fish', 1)
+    .button(14, 'Ink Sac', ["", `§7Buy Price:§6 ${prices.buy.inkSac}`, `§7Sell Price:§6 ${prices.sell.inkSac}`], 'minecraft:ink_sac', 1)
+    .button(15, 'Cherry Sapling', ["", `§7Buy Price:§6 ${prices.buy.cherrySapling}`, `§7Sell Price:§6 ${prices.sell.cherrySapling}`], 'minecraft:cherry_sapling', 1)
+    .button(16, 'Cherry Log', ["", `§7Buy Price:§6 ${prices.buy.cherryLog}`, `§7Sell Price:§6 ${prices.sell.cherryLog}`], 'minecraft:cherry_log', 1)
+
+    
+
+    /*
+    .button(37, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
+    .button(38, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
+    .button(39, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
+    .button(40, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
+    .button(41, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
+    .button(42, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
+    .button(43, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
+    */
+    
+
+    .show(player).then(a => {
+        if (a.canceled) return;
+        switch (a.selection) {
+            case 10: {
+                return buyPreviewMenu(player, prices.buy.basicRod, prices.sell.basicRod, items.basicRod)
+            }
+            case 11: {
+                return buyPreviewMenu(player, prices.buy.rawCod, prices.sell.rawCod, items.rawCod)
+            }
+            case 12: {
+                return buyPreviewMenu(player, prices.buy.rawSalmon, prices.sell.rawSalmon, items.rawSalmon)
+            }
+            case 13: {
+                return buyPreviewMenu(player, prices.buy.tropicalFish, prices.sell.tropicalFish, items.tropicalFish)
+            }
+            case 14: {
+                return buyPreviewMenu(player, prices.buy.inkSac, prices.sell.inkSac, items.inkSac)
+            }
+            case 15: {
+                return buyUnavailablePreviewMenu(player, prices.sell.cherrySapling, items.cherrySapling)
+            }
+            case 16: {
+                return buyUnavailablePreviewMenu(player, prices.sell.cherryLog, items.cherryLog)
             }
         }
     })
