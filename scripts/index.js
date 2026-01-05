@@ -606,10 +606,10 @@ function codesMenu(player) {
             }
             case 'HACKER': { // you can only get this code from looking at this code file hahahahahaha
                 if (getPlayerDynamicProperty(player, 'HACKER')) return player.sendMessage('§cYou already redeemed this code!')
-                setPlayerDynamicProperty(player, "coins", 500, true)
+                setPlayerDynamicProperty(player, "coins", 5000, true)
 
                 setPlayerDynamicProperty(player, 'HACKER', 1)
-                player.sendMessage("§aSuccessfully redeemed code §eHACKER§a!\n§r§a+§6500 coins")
+                player.sendMessage("§aSuccessfully redeemed code §eHACKER§a!\n§r§a+§65000 coins")
                 return player.playSound("random.levelup")
             }
             default: {
