@@ -603,6 +603,9 @@ function codesMenu(player) {
                 if (getPlayerDynamicProperty(player, 'HACKER')) return player.sendMessage('§cYou already redeemed this code!')
                 setPlayerDynamicProperty(player, coins, 500, true)
             }
+            default: {
+                return player.sendMessage('§cInvalid Code!')
+            }
         }
 
     })
@@ -1271,7 +1274,7 @@ world.afterEvents.entitySpawn.subscribe(data => {
     const entity = data.entity
     const velocity = data.entity.getVelocity()
 
-    const item = rollWeightedItem() // put random item here then thats basically all you have to do
+    const item = rollWeightedItem(fishingLootTable) // put random item here then thats basically all you have to do
 
     const lore = item.getLore()
 
