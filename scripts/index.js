@@ -556,11 +556,16 @@ prices.sell.prismarineShard = 500
 function mainMenu(player) {
 	new ChestFormData("27")
 		.title('Skyblock Menu')
+        .button(12, 'Codes', ['', '§7Redeem Codes for Rewards!'], 'minecraft:name_tag', 1)
 		.button(13, 'Your Island', ['', '§7Warp to your Island!'], 'minecraft:compass', 1)
         .button(14, 'Shop', ['', '§7Buy and Sell some Items!'], 'minecraft:gold_ingot', 1)
+
 		.show(player).then(a => {
 			if (a.canceled) return;
 			switch (a.selection) {
+                case 12: {
+                    return codesMenu(player)
+                }
                 case 13: {
                     player.teleport(player.getSpawnPoint())
                     return player.sendMessage("§eWarped to your Island")
@@ -577,6 +582,7 @@ function mainMenu(player) {
 function codesMenu(player) {
     new ModalFormData()
     .title('Codes')
+    .label("Join §9discord.gg/HRGNN3pzQN§r to redeem the discord kit, as well as information on the latest codes and updates!!\n\n")
     .textField('Enter Code Here', 'Code')
     .show(player).then(a => {
         if (a.canceled) return;
@@ -1334,6 +1340,8 @@ world.beforeEvents.entityRemove.subscribe(data => { // duuuuude i have no idea w
 system.runInterval(() => {
     const players = world.getPlayers()
     players.forEach(player => {
-        player.onScreenDisplay.setActionBar(`Coins: §6${getPlayerDynamicProperty(player, "coins")}`)
+        player.onScreenDisplay.setActionBar(
+            `Coins: §6${getPlayerDynamicProperty(player, "coins")}
+§9discord.gg/HRGNN3pzQN`)
     })
 }, 4)
