@@ -1209,10 +1209,10 @@ world.beforeEvents.playerInteractWithEntity.subscribe(data => {
         
         system.runTimeout(() => {
             player.runCommand(`structure load island ${islandPos.x} ${islandPos.y} ${islandPos.z}`)
-            setGlobalDynamicProperty("islandPos", islandPos)
             player.teleport({x: islandPos.x+32.5, y: islandPos.y+6, z: islandPos.z+32.5})
             player.runCommand(`tickingarea remove island`)
-            islandPos.x += 700
+            islandPos.x += 500
+            setGlobalDynamicProperty("islandPos", islandPos)
         }, 10)
 
         })
