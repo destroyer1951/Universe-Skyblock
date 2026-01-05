@@ -408,7 +408,7 @@ prices.buy.darkOakLog = 200
 prices.sell.darkOakLog = 8
 
 prices.buy.birchSapling = 1750
-prices.sell.birchSapling = 1
+prices.sell.birchSapling = 10
 
 prices.buy.birchLog = 200
 prices.sell.birchLog = 10
