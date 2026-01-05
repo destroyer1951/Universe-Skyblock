@@ -589,17 +589,26 @@ function codesMenu(player) {
     .textField('Enter Code Here', 'Code')
     .show(player).then(a => {
         if (a.canceled) return;
-        const code = a.formValues[0]
+        const code = a.formValues[1]
+        console.warn(code)
 
         switch (code) {
             case 'UNIVERSESKYBLOCK2026': {
                 if (getPlayerDynamicProperty(player, 'UNIVERSESKYBLOCK2026')) return player.sendMessage('§cYou already redeemed this code!')
-                setPlayerDynamicProperty(player, coins, 750, true)
+                setPlayerDynamicProperty(player, "coins", 750, true)
                 player.getComponent("inventory").container.addItem(new ItemStack("minecraft:iron_ingot", 6))
+
+                setPlayerDynamicProperty(player, 'UNIVERSESKYBLOCK2026', 1)
+                player.sendMessage("§aSuccessfully redeemed code §eUNIVERSESKYBLOCK2026§a!\n§r§a+§6750 coins\n§r§a+§f6 Iron Ingots")
+                return player.playSound("random.levelup")
             }
             case 'HACKER': { // you can only get this code from looking at this code file hahahahahaha
                 if (getPlayerDynamicProperty(player, 'HACKER')) return player.sendMessage('§cYou already redeemed this code!')
-                setPlayerDynamicProperty(player, coins, 500, true)
+                setPlayerDynamicProperty(player, "coins", 500, true)
+
+                setPlayerDynamicProperty(player, 'HACKER', 1)
+                player.sendMessage("§aSuccessfully redeemed code §eHACKER§a!\n§r§a+§6500 coins")
+                return player.playSound("random.levelup")
             }
             default: {
                 return player.sendMessage('§cInvalid Code!')
