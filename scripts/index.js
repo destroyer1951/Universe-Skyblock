@@ -255,6 +255,20 @@ const getFreeSlots = (player) => {
     return slots
 }
 
+function rollWeightedItem(table) {
+    const totalWeight = table.reduce((sum, e) => sum + e.weight, 0)
+    let roll = Math.random() * totalWeight
+
+    for (const entry of table) {
+        roll -= entry.weight
+        if (roll <= 0) {
+            return typeof entry.item === "function"
+                ? entry.item()
+                : entry.item
+        }
+    }
+}
+
 
 /*
 ██    ██     ██ ████████ ███████ ███    ███ ███████     ██    ██ 
@@ -408,6 +422,16 @@ system.run(() => {
     items.cherryLog = makeItem("minecraft:cherry_log", item => {
         item.nameTag = "§r§fCherry Log"
     })
+
+    Object.defineProperty(items, "prismarineShard", {
+        get() {
+            return makeItem("minecraft:prismarine_shard", item => {
+                item.nameTag = "§r§fPrismarine Shard"
+                item.setLore([`§r§e${rollStars()}`])
+            })
+        }
+    })
+
 })
 
 const prices = {buy: {}, sell: {}}
@@ -514,6 +538,9 @@ prices.sell.cherrySapling = 10
 prices.buy.cherryLog = "§cN/A"
 prices.sell.cherryLog = 12
 
+prices.buy.prismarineShard = "§cN/A"
+prices.sell.prismarineShard = 500
+
 
 
 
@@ -544,6 +571,31 @@ function mainMenu(player) {
             }
 		})
 };
+
+
+/** @param {Player} player  */
+function codesMenu(player) {
+    new ModalFormData()
+    .title('Codes')
+    .textField('Enter Code Here', 'Code')
+    .show(player).then(a => {
+        if (a.canceled) return;
+        const code = a.formValues[0]
+
+        switch (code) {
+            case 'UNIVERSESKYBLOCK2026': {
+                if (getPlayerDynamicProperty(player, 'UNIVERSESKYBLOCK2026')) return player.sendMessage('§cYou already redeemed this code!')
+                setPlayerDynamicProperty(player, coins, 750, true)
+                player.getComponent("inventory").container.addItem(new ItemStack("minecraft:iron_ingot", 6))
+            }
+            case 'HACKER': {
+                if (getPlayerDynamicProperty(player, 'HACKER')) return player.sendMessage('§cYou already redeemed this code!')
+                setPlayerDynamicProperty(player, coins, 500, true)
+            }
+        }
+
+    })
+}
 
 /** @param {Player} player  */
 function shopMainMenu(player) {
@@ -743,6 +795,7 @@ function fishingShopMenu(player) {
     .button(14, 'Ink Sac', ["", `§7Buy Price:§6 ${prices.buy.inkSac}`, `§7Sell Price:§6 ${prices.sell.inkSac}`], 'minecraft:ink_sac', 1)
     .button(15, 'Cherry Sapling', ["", `§7Buy Price:§6 ${prices.buy.cherrySapling}`, `§7Sell Price:§6 ${prices.sell.cherrySapling}`], 'minecraft:cherry_sapling', 1)
     .button(16, 'Cherry Log', ["", `§7Buy Price:§6 ${prices.buy.cherryLog}`, `§7Sell Price:§6 ${prices.sell.cherryLog}`], 'minecraft:cherry_log', 1)
+    .button(19, 'Prismarine Shard', ["", `§7Buy Price:§6 ${prices.buy.prismarineShard}`, `§7Sell Price:§6 ${prices.sell.prismarineShard}`], 'minecraft:prismarine_shard', 1)
 
     
 
@@ -780,6 +833,9 @@ function fishingShopMenu(player) {
             }
             case 16: {
                 return buyUnavailablePreviewMenu(player, prices.sell.cherryLog, items.cherryLog)
+            }
+            case 19: {
+                return buyUnavailablePreviewMenu(player, prices.sell.prismarineShard, items.prismarineShard)
             }
         }
     })
@@ -1186,7 +1242,14 @@ world.afterEvents.itemUse.subscribe(data => {
     }
 })
 
-
+const fishingLootTable = [
+    { item: items.rawCod, weight: 50 },
+    { item: items.rawSalmon, weight: 30 },
+    { item: items.tropicalFish, weight: 15 },
+    { item: items.cherrySapling, weight: 4 },
+    { item: items.copperIngot, weight: 1 },
+    { item: items.prismarineShard, weight: 0.2 },
+]
 
 world.afterEvents.entitySpawn.subscribe(data => {
     try {
@@ -1197,7 +1260,8 @@ world.afterEvents.entitySpawn.subscribe(data => {
     const entity = data.entity
     const velocity = data.entity.getVelocity()
 
-    const item = new ItemStack("minecraft:diamond", 16)
+    const item = rollWeightedItem() // put random item here then thats basically all you have to do
+
     const lore = item.getLore()
 
     if (lore) {
@@ -1213,7 +1277,7 @@ world.afterEvents.entitySpawn.subscribe(data => {
 
 
 
-world.beforeEvents.entityRemove.subscribe(data => {
+world.beforeEvents.entityRemove.subscribe(data => { // duuuuude i have no idea whats going on here
     const entity = data.removedEntity
     if (!(entity.getComponent("item")?.itemStack)) return
 
@@ -1233,7 +1297,7 @@ world.beforeEvents.entityRemove.subscribe(data => {
             const item = inv.getItem(i)
             const tLore = item?.getLore()
 
-                if (tLore && tLore[tLore.length-1] && (tLore[tLore.length-1].startsWith("fxp"))) {
+                if (tLore && tLore[tLore.length-1] && (tLore[tLore.length-1].startsWith("fxp"))) { // mostly here so hopefully I dont have to edit this ever again
                     tLore.pop()
                     item.setLore(tLore)
                     inv.setItem(i, undefined)
