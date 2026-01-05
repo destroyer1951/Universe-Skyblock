@@ -292,6 +292,7 @@ function rollStars(maxStars=5) {
 
 const items = {}
 system.run(() => {
+    // General shop items
     items.lavaBucket = makeItem("minecraft:lava_bucket", item => {
         item.nameTag = "§r§fLava Bucket"
     })
@@ -354,8 +355,6 @@ system.run(() => {
         item.setLore(["", "§r§8Both exceptionally shiny", "§r§8and exceptionally sharp", "", `§r§e${rollStars()}`])
     })
 
-    // evil scary items
-
     Object.defineProperty(items, "padparadscha", {
         get() {
             return makeItem("minecraft:resin_brick", item => {
@@ -365,11 +364,24 @@ system.run(() => {
         }
     })
 
+    // Farm shop items
 
-})  
+    items.wheat = makeItem("minecraft:wheat", item => {
+        item.nameTag = "§r§fWheat"
+    })
+    items.wheatSeeds = makeItem("minecraft:wheat_seeds", item => {
+        item.nameTag = "§r§fWheat Seeds"
+    })
+    items.potato = makeItem("minecraft:potato", item => {
+        item.nameTag = "§r§fPotato"
+    })
+    items.sugarCane = makeItem("minecraft:sugar_cane", item => {
+        item.nameTag = "§r§fSugar Cane"
+    })
 
 const prices = {buy: {}, sell: {}}
 
+// General Shop Items
 
 prices.buy.lavaBucket = 1000
 prices.sell.lavaBucket = 100
@@ -434,6 +446,20 @@ prices.sell.quartzCrystal = 1
 prices.buy.padparadscha = "N/A"
 prices.sell.padparadscha = 1
 
+// Farm shop items
+
+prices.buy.wheat = 50
+prices.sell.wheat = 6
+
+prices.buy.wheatSeeds = 500
+prices.sell.wheatSeeds = 1
+
+prices.buy.potato = 1000
+prices.sell.potato = 3
+
+prices.buy.sugarCane = 5000
+prices.sell.sugarCane = 5
+
 
 
 
@@ -487,7 +513,7 @@ function shopMainMenu(player) {
                 return generalShopMenu(player)
             }
             case 14: {
-                return
+                return farmShopMenu(player)
             }
             case 15: {
                 return
@@ -540,7 +566,7 @@ function generalShopMenu(player) {
         if (a.canceled) return;
         switch (a.selection) {
             case 10: {
-        return buyUnstackablePreviewMenu(player, prices.buy.lavaBucket, prices.sell.lavaBucket, items.lavaBucket)
+                return buyUnstackablePreviewMenu(player, prices.buy.lavaBucket, prices.sell.lavaBucket, items.lavaBucket)
             }
             case 11: {
                 return buyPreviewMenu(player, prices.buy.ice, prices.sell.ice, items.ice)
@@ -611,29 +637,13 @@ function farmShopMenu(player) {
     new ChestFormData("54")
     .title('Shop Menu')
 
-    .button(10, 'Lava Bucket', ["", "§7Buy Price:§6 1000", "§7Sell Price:§6 1000"], 'minecraft:lava_bucket', 1)
-    .button(11, 'Ice', ["", `§7Buy Price:§6 ${prices.buy.ice}`, `§7Sell Price:§6 ${prices.sell.ice}`], 'minecraft:ice', 1)
-    .button(12, 'Grass Block', ["", `§7Buy Price:§6 ${prices.buy.grassBlock}`, `§7Sell Price:§6 ${prices.sell.grassBlock}`], 'minecraft:grass_block', 1)
-    .button(13, 'Dirt', ["", `§7Buy Price:§6 ${prices.buy.dirt}`, `§7Sell Price:§6 ${prices.sell.dirt}`], 'minecraft:dirt', 1)
-    .button(14, 'Cobblestone', ["", `§7Buy Price:§6 ${prices.buy.cobblestone}`, `§7Sell Price:§6 ${prices.sell.cobblestone}`], 'minecraft:cobblestone', 1)
-    .button(15, 'Sand', ["", `§7Buy Price:§6 ${prices.buy.sand}`, `§7Sell Price:§6 ${prices.sell.sand}`], 'minecraft:sand', 1)
-    .button(16, 'Bone Meal', ["", `§7Buy Price:§6 ${prices.buy.boneMeal}`, `§7Sell Price:§6 ${prices.sell.boneMeal}`], 'minecraft:bone_meal', 1)
+    .button(10, 'Wheat', ["", `§7Buy Price:§6 ${prices.buy.wheat}`, `§7Sell Price:§6 ${prices.sell.wheat}`], 'minecraft:wheat', 1)
+    .button(11, 'Wheat Seeds', ["", `§7Buy Price:§6 ${prices.buy.wheatSeeds}`, `§7Sell Price:§6 ${prices.sell.wheatSeeds}`], 'minecraft:wheat_seeds', 1)
+    .button(12, 'Potato', ["", `§7Buy Price:§6 ${prices.buy.potato}`, `§7Sell Price:§6 ${prices.sell.potato}`], 'minecraft:potato', 1)
+    .button(13, 'Sugar Cane', ["", `§7Buy Price:§6 ${prices.buy.sugarCane}`, `§7Sell Price:§6 ${prices.sell.sugarCane}`], 'minecraft:sugar_cane', 1)
+    .button(14, 'Bone Meal', ["", `§7Buy Price:§6 ${prices.buy.boneMeal}`, `§7Sell Price:§6 ${prices.sell.boneMeal}`], 'minecraft:bone_meal', 1)
 
-    .button(19, 'Charcoal', ["", `§7Buy Price:§6 ${prices.buy.charcoal}`, `§7Sell Price:§6 ${prices.sell.charcoal}`], 'minecraft:charcoal', 1)
-    .button(20, 'Oak Sapling', ["", `§7Buy Price:§6 ${prices.buy.oakSapling}`, `§7Sell Price:§6 ${prices.sell.oakSapling}`], 'minecraft:oak_sapling', 1)
-    .button(21, 'Oak Log', ["", `§7Buy Price:§6 ${prices.buy.oakLog}`, `§7Sell Price:§6 ${prices.sell.oakLog}`], 'minecraft:oak_log', 1)
-    .button(22, 'Dark Oak Sapling', ["", `§7Buy Price:§6 ${prices.buy.darkOakSapling}`, `§7Sell Price:§6 ${prices.sell.darkOakSapling}`], 'minecraft:dark_oak_sapling', 1)
-    .button(23, 'Dark Oak Log', ["", `§7Buy Price:§6 ${prices.buy.darkOakLog}`, `§7Sell Price:§6 ${prices.sell.darkOakLog}`], 'minecraft:dark_oak_log', 1)
-    .button(24, 'Birch Sapling', ["", `§7Buy Price:§6 ${prices.buy.birchSapling}`, `§7Sell Price:§6 ${prices.sell.birchSapling}`], 'minecraft:birch_sapling', 1)
-    .button(25, 'Birch Log', ["", `§7Buy Price:§6 ${prices.buy.birchLog}`, `§7Sell Price:§6 ${prices.sell.birchLog}`], 'minecraft:birch_log', 1)
-
-    .button(28, 'Coal', ["", `§7Buy Price:§6 ${prices.buy.coal}`, `§7Sell Price:§6 ${prices.sell.coal}`], 'minecraft:coal', 1)
-    .button(29, 'Copper Ingot', ["", `§7Buy Price:§6 ${prices.buy.copperIngot}`, `§7Sell Price:§6 ${prices.sell.copperIngot}`], 'minecraft:copper_ingot', 1)
-    .button(30, 'Iron Ingot', ["", `§7Buy Price:§6 ${prices.buy.ironIngot}`, `§7Sell Price:§6 ${prices.sell.ironIngot}`], 'minecraft:iron_ingot', 1)
-    .button(31, 'Gold Ingot', ["", `§7Buy Price:§6 ${prices.buy.goldIngot}`, `§7Sell Price:§6 ${prices.sell.goldIngot}`], 'minecraft:gold_ingot', 1)
-    .button(32, 'Diamond', ["", "§7Buy Price:§c N/A", `§7Sell Price:§6 ${prices.sell.diamond}`], 'minecraft:diamond', 1)
-    .button(33, 'Quartz Crystal', ["", "§7Buy Price:§c N/A", `§7Sell Price:§6 ${prices.sell.quartzCrystal}`], 'minecraft:quartz', 1)
-    .button(34, 'Padparadscha', ["", "§7Buy Price:§c N/A", `§7Sell Price:§6 ${prices.sell.padparadscha}`], 'minecraft:resin_brick', 1)
+    
 
     /*
     .button(37, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
@@ -650,67 +660,19 @@ function farmShopMenu(player) {
         if (a.canceled) return;
         switch (a.selection) {
             case 10: {
-        return buyUnstackablePreviewMenu(player, prices.buy.lavaBucket, prices.sell.lavaBucket, items.lavaBucket)
+                return buyPreviewMenu(player, prices.buy.wheat, prices.sell.wheat, items.wheat)
             }
             case 11: {
-                return buyPreviewMenu(player, prices.buy.ice, prices.sell.ice, items.ice)
+                return buyPreviewMenu(player, prices.buy.wheatSeeds, prices.sell.wheatSeeds, items.wheatSeeds)
             }
             case 12: {
-                return buyPreviewMenu(player, prices.buy.grassBlock, prices.sell.grassBlock, items.grassBlock)
+                return buyPreviewMenu(player, prices.buy.potato, prices.sell.potato, items.potato)
             }
             case 13: {
-                return buyPreviewMenu(player, prices.buy.dirt, prices.sell.dirt, items.dirt)
+                return buyPreviewMenu(player, prices.buy.sugarCane, prices.sell.sugarCane, items.sugarCane)
             }
             case 14: {
-                return buyPreviewMenu(player, prices.buy.cobblestone, prices.sell.cobblestone, items.cobblestone)
-            }
-            case 15: {
-                return buyPreviewMenu(player, prices.buy.sand, prices.sell.sand, items.sand)
-            }
-            case 16: {
                 return buyPreviewMenu(player, prices.buy.boneMeal, prices.sell.boneMeal, items.boneMeal)
-            }
-            case 19: {
-                return buyPreviewMenu(player, prices.buy.charcoal, prices.sell.charcoal, items.charcoal)
-            }
-            case 20: {
-                return buyPreviewMenu(player, prices.buy.oakSapling, prices.sell.oakSapling, items.oakSapling)
-            }
-            case 21: {
-                return buyPreviewMenu(player, prices.buy.oakLog, prices.sell.oakLog, items.oakLog)
-            }
-            case 22: {
-                return buyPreviewMenu(player, prices.buy.darkOakSapling, prices.sell.darkOakSapling, items.darkOakSapling)
-            }
-            case 23: {
-                return buyPreviewMenu(player, prices.buy.darkOakLog, prices.sell.darkOakLog, items.darkOakLog)
-            }
-            case 24: {
-                return buyPreviewMenu(player, prices.buy.birchSapling, prices.sell.birchSapling, items.birchSapling)
-            }
-            case 25: {
-                return buyPreviewMenu(player, prices.buy.birchLog, prices.sell.birchLog, items.birchLog)
-            }
-            case 28: {
-                return buyPreviewMenu(player, prices.buy.coal, prices.sell.coal, items.coal)
-            }
-            case 29: {
-                return buyPreviewMenu(player, prices.buy.copperIngot, prices.sell.copperIngot, items.copperIngot)
-            }
-            case 30: {
-                return buyPreviewMenu(player, prices.buy.ironIngot, prices.sell.ironIngot, items.ironIngot)
-            }
-            case 31: {
-                return buyPreviewMenu(player, prices.buy.goldIngot, prices.sell.goldIngot, items.goldIngot)
-            }
-            case 32: {
-                return buyNamedUnavailablePreviewMenu(player, prices.sell.diamond, items.diamond) 
-            }
-            case 33: {
-                return buyNamedUnavailablePreviewMenu(player, prices.sell.quartzCrystal, items.quartzCrystal) 
-            }
-            case 34: {
-                return buyNamedUnavailablePreviewMenu(player, prices.sell.padparadscha, items.padparadscha) 
             }
         }
     })
