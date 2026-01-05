@@ -835,7 +835,7 @@ function fishingShopMenu(player) {
         if (a.canceled) return;
         switch (a.selection) {
             case 10: {
-                return buyPreviewMenu(player, prices.buy.basicRod, prices.sell.basicRod, items.basicRod)
+                return buyUnstackablePreviewMenu(player, prices.buy.basicRod, prices.sell.basicRod, items.basicRod)
             }
             case 11: {
                 return buyPreviewMenu(player, prices.buy.rawCod, prices.sell.rawCod, items.rawCod)
