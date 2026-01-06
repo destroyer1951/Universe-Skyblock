@@ -1053,7 +1053,8 @@ system.run(() => {
 world.beforeEvents.playerInteractWithEntity.subscribe(data => {
     const player = data.player
     const entity = data.target
-    if (entity.nameTag == "Right Click Me!") {
+
+    if (entity.nameTag == "Right Click Me!" && entity.typeId == "minecraft:npc") {
         data.cancel = true
 
         setPlayerDynamicProperty(player, "playerID", getGlobalDynamicProperty("playerIDIndex"))
@@ -1183,7 +1184,7 @@ world.beforeEvents.entityRemove.subscribe(data => { // duuuuude i have no idea w
                         inv.addItem(item)
                     }
                 }
-            setScore(players[0], "temp", xp, true)
+            //setScore(players[0], "temp", xp, true)
         })    
     },2)
     
