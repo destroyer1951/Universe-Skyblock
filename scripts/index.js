@@ -1149,6 +1149,10 @@ world.afterEvents.entitySpawn.subscribe(data => {
     entity.kill()
 })
 
+/*
+world.beforeEvents.playerInventoryItemChange.subscribe(data => { // this will work in the next update hopefully
+    console.warn("test")
+})*/
 
 
 world.beforeEvents.entityRemove.subscribe(data => { // duuuuude i have no idea whats going on here
