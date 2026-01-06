@@ -1165,25 +1165,27 @@ world.beforeEvents.entityRemove.subscribe(data => { // duuuuude i have no idea w
 
     let xp = 0
     xp = Number(lore[lore.length-1].substring(3))
-    
-    const players = data.removedEntity.dimension.getPlayers({location: data.removedEntity.location, maxDistance: 5, closest: 1})
+    system.runTimeout(() => {
+        const players = data.removedEntity.dimension.getPlayers({location: data.removedEntity.location, maxDistance: 5, closest: 1})
 
-    system.run(() => {
-        const inv = players[0].getComponent("inventory").container
-        for (let i = 0; i < 36; i++) {
-            
-            const item = inv.getItem(i)
-            const tLore = item?.getLore()
+        system.run(() => {
+            const inv = players[0].getComponent("inventory").container
+            for (let i = 0; i < 36; i++) {
+                
+                const item = inv.getItem(i)
+                const tLore = item?.getLore()
 
-                if (tLore && tLore[tLore.length-1] && (tLore[tLore.length-1].startsWith("fxp"))) { // mostly here so hopefully I dont have to edit this ever again
-                    tLore.pop()
-                    item.setLore(tLore)
-                    inv.setItem(i, undefined)
-                    inv.addItem(item)
+                    if (tLore && tLore[tLore.length-1] && (tLore[tLore.length-1].startsWith("fxp"))) { // mostly here so hopefully I dont have to edit this ever again
+                        tLore.pop()
+                        item.setLore(tLore)
+                        inv.setItem(i, undefined)
+                        inv.addItem(item)
+                    }
                 }
-            }
-        setScore(players[0], "temp", xp, true)
-    })    
+            setScore(players[0], "temp", xp, true)
+        })    
+    },2)
+    
     }
 
     try {
