@@ -600,6 +600,14 @@ function buyPreviewMenu(player, buyPrice, sellPrice, item) {
     const freeSlots = getFreeSlots(player)
     if (freeSlots == 0) return player.sendMessage("§cYou need free inventory space for this!")
     let cleanName = item.nameTag.replace(/§./g, "")
+
+    let lore = item.getLore()
+    if (lore && lore[lore.length - 1].includes("*")) {
+        lore.pop()
+        lore.pop()
+        item.setLore(lore)
+    }
+
     new ChestFormData("27")
     .title(`Buy §8${cleanName}`)
     .button(10, 'Buy 1', [`§8${cleanName}`, "", `§7Buy 1 for: §6${buyPrice}`], "minecraft:yellow_dye", 1)
@@ -646,6 +654,14 @@ function buyPreviewMenu(player, buyPrice, sellPrice, item) {
 
 function buyUnavailablePreviewMenu(player, sellPrice, item) {
     let cleanName = item.nameTag.replace(/§./g, "")
+
+    let lore = item.getLore()
+    if (lore && lore[lore.length - 1].includes("*")) {
+        lore.pop()
+        lore.pop()
+        item.setLore(lore)
+    }
+
     new ChestFormData("27")
     .title(`Buy §8${cleanName}`)
     .button(10, '§dYou can\'t buy this item!', [`§8${cleanName}`, "", `§7This item is too rare to buy!`], "minecraft:barrier", 1)
@@ -684,6 +700,14 @@ function buyUnavailablePreviewMenu(player, sellPrice, item) {
 
 function buyNamedUnavailablePreviewMenu(player, sellPrice, item) {
     let cleanName = item.nameTag.replace(/§./g, "")
+
+    let lore = item.getLore()
+    if (lore && lore[lore.length - 1].includes("*")) {
+        lore.pop()
+        lore.pop()
+        item.setLore(lore)
+    }
+
     new ChestFormData("27")
     .title(`Buy §8${cleanName}`)
     .button(10, '§dYou can\'t buy this item!', [`§8${cleanName}`, "", `§7This item is too rare to buy!`], "minecraft:barrier", 1)
@@ -723,6 +747,14 @@ function buyNamedUnavailablePreviewMenu(player, sellPrice, item) {
 
 function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item) {
     let cleanName = item.nameTag.replace(/§./g, "") 
+
+    let lore = item.getLore()
+    if (lore && lore[lore.length - 1].includes("*")) {
+        lore.pop()
+        lore.pop()
+        item.setLore(lore)
+    }
+
     new ChestFormData("27")
     .title(`Buy §8${cleanName}`)
     .button(10, 'Buy 1', [`§8${cleanName}`, "", `§7Buy 1 for: §6${buyPrice}`], "minecraft:yellow_dye", 1)
@@ -768,6 +800,14 @@ function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item) {
 
 function buySellUnavailablePreviewMenu(player, buyPrice, item) {
     let cleanName = item.nameTag.replace(/§./g, "")
+
+    let lore = item.getLore()
+    if (lore && lore[lore.length - 1].includes("*")) {
+        lore.pop()
+        lore.pop()
+        item.setLore(lore)
+    }
+
     new ChestFormData("27")
     .title(`Buy §8${cleanName}`)
     .button(10, 'Buy 1', [`§8${cleanName}`, "", `§7Buy 1 for: §6${buyPrice}`], "minecraft:yellow_dye", 1)
@@ -808,12 +848,19 @@ function buySellUnavailablePreviewMenu(player, buyPrice, item) {
 
 function buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item) {
     let cleanName = item.nameTag.replace(/§./g, "")
+
+    let lore = item.getLore()
+    if (lore && lore[lore.length - 1].includes("*")) {
+        lore.pop()
+        lore.pop()
+    }
+
     new ChestFormData("27")
     .title(`Buy §8${cleanName}`)
     .button(10, 'Buy 1', [`§8${cleanName}`, "", `§7Buy 1 for: §6${buyPrice}`], "minecraft:yellow_dye", 1)
     .button(11, '§dThis item is unstackable!', [`§8${cleanName}`, "", "§7You cannot buy multiple", "§7of this item!"], "minecraft:barrier", 1)
     
-    .button(13, `${item.nameTag}`, item.getLore(), item.typeId, 1)
+    .button(13, `${item.nameTag}`, lore, item.typeId, 1)
 
     .button(15, '§dYou can\'t sell this item!', [`§8${cleanName}`, "", `§7This item can't be sold!`], "minecraft:barrier", 1)
     .button(16, '§dYou can\'t sell this item!', [`§8${cleanName}`, "", `§7This item can't be sold!`], "minecraft:barrier", 1)
