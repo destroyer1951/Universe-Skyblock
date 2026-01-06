@@ -565,7 +565,7 @@ function fishingShopMenu(player) {
         if (a.canceled) return;
         switch (a.selection) {
             case 10: {
-                return buyUnstackablePreviewMenu(player, prices.buy.basicRod, prices.sell.basicRod, items.basicRod)
+                return buyUnstackableSellUnavailablePreviewMenu(player, prices.buy.basicRod, items.basicRod)
             }
             case 11: {
                 return buyPreviewMenu(player, prices.buy.rawCod, prices.sell.rawCod, items.rawCod)
@@ -765,6 +765,85 @@ function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item) {
         }
     })
 }
+
+function buySellUnavailablePreviewMenu(player, buyPrice, item) {
+    let cleanName = item.nameTag.replace(/§./g, "")
+    new ChestFormData("27")
+    .title(`Buy §8${cleanName}`)
+    .button(10, 'Buy 1', [`§8${cleanName}`, "", `§7Buy 1 for: §6${buyPrice}`], "minecraft:yellow_dye", 1)
+    .button(11, 'Buy Custom', [`§8${cleanName}`, "", `§7Per item price: §6${buyPrice}`], "minecraft:red_dye", 1)
+    
+    .button(13, `${item.nameTag}`, item.getLore(), item.typeId, 1)
+
+    .button(15, '§dYou can\'t sell this item!', [`§8${cleanName}`, "", `§7This item can't be sold!`], "minecraft:barrier", 1)
+    .button(16, '§dYou can\'t sell this item!', [`§8${cleanName}`, "", `§7This item can't be sold!`], "minecraft:barrier", 1)
+
+    .show(player).then(a => {
+        if (a.canceled) return
+        switch (a.selection) {
+            case 10: {
+                if (getPlayerDynamicProperty(player, "coins") < buyPrice) return cantBuyOneMenu(player)
+                
+                setPlayerDynamicProperty(player, "coins", -buyPrice, true)
+                item.amount = 1
+                player.getComponent("inventory").container.addItem(item)
+                player.playSound("random.orb")
+                player.sendMessage(`§aYou purchased §ex1 ${item.nameTag}§a for §6${buyPrice} coins`)
+                return buySellUnavailablePreviewMenu(player, buyPrice, item)
+
+            } 
+            case 11: {
+                if (getPlayerDynamicProperty(player, "coins") < buyPrice*2) return cantBuyMultipleMenu(player)
+                return buyCustomMenu(player, buyPrice, item)
+            }
+            case 15: {
+                return buySellUnavailablePreviewMenu(player, buyPrice, item)
+            }
+            case 16: {
+                return buySellUnavailablePreviewMenu(player, buyPrice, item)
+            }
+        }
+    })
+}     
+
+function buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item) {
+    let cleanName = item.nameTag.replace(/§./g, "")
+    new ChestFormData("27")
+    .title(`Buy §8${cleanName}`)
+    .button(10, 'Buy 1', [`§8${cleanName}`, "", `§7Buy 1 for: §6${buyPrice}`], "minecraft:yellow_dye", 1)
+    .button(11, '§dThis item is unstackable!', [`§8${cleanName}`, "", "§7You cannot buy multiple", "§7of this item!"], "minecraft:barrier", 1)
+    
+    .button(13, `${item.nameTag}`, item.getLore(), item.typeId, 1)
+
+    .button(15, '§dYou can\'t sell this item!', [`§8${cleanName}`, "", `§7This item can't be sold!`], "minecraft:barrier", 1)
+    .button(16, '§dYou can\'t sell this item!', [`§8${cleanName}`, "", `§7This item can't be sold!`], "minecraft:barrier", 1)
+
+    .show(player).then(a => {
+        if (a.canceled) return
+        switch (a.selection) {
+            case 10: {
+                if (getPlayerDynamicProperty(player, "coins") < buyPrice) return cantBuyOneMenu(player)
+                
+                setPlayerDynamicProperty(player, "coins", -buyPrice, true)
+                item.amount = 1
+                player.getComponent("inventory").container.addItem(item)
+                player.playSound("random.orb")
+                player.sendMessage(`§aYou purchased §ex1 ${item.nameTag}§a for §6${buyPrice} coins`)
+                return buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item)
+
+            } 
+            case 11: {
+                return buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item)
+            }
+            case 15: {
+                return buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item)
+            }
+            case 16: {
+                return buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item)
+            }
+        }
+    })
+}   
 
 /** 
  * @param {Player} player
