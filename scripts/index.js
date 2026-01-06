@@ -1137,8 +1137,6 @@ world.afterEvents.entitySpawn.subscribe(data => {
 
     const item = rollWeightedItem(fishingLootTable) 
 
-    console.warn(typeof item)
-
     let lore = item.getLore()
 
     if (lore) {
