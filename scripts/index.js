@@ -62,6 +62,7 @@ world.afterEvents.playerSpawn.subscribe(data => {
     const compass = new ItemStack("minecraft:compass")
     compass.lockMode = "slot"
     player.getComponent('inventory').container.setItem(8, compass)
+    player.addEffect("saturation", 20000000, { amplifier: 25, showParticles: false })
     
     if (!data.initialSpawn) return
     player.sendMessage('§cThis world uses Data Storage Basket created by destroyer1951. Any username changes will result in §lpermanent§r§c data loss. You have been warned.')
