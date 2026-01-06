@@ -61,6 +61,7 @@ world.afterEvents.playerSpawn.subscribe(data => {
     
     const compass = new ItemStack("minecraft:compass")
     compass.lockMode = "slot"
+    compass.nameTag = "§r§fMain Menu"
     player.getComponent('inventory').container.setItem(8, compass)
     player.addEffect("saturation", 20000000, { amplifier: 25, showParticles: false })
     
@@ -603,7 +604,7 @@ function buyPreviewMenu(player, buyPrice, sellPrice, item) {
     let cleanName = item.nameTag.replace(/§./g, "")
 
     let lore = item.getLore()
-    if (lore && lore[lore.length - 1].includes("*")) {
+    if (lore.length > 0) {
         lore.pop()
         lore.pop()
     }
@@ -656,7 +657,7 @@ function buyUnavailablePreviewMenu(player, sellPrice, item) {
     let cleanName = item.nameTag.replace(/§./g, "")
 
     let lore = item.getLore()
-    if (lore && lore[lore.length - 1].includes("*")) {
+    if (lore.length > 0) {
         lore.pop()
         lore.pop()
     }
@@ -701,7 +702,7 @@ function buyNamedUnavailablePreviewMenu(player, sellPrice, item) {
     let cleanName = item.nameTag.replace(/§./g, "")
 
     let lore = item.getLore()
-    if (lore && lore[lore.length - 1].includes("*")) {
+    if (lore.length > 0) {
         lore.pop()
         lore.pop()
     }
@@ -747,7 +748,7 @@ function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item) {
     let cleanName = item.nameTag.replace(/§./g, "") 
 
     let lore = item.getLore()
-    if (lore && lore[lore.length - 1].includes("*")) {
+    if (lore.length > 0) {
         lore.pop()
         lore.pop()
     }
@@ -799,7 +800,7 @@ function buySellUnavailablePreviewMenu(player, buyPrice, item) {
     let cleanName = item.nameTag.replace(/§./g, "")
 
     let lore = item.getLore()
-    if (lore && lore[lore.length - 1].includes("*")) {
+    if (lore.length > 0) {
         lore.pop()
         lore.pop()
     }
@@ -846,7 +847,7 @@ function buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item) {
     let cleanName = item.nameTag.replace(/§./g, "")
 
     let lore = item.getLore()
-    if (lore && lore[lore.length - 1].includes("*")) {
+    if (lore.length > 0) {
         lore.pop()
         lore.pop()
     }

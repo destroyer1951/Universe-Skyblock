@@ -84,7 +84,7 @@ prices.sell.sugarCane = 5
 // Fishing shop items
 
 prices.buy.basicRod = 250
-prices.sell.basicRod = "N/A"
+prices.sell.basicRod = "§cN/A"
 
 prices.buy.rawCod = 50
 prices.sell.rawCod = 10
