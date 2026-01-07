@@ -287,16 +287,25 @@ export const getFreeSlots = (player) => {
     return slots
 }
 
-export function rollWeightedItem(table) {
-    const totalWeight = table.reduce((sum, e) => sum + e.weight, 0)
+export function rollWeightedItem(table, luck = 0) { // chatgpt my goat
+    // apply luck (rare items benefit more)
+    const adjusted = table.map(e => ({
+        item: e.item,
+        weight: e.weight * (1 + luck * (1 / e.weight) * 0.15)
+    }))
+
+    const totalWeight = adjusted.reduce((sum, e) => sum + e.weight, 0)
     let roll = Math.random() * totalWeight
 
-    for (const entry of table) {
+    for (const entry of adjusted) {
         roll -= entry.weight
         if (roll <= 0) {
             return entry.item()
         }
     }
+
+    // safety fallback
+    return adjusted[adjusted.length - 1].item()
 }
 
 
@@ -394,6 +403,8 @@ system.runInterval(() => {
     })
 }, 5)
 
+let fishingList = []
+
 world.afterEvents.itemUse.subscribe(data => {
     const player = data.source
     const item = data.itemStack
@@ -412,11 +423,17 @@ world.afterEvents.itemUse.subscribe(data => {
         } case "minecraft:compass": {
             mainMenu(player)
             return
+        } case "minecraft:fishing_rod": {
+            fishingList.push(player.name)
+            console.warn("sob")
+            system.runTimeout(() => {
+                return fishingList.shift()
+            }, 4)
         }
     }
 })
 
-const fishingLootTable = [
+const basicRodLootTable = [
     { item: () => items.rawCod, weight: 50 },
     { item: () => items.rawSalmon, weight: 30 },
     { item: () => items.tropicalFish, weight: 15 },
@@ -431,17 +448,19 @@ world.afterEvents.entitySpawn.subscribe(data => {
     } catch (e) {
         return
     }
+    const player = world.getPlayers({name:fishingList[0]})[0]
+    const rod = player.getComponent("equippable").getEquipmentSlot("Mainhand")
+
+    let item = items.diamond
+    switch (rod.nameTag) {
+        case items.basicRod.nameTag: {
+            item = rollWeightedItem(basicRodLootTable)
+            break
+        }
+    }
+
     const entity = data.entity
     const velocity = data.entity.getVelocity()
-
-    const item = rollWeightedItem(fishingLootTable) 
-
-    let lore = item.getLore()
-
-    if (lore) {
-        lore[lore.length] = "fxp275"
-    } else lore = ["fxp275"]
-    item.setLore(lore)
 
     const newEntity = entity.dimension.spawnItem(item, entity.location)
     const newVelo = {x: velocity.x*.75, y:velocity.y*.50, z:velocity.z*.75}
@@ -455,39 +474,8 @@ world.beforeEvents.playerInventoryItemChange.subscribe(data => { // this will wo
 })*/
 
 
-world.beforeEvents.entityRemove.subscribe(data => { // duuuuude i have no idea whats going on here
-    const entity = data.removedEntity
-    if (!(entity.getComponent("item")?.itemStack)) return
-
-
-    const lore = entity.getComponent("item")?.itemStack.getLore()
-    if (lore[lore.length-1] && lore[lore.length-1].startsWith("fxp")) {
-
-    let xp = 0
-    xp = Number(lore[lore.length-1].substring(3))
-    system.runTimeout(() => {
-        const players = data.removedEntity.dimension.getPlayers({location: data.removedEntity.location, maxDistance: 5, closest: 1})
-
-        system.run(() => {
-            const inv = players[0].getComponent("inventory").container
-            for (let i = 0; i < 36; i++) {
-                
-                const item = inv.getItem(i)
-                const tLore = item?.getLore()
-
-                    if (tLore && tLore[tLore.length-1] && (tLore[tLore.length-1].startsWith("fxp"))) { // mostly here so hopefully I dont have to edit this ever again
-                        tLore.pop()
-                        item.setLore(tLore)
-                        inv.setItem(i, undefined)
-                        inv.addItem(item)
-                    }
-                }
-            //setScore(players[0], "temp", xp, true)
-        })    
-    },2)
-    
-    }
-
+world.beforeEvents.entityRemove.subscribe(data => { // it all makes sense now
+ 
     try {
         if (!(data.removedEntity.getComponent("item")?.itemStack?.typeId === "minecraft:element_1")) return;
     } catch (e) {
