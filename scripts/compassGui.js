@@ -36,20 +36,20 @@ export function mainMenu(player) {
         })
 };
 
-
+/** @param {Player} player  */
 export function levelsMenu(player) {
     const miningLevel = getPlayerDynamicProperty(player, "miningLevel")
-    const farmingLevel = getPlayerDynamicProperty(player, "farmingLevel")
+    //const farmingLevel = getPlayerDynamicProperty(player, "farmingLevel")
     const fishingLevel = getPlayerDynamicProperty(player, "fishingLevel")
-    const combatLevel = getPlayerDynamicProperty(player, "combatLevel")
+    //const combatLevel = getPlayerDynamicProperty(player, "combatLevel")
     const skyblockLevel = getPlayerDynamicProperty(player, "skyblockLevel")
     new ChestFormData("27")
         .title('Skill Levels')
-        .button(11, `Mining: ${miningLevel}`, ['', '§7Check your Mining Level'], 'minecraft:iron_pickaxe', 1)
-        .button(12, `Combat: ${combatLevel}`, ['', '§7Check your Combat Level'], 'minecraft:iron_sword', 1)
-        .button(13, `Skyblock: ${skyblockLevel}`, ['', '§7Check your Skyblock Level'], 'minecraft:turtle_scute', 1)
-        .button(14, `Farming: ${farmingLevel}`, ['', '§7Check your Farming Level'], 'minecraft:wheat', 1)
-        .button(15, `Fishing: ${fishingLevel}`, ['', '§7Check your Fishing Level'], 'minecraft:fishing_rod', 1)
+        .button(11, `§cCombat Level`, ['', '§l§5COMING SOON'], 'minecraft:iron_sword', 1)
+        .button(12, `§bMining Level`, ['', `Level: ${miningLevel}/50`, '', '§7Mining XP is earned through', 'breaking cobblestone and', 'related ores'], 'minecraft:iron_pickaxe', 1)
+        .button(13, `§aSkyblock Level`, ['', `Level: ${skyblockLevel}/50`, '', '§7Your Skyblock Level is an', 'average of the 4 other', 'skill levels!'], 'minecraft:turtle_scute', 1)
+        .button(14, `§9Fishing Level `, ['', `Level: ${fishingLevel}/50`, '', '§7Fishing XP is earned through', 'fishing and catching rare items'], 'minecraft:fishing_rod', 1)
+        .button(15, `§eFarming Level `, ['', '§l§5COMING SOON'], 'minecraft:wheat', 1)
         .show(player).then(a => {
             if (a.canceled) return;
             switch (a.selection) {
