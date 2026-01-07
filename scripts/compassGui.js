@@ -5,7 +5,7 @@ import { ChestFormData } from './extensions/forms.js';
 import { items, makeItem, rollStars } from './items.js'
 import { prices } from './prices.js'
 import { getPlayerDynamicProperty, setPlayerDynamicProperty, getGlobalDynamicProperty, setGlobalDynamicProperty, getScore, setScore, setStat } from './stats.js'
-import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, rollWeightedItem   } from './index.js'
+import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, rollWeightedItem, xpRequirements } from './index.js'
 
 /** @param {Player} player  */
 export function mainMenu(player) {
@@ -36,6 +36,7 @@ export function mainMenu(player) {
         })
 };
 
+
 /** @param {Player} player  */
 export function levelsMenu(player) {
     const miningLevel = getPlayerDynamicProperty(player, "miningLevel")
@@ -43,13 +44,28 @@ export function levelsMenu(player) {
     const fishingLevel = getPlayerDynamicProperty(player, "fishingLevel")
     //const combatLevel = getPlayerDynamicProperty(player, "combatLevel")
     const skyblockLevel = getPlayerDynamicProperty(player, "skyblockLevel")
+
+    const miningXP = getPlayerDynamicProperty(player, "miningXP")
+    const fishingXP = getPlayerDynamicProperty(player, "fishingXP")
+    const skyblockXP = getPlayerDynamicProperty(player, "skyblockXP")
+    //const farmingXP = getPlayerDynamicProperty(player, "farmingXP")
+    //const combatXP = getPlayerDynamicProperty(player, "combatXP")
+
+    const miningLevelProgress = xpRequirements[miningLevel + 1] ? xpRequirements[miningLevel] : "MAX"
+    const fishingLevelProgress = xpRequirements[fishingLevel + 1] ? xpRequirements[fishingLevel] : "MAX"
+    const skyblockLevelProgress = xpRequirements[skyblockLevel + 1] ? xpRequirements[skyblockLevel] : "MAX"
+        //const farmingLevelProgress = xpRequirements[farmingLevel + 1] ? xpRequirements[farmingLevel] : "MAX"
+        //const combatLevelProgress = xpRequirements[combatLevel + 1] ? xpRequirements[combatLevel] : "MAX"
+
+
+
     new ChestFormData("27")
         .title('Skill Levels')
         .button(11, `§cCombat Level`, ['', '§l§5COMING SOON'], 'minecraft:iron_sword', 1)
-        .button(12, `§bMining Level`, ['', `Level: ${miningLevel}/50`, '', '§7Mining XP is earned through', 'breaking cobblestone and', 'related ores'], 'minecraft:iron_pickaxe', 1)
-        .button(13, `§aSkyblock Level`, ['', `Level: ${skyblockLevel}/50`, '', '§7Your Skyblock Level is an', 'average of the 4 other', 'skill levels!'], 'minecraft:turtle_scute', 1)
-        .button(14, `§9Fishing Level `, ['', `Level: ${fishingLevel}/50`, '', '§7Fishing XP is earned through', 'fishing and catching rare items'], 'minecraft:fishing_rod', 1)
-        .button(15, `§eFarming Level `, ['', '§l§5COMING SOON'], 'minecraft:wheat', 1)
+        .button(12, `§bMining Level: ${miningLevel}`, ['', `Progress: ${miningXP}/${miningLevelProgress} XP`, '', '§7Mining XP is earned through', 'breaking cobblestone and', 'related ores'], 'minecraft:iron_pickaxe', 1)
+        .button(13, `§aSkyblock Level: ${skyblockLevel}`, ['', `Progress: ${skyblockXP}/${skyblockLevelProgress} XP`, '', '§7Your Skyblock Level is an', 'average of the 4 other', 'skill levels!'], 'minecraft:turtle_scute', 1)
+        .button(14, `§9Fishing Level: ${fishingLevel}`, ['', `Progress: ${fishingXP}/${fishingLevelProgress} XP`, '', '§7Fishing XP is earned through', 'fishing and catching rare items'], 'minecraft:fishing_rod', 1)
+        .button(15, `§eFarming Level`, ['', '§l§5COMING SOON'], 'minecraft:wheat', 1)
         .show(player).then(a => {
             if (a.canceled) return;
             switch (a.selection) {

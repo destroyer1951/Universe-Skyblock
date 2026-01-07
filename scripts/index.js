@@ -42,6 +42,16 @@ world.afterEvents.playerSpawn.subscribe(data => {
     player.sendMessage('§cThis world uses Data Storage Basket created by destroyer1951. Any username changes will result in §lpermanent§r§c data loss. You have been warned.')
 
     if (!getPlayerDynamicProperty(player, 'coins')) setPlayerDynamicProperty(player, 'coins', 0)
+    if (!getPlayerDynamicProperty(player, 'skyblockLevel')) setPlayerDynamicProperty(player, 'skyblockLevel', 0)
+    if (!getPlayerDynamicProperty(player, 'skyblockXP')) setPlayerDynamicProperty(player, 'skyblockXP', 0)
+    if (!getPlayerDynamicProperty(player, 'miningLevel')) setPlayerDynamicProperty(player, 'miningLevel', 0)
+    if (!getPlayerDynamicProperty(player, 'miningXP')) setPlayerDynamicProperty(player, 'miningXP', 0)
+    if (!getPlayerDynamicProperty(player, 'fishingLevel')) setPlayerDynamicProperty(player, 'fishingLevel', 0)
+    if (!getPlayerDynamicProperty(player, 'fishingXP')) setPlayerDynamicProperty(player, 'fishingXP', 0)
+    if (!getPlayerDynamicProperty(player, 'farmingLevel')) setPlayerDynamicProperty(player, 'farmingLevel', 0)
+    if (!getPlayerDynamicProperty(player, 'farmingXP')) setPlayerDynamicProperty(player, 'farmingXP', 0)
+    if (!getPlayerDynamicProperty(player, 'combatLevel')) setPlayerDynamicProperty(player, 'combatLevel', 0)
+    if (!getPlayerDynamicProperty(player, 'combatXP')) setPlayerDynamicProperty(player, 'combatXP', 0)
 })
 
 world.beforeEvents.chatSend.subscribe(data => {
@@ -149,6 +159,44 @@ player.sendMessage(`§aInformation for the player property §e${property}
         }
     }
 })
+
+export const xpRequirements = [
+    50,
+    125,
+    250,
+    600,
+    1500,
+    3500,
+    5000,
+    10000,
+    20000,
+    30000,
+    40000,
+    50000,
+    65000,
+    80000,
+    100000,
+    125000 // 15
+]
+
+function checkLevelUp(player, skill) {
+    let level = getPlayerDynamicProperty(player, `${skill}Level`)
+    let xp = getPlayerDynamicProperty(player, `${skill}XP`)
+    let color = "§f"
+    switch (skill) {
+        case "mining": color = "§b"; break;
+        case "fishing": color = "§9"; break;
+        case "farming": color = "§a"; break;
+        case "combat": color = "§c"; break;
+    }
+    const skillDisplay = skill[0].toUpperCase() + skill.slice(1)
+    if (xp >= xpRequirements[level]) {
+        setPlayerDynamicProperty(player, `${skill}Level`, level + 1)
+        setPlayerDynamicProperty(player, `${skill}XP`, xp - xpRequirements[level])
+        player.sendMessage(`§b-------------------------------------\n\n§l§e LEVEL UP >> §r§aYour ${color}${skillDisplay}§a level is now §l${color}${level + 1}§r§a!\n\n§b-------------------------------------`)
+        player.playSound("random.levelup")
+    }
+}
 
 
 
