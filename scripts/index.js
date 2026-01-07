@@ -1,8 +1,10 @@
 import { world, system, ItemStack, Player } from '@minecraft/server'
 import { ModalFormData } from '@minecraft/server-ui';
 import { ChestFormData } from './extensions/forms.js';
+
 import { items, makeItem, rollStars } from './items.js'
 import { prices } from './prices.js'
+import { getPlayerDynamicProperty, setPlayerDynamicProperty, getGlobalDynamicProperty, setGlobalDynamicProperty, getScore, setScore, setStat } from './stats.js'
 import * as Menus from './compassGui.js'
 
 const { 
@@ -26,48 +28,6 @@ const {
   ████       ███████    ██    ██   ██    ██    ███████       ████   
 */                                                                 
 
-
-function getPlayerDynamicProperty(player, objective) {
-    return world.getDynamicProperty(`${player.name.toLowerCase()}:${objective}`)
-}
-
-function setPlayerDynamicProperty(player, objective, value, add = false) {
-    add && typeof value === 'number' && world.getDynamicProperty(`${player.name.toLowerCase()}:${objective}`) ? world.setDynamicProperty(`${player.name.toLowerCase()}:${objective}`,  world.getDynamicProperty(`${player.name.toLowerCase()}:${objective}`) + value) : world.setDynamicProperty(`${player.name.toLowerCase()}:${objective}`, value)
-}
-
-
-function getGlobalDynamicProperty(objective) {
-    return world.getDynamicProperty(objective)
-}
-
-function setGlobalDynamicProperty(objective, value, add = false) {
-    add && typeof value === 'number' && world.getDynamicProperty(objective) ? world.setDynamicProperty(objective, world.getDynamicProperty(objective)+value) : world.setDynamicProperty(objective, value)
-}
-
-function getScore(target, objective) {
-    try {
-        if (world.scoreboard.getObjective(objective).getScore(typeof target === 'string' ? target : target.scoreboardIdentity) === undefined) {
-            return 0
-        } else { return world.scoreboard.getObjective(objective).getScore(typeof target === 'string' ? target : target.scoreboardIdentity) }
-    } catch {
-        return 0
-    }
-}
-
-function setScore(target, objective, amount, add = false) {
-    const scoreObj = world.scoreboard.getObjective(objective)
-    const score = (add ? scoreObj?.getScore(target) ?? 0 : 0) + amount
-    scoreObj?.setScore(target, score)
-    return score;
-}
-
-function setStat(player, stat, amount, add = false) {
-    if (typeof amount !== 'number') return
-    if (!add) return setPlayerDynamicProperty(player, stat, amount)
-    const multiplier = getPlayerDynamicProperty(player, `${stat}Mult`)
-    if (!multiplier && multiplier != 0) return setPlayerDynamicProperty(player, stat, amount, true)
-    return setPlayerDynamicProperty(player, stat, amount*multiplier, true)
-}
 
 world.afterEvents.playerSpawn.subscribe(data => {
     const player = data.player
@@ -200,7 +160,7 @@ player.sendMessage(`§aInformation for the player property §e${property}
     ████           ██       ██████  ██   ████  ██████    ██    ██  ██████  ██   ████ ███████       ████
 */
 
-const checkItemAmount = (player, itemId, clearItems = false, itemName="") => {
+export const checkItemAmount = (player, itemId, clearItems = false, itemName="") => {
     const inventory = player.getComponent("inventory").container
     let itemAmount = 0
     for (let i = 0; i < 36; i++) {
@@ -213,7 +173,7 @@ const checkItemAmount = (player, itemId, clearItems = false, itemName="") => {
     return itemAmount
 }
 
-const checkInvEmpty = (player) => {
+export const checkInvEmpty = (player) => {
     const inventory = player.getComponent("inventory").container
     for (let i = 0; i < 36; i++) {
         let item = inventory.getItem(i)
@@ -231,7 +191,7 @@ const checkInvEmpty = (player) => {
  * @param {number} decrement The amount of the item to remove.
  * @returns {boolean} If items were cleared or not.
  */
-function clearItem(player, itemId, decrement=0, itemName="") { // i think herobrine and ai just writes all of my code for me
+export function clearItem(player, itemId, decrement=0, itemName="") { // i think herobrine and ai just writes all of my code for me
     const inventory = player.getComponent("inventory").container;
     if (decrement === 0) {
         let cleared = false
@@ -269,7 +229,7 @@ function clearItem(player, itemId, decrement=0, itemName="") { // i think herobr
 };
 
 /** @param {Player} player */
-const getFreeSlots = (player) => {
+export const getFreeSlots = (player) => {
     const inventory = player.getComponent("inventory").container
     let slots = 0
     for (let i = 0; i < 36; i++) {
@@ -279,7 +239,7 @@ const getFreeSlots = (player) => {
     return slots
 }
 
-function rollWeightedItem(table) {
+export function rollWeightedItem(table) {
     const totalWeight = table.reduce((sum, e) => sum + e.weight, 0)
     let roll = Math.random() * totalWeight
 

@@ -1,13 +1,17 @@
 import { world, system, ItemStack, Player } from '@minecraft/server'
 import { ModalFormData } from '@minecraft/server-ui';
 import { ChestFormData } from './extensions/forms.js';
+
 import { items, makeItem, rollStars } from './items.js'
 import { prices } from './prices.js'
+import { getPlayerDynamicProperty, setPlayerDynamicProperty, getGlobalDynamicProperty, setGlobalDynamicProperty, getScore, setScore, setStat } from './stats.js'
+import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, rollWeightedItem   } from './index.js'
 
 /** @param {Player} player  */
 export function mainMenu(player) {
     new ChestFormData("27")
         .title('Skyblock Menu')
+        .button(4, 'Levels', ['', '§7Check your Skill Levels!'], 'minecraft:turtle_scute', 1)
         .button(12, 'Codes', ['', '§7Redeem Codes for Rewards!'], 'minecraft:name_tag', 1)
         .button(13, 'Your Island', ['', '§7Warp to your Island!'], 'minecraft:compass', 1)
         .button(14, 'Shop', ['', '§7Buy and Sell some Items!'], 'minecraft:gold_ingot', 1)
@@ -15,6 +19,9 @@ export function mainMenu(player) {
         .show(player).then(a => {
             if (a.canceled) return;
             switch (a.selection) {
+                case 4: {
+                    return levelsMenu(player)
+                }
                 case 12: {
                     return codesMenu(player)
                 }
@@ -29,6 +36,27 @@ export function mainMenu(player) {
         })
 };
 
+
+export function levelsMenu(player) {
+    const miningLevel = getPlayerDynamicProperty(player, "miningLevel")
+    const farmingLevel = getPlayerDynamicProperty(player, "farmingLevel")
+    const fishingLevel = getPlayerDynamicProperty(player, "fishingLevel")
+    const combatLevel = getPlayerDynamicProperty(player, "combatLevel")
+    const skyblockLevel = getPlayerDynamicProperty(player, "skyblockLevel")
+    new ChestFormData("27")
+        .title('Skill Levels')
+        .button(11, `Mining: ${miningLevel}`, ['', '§7Check your Mining Level'], 'minecraft:iron_pickaxe', 1)
+        .button(12, `Combat: ${combatLevel}`, ['', '§7Check your Combat Level'], 'minecraft:iron_sword', 1)
+        .button(13, `Skyblock: ${skyblockLevel}`, ['', '§7Check your Skyblock Level'], 'minecraft:turtle_scute', 1)
+        .button(14, `Farming: ${farmingLevel}`, ['', '§7Check your Farming Level'], 'minecraft:wheat', 1)
+        .button(15, `Fishing: ${fishingLevel}`, ['', '§7Check your Fishing Level'], 'minecraft:fishing_rod', 1)
+        .show(player).then(a => {
+            if (a.canceled) return;
+            switch (a.selection) {
+
+            }
+        })
+}
 
 /** @param {Player} player  */
 export function codesMenu(player) {
