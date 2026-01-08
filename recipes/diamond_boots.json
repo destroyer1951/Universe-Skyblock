@@ -2,7 +2,7 @@
   "format_version": "1.20.10",
   "minecraft:recipe_shaped": {
     "description": {
-    "identifier": "minecraft:iron_boots"
+    "identifier": "minecraft:diamond_boots"
     },
 
     
@@ -13,16 +13,16 @@
     ],
     "key": {
       "X": {
-        "item": "minecraft:iron_ingot"
+        "item": "minecraft:diamond"
       }
     },
 	"unlock": [
-        {
-          "item": "minecraft:iron_ingot"
-        }
+      {
+        "item": "minecraft:diamond"
+      }
     ],
     "result": {
-      "item": "minecraft:iron_boots"
+      "item": "minecraft:diamond_boots"
     }
   }
 }

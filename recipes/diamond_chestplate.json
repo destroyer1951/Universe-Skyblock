@@ -2,27 +2,28 @@
   "format_version": "1.20.10",
   "minecraft:recipe_shaped": {
     "description": {
-    "identifier": "minecraft:iron_boots"
+    "identifier": "minecraft:diamond_chestplate"
     },
 
     
     "tags": [ "deprecated" ],
     "pattern": [
       "X X",
-      "X X"
+      "XXX",
+      "XXX"
     ],
     "key": {
       "X": {
-        "item": "minecraft:iron_ingot"
+        "item": "minecraft:diamond"
       }
     },
 	"unlock": [
-        {
-          "item": "minecraft:iron_ingot"
-        }
+      {
+        "item": "minecraft:diamond"
+      }
     ],
     "result": {
-      "item": "minecraft:iron_boots"
+      "item": "minecraft:diamond_chestplate"
     }
   }
 }
