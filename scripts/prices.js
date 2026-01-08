@@ -47,16 +47,16 @@ prices.buy.birchLog = 200
 prices.sell.birchLog = 10
 
 prices.buy.coal = 100
-prices.sell.coal = 12
+prices.sell.coal = 15
 
-prices.buy.copperIngot = 3000
-prices.sell.copperIngot = 20
+prices.buy.copperIngot = 2000
+prices.sell.copperIngot = 50
 
-prices.buy.ironIngot = 10000
-prices.sell.ironIngot = 35
+prices.buy.ironIngot = 4000
+prices.sell.ironIngot = 100
 
-prices.buy.goldIngot = 25000
-prices.sell.goldIngot = 50
+prices.buy.goldIngot = 15000
+prices.sell.goldIngot = 150
 
 prices.buy.diamond = "§cN/A"
 prices.sell.diamond = 1
