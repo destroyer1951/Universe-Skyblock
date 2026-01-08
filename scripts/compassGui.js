@@ -385,10 +385,14 @@ export function fishingShopMenu(player) {
 export function buyPreviewMenu(player, buyPrice, sellPrice, item) {
     const freeSlots = getFreeSlots(player)
     if (freeSlots == 0) return player.sendMessage("§cYou need free inventory space for this!")
+
     let cleanName 
     if (item.nameTag) { 
         cleanName = item.nameTag.replace(/§./g, "")
-    } else cleanName = "placeholder"
+    } else {
+        cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+        console.warn("cleanName")
+    }
 
     let lore = item.getLore()
     if (lore.length !== 0 && lore[lore.length-1].includes("*")) {
@@ -400,7 +404,7 @@ export function buyPreviewMenu(player, buyPrice, sellPrice, item) {
     .button(10, 'Buy 1', [`§8${cleanName}`, "", `§7Buy 1 for: §6${buyPrice}`], "minecraft:yellow_dye", 1)
     .button(11, 'Buy Custom', [`§8${cleanName}`, "", `§7Per item price: §6${buyPrice}`], "minecraft:red_dye", 1)
 
-    .button(13, `${item.nameTag ? item.nameTag : cleanName}`, lore, item.typeId, 1)
+    .button(13, `§r§f${item.nameTag ? item.nameTag : cleanName}`, lore, item.typeId, 1)
 
     .button(15, 'Sell 1', [`§8${cleanName}`, "", `§7Sell 1 for: §6${sellPrice}`], "minecraft:lime_dye", 1)
     .button(16, 'Sell Custom', [`§8${cleanName}`, "", `§7Per item price: §6${sellPrice}`], "minecraft:green_dye", 1)
@@ -415,7 +419,7 @@ export function buyPreviewMenu(player, buyPrice, sellPrice, item) {
                 item.amount = 1
                 player.getComponent("inventory").container.addItem(item)
                 player.playSound("random.orb")
-                player.sendMessage(`§aYou purchased §ex1 ${item.nameTag ? item.nameTag : cleanName}§a for §6${buyPrice} coins`)
+                player.sendMessage(`§aYou purchased §ex1 §f${item.nameTag ? item.nameTag : cleanName}§a for §6${buyPrice} coins`)
                 return buyPreviewMenu(player, buyPrice, sellPrice, item)
 
             } case 11: {
@@ -428,7 +432,7 @@ export function buyPreviewMenu(player, buyPrice, sellPrice, item) {
                     setPlayerDynamicProperty(player, "coins", (sellPrice), true)
 
                     player.playSound("random.orb")
-                    return player.sendMessage(`§aYou sold §ex1 ${item.nameTag ? item.nameTag : cleanName}§a for §6${sellPrice} coins`)
+                    return player.sendMessage(`§aYou sold §ex1 §f${item.nameTag ? item.nameTag : cleanName}§a for §6${sellPrice} coins`)
                 } else return cantSellMenu(player)
 
             } case 16: {
@@ -440,7 +444,15 @@ export function buyPreviewMenu(player, buyPrice, sellPrice, item) {
 }
 
 export function buyUnavailablePreviewMenu(player, sellPrice, item) {
-    let cleanName = item.nameTag.replace(/§./g, "")
+
+
+    let cleanName 
+    if (item.nameTag) { 
+        cleanName = item.nameTag.replace(/§./g, "")
+    } else {
+        cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+        console.warn("cleanName")
+    }
 
     let lore = item.getLore()
     if (lore.length !== 0 && lore[lore.length-1].includes("*")) {
@@ -452,7 +464,7 @@ export function buyUnavailablePreviewMenu(player, sellPrice, item) {
     .button(10, '§dYou can\'t buy this item!', [`§8${cleanName}`, "", `§7This item is too rare to buy!`], "minecraft:barrier", 1)
     .button(11, '§dYou can\'t buy this item!', [`§8${cleanName}`, "", `§7This item is too rare to buy!`], "minecraft:barrier", 1)
 
-    .button(13, `${item.nameTag}`, lore, item.typeId, 1)
+    .button(13, `§r§f${item.nameTag ? item.nameTag : cleanName}`, lore, item.typeId, 1)
 
     .button(15, 'Sell 1', [`§8${cleanName}`, "", `§7Sell 1 for: §6${sellPrice}`], "minecraft:lime_dye", 1)
     .button(16, 'Sell Custom', [`§8${cleanName}`, "", `§7Per item price: §6${sellPrice}`], "minecraft:green_dye", 1)
@@ -472,7 +484,7 @@ export function buyUnavailablePreviewMenu(player, sellPrice, item) {
                     setPlayerDynamicProperty(player, "coins", (sellPrice), true)
 
                     player.playSound("random.orb")
-                    return player.sendMessage(`§aYou sold §ex1 ${item.nameTag}§a for §6${sellPrice} coins`)
+                    return player.sendMessage(`§aYou sold §ex1 §f${item.nameTag ? item.nameTag : cleanName}§a for §6${sellPrice} coins`)
                 } else return cantSellMenu(player)
             } 
             case 16: {
@@ -484,7 +496,14 @@ export function buyUnavailablePreviewMenu(player, sellPrice, item) {
 }
 
 export function buyNamedUnavailablePreviewMenu(player, sellPrice, item) {
-    let cleanName = item.nameTag.replace(/§./g, "")
+
+    let cleanName 
+    if (item.nameTag) { 
+        cleanName = item.nameTag.replace(/§./g, "")
+    } else {
+        cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+        console.warn("cleanName")
+    }
 
     let lore = item.getLore()
     if (lore.length !== 0 && lore[lore.length-1].includes("*")) {
@@ -529,7 +548,17 @@ export function buyNamedUnavailablePreviewMenu(player, sellPrice, item) {
 
 
 export function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item) {
-    let cleanName = item.nameTag.replace(/§./g, "") 
+
+    const freeSlots = getFreeSlots(player)
+    if (freeSlots == 0) return player.sendMessage("§cYou need free inventory space for this!")
+
+    let cleanName 
+    if (item.nameTag) { 
+        cleanName = item.nameTag.replace(/§./g, "")
+    } else {
+        cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+        console.warn("cleanName")
+    }
 
     let lore = item.getLore()
     if (lore.length !== 0 && lore[lore.length-1].includes("*")) {
@@ -541,7 +570,7 @@ export function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item) {
     .button(10, 'Buy 1', [`§8${cleanName}`, "", `§7Buy 1 for: §6${buyPrice}`], "minecraft:yellow_dye", 1)
     .button(11, '§dThis item is unstackable!', [`§8${cleanName}`, "", "§7You cannot buy multiple", "§7of this item!"], "minecraft:barrier", 1)
 
-    .button(13, `${item.nameTag}`, lore, item.typeId, 1)
+    .button(13, `§r§f${item.nameTag ? item.nameTag : cleanName}`, lore, item.typeId, 1)
 
     .button(15, 'Sell 1', [`§8${cleanName}`, "", `§7Sell 1 for: §6${sellPrice}`], "minecraft:lime_dye", 1)
     .button(16, 'Sell Custom', [`§8${cleanName}`, "", `§7Per item price: §6${sellPrice}`], "minecraft:green_dye", 1)
@@ -556,7 +585,7 @@ export function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item) {
                 item.amount = 1
                 player.getComponent("inventory").container.addItem(item)
                 player.playSound("random.orb")
-                player.sendMessage(`§aYou purchased §ex1 ${item.nameTag}§a for §6${buyPrice} coins`)
+                player.sendMessage(`§aYou purchased §ex1 §f${item.nameTag ? item.nameTag : cleanName}§a for §6${buyPrice} coins`)
                 return buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item)
 
             } case 11: {
@@ -568,7 +597,7 @@ export function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item) {
                     setPlayerDynamicProperty(player, "coins", (sellPrice), true)
 
                     player.playSound("random.orb")
-                    return player.sendMessage(`§aYou sold §ex1 ${item.nameTag}§a for §6${sellPrice} coins`)
+                    return player.sendMessage(`§aYou sold §ex1 §f${item.nameTag ? item.nameTag : cleanName}§a for §6${sellPrice} coins`)
                 } else return cantSellMenu(player)
             }
             case 16: {
@@ -580,7 +609,17 @@ export function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item) {
 }
 
 export function buySellUnavailablePreviewMenu(player, buyPrice, item) {
-    let cleanName = item.nameTag.replace(/§./g, "")
+
+    const freeSlots = getFreeSlots(player)
+    if (freeSlots == 0) return player.sendMessage("§cYou need free inventory space for this!")
+
+    let cleanName 
+    if (item.nameTag) { 
+        cleanName = item.nameTag.replace(/§./g, "")
+    } else {
+        cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+        console.warn("cleanName")
+    }
 
     let lore = item.getLore()
     if (lore.length !== 0 && lore[lore.length-1].includes("*")) {
@@ -592,7 +631,7 @@ export function buySellUnavailablePreviewMenu(player, buyPrice, item) {
     .button(10, 'Buy 1', [`§8${cleanName}`, "", `§7Buy 1 for: §6${buyPrice}`], "minecraft:yellow_dye", 1)
     .button(11, 'Buy Custom', [`§8${cleanName}`, "", `§7Per item price: §6${buyPrice}`], "minecraft:red_dye", 1)
 
-    .button(13, `${item.nameTag}`, lore, item.typeId, 1)
+    .button(13, `§r§f${item.nameTag ? item.nameTag : cleanName}`, lore, item.typeId, 1)
 
     .button(15, '§dYou can\'t sell this item!', [`§8${cleanName}`, "", `§7This item can't be sold!`], "minecraft:barrier", 1)
     .button(16, '§dYou can\'t sell this item!', [`§8${cleanName}`, "", `§7This item can't be sold!`], "minecraft:barrier", 1)
@@ -607,7 +646,7 @@ export function buySellUnavailablePreviewMenu(player, buyPrice, item) {
                 item.amount = 1
                 player.getComponent("inventory").container.addItem(item)
                 player.playSound("random.orb")
-                player.sendMessage(`§aYou purchased §ex1 ${item.nameTag}§a for §6${buyPrice} coins`)
+                player.sendMessage(`§aYou purchased §ex1 §f${item.nameTag ? item.nameTag : cleanName}§a for §6${buyPrice} coins`)
                 return buySellUnavailablePreviewMenu(player, buyPrice, item)
 
             } 
@@ -626,7 +665,17 @@ export function buySellUnavailablePreviewMenu(player, buyPrice, item) {
 }     
 
 export function buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item) {
-    let cleanName = item.nameTag.replace(/§./g, "")
+
+    const freeSlots = getFreeSlots(player)
+    if (freeSlots == 0) return player.sendMessage("§cYou need free inventory space for this!")
+
+    let cleanName 
+    if (item.nameTag) { 
+        cleanName = item.nameTag.replace(/§./g, "")
+    } else {
+        cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+        console.warn("cleanName")
+    }
 
     let lore = item.getLore()
     if (lore.length !== 0 && lore[lore.length-1].includes("*")) {
@@ -639,7 +688,7 @@ export function buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item)
     .button(10, 'Buy 1', [`§8${cleanName}`, "", `§7Buy 1 for: §6${buyPrice}`], "minecraft:yellow_dye", 1)
     .button(11, '§dThis item is unstackable!', [`§8${cleanName}`, "", "§7You cannot buy multiple", "§7of this item!"], "minecraft:barrier", 1)
     
-    .button(13, `${item.nameTag}`, lore, item.typeId, 1)
+    .button(13, `§r§f${item.nameTag ? item.nameTag : cleanName}`, lore, item.typeId, 1)
 
     .button(15, '§dYou can\'t sell this item!', [`§8${cleanName}`, "", `§7This item can't be sold!`], "minecraft:barrier", 1)
     .button(16, '§dYou can\'t sell this item!', [`§8${cleanName}`, "", `§7This item can't be sold!`], "minecraft:barrier", 1)
@@ -654,7 +703,7 @@ export function buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item)
                 item.amount = 1
                 player.getComponent("inventory").container.addItem(item)
                 player.playSound("random.orb")
-                player.sendMessage(`§aYou purchased §ex1 ${item.nameTag}§a for §6${buyPrice} coins`)
+                player.sendMessage(`§aYou purchased §ex1 §f${item.nameTag ? item.nameTag : cleanName}§a for §6${buyPrice} coins`)
                 return buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item)
 
             } 
@@ -676,7 +725,15 @@ export function buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item)
  * @param {ItemStack} item
  */
 export function buyCustomMenu(player, buyPrice, item) {
-    let cleanName = item.nameTag.replace(/§./g, "")
+
+    let cleanName 
+    if (item.nameTag) { 
+        cleanName = item.nameTag.replace(/§./g, "")
+    } else {
+        cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+        console.warn("cleanName")
+    }
+
     let maxBuyable = Math.floor(getPlayerDynamicProperty(player, "coins")/buyPrice)
     if (maxBuyable > 2304) maxBuyable = 2304
     const freeSlots = getFreeSlots(player)
@@ -686,7 +743,7 @@ export function buyCustomMenu(player, buyPrice, item) {
     .title(`§8${cleanName}`)
     if (maxBuyable > freeSlots*64)  {
         maxBuyable = freeSlots*64
-        form.label("\n§cYour maximum purchaseable is limited by your inventory space!\n\nFree up inventory slots to buy more items!")
+        form.label("\n§cYour maximum purchaseable is limited by your inventory space!\n\nFree up inventory slots to buy more items!") // i spelt purchasable wrong
         index = 1
     }
     form.slider("Amount to buy", 1, maxBuyable, {defaultValue: 1, valueStep: 1})
@@ -712,7 +769,7 @@ export function buyCustomMenu(player, buyPrice, item) {
         }
         item.amount = 1
         player.playSound("random.orb")
-        return player.sendMessage(`§aYou purchased §ex${a.formValues[index]} ${item.nameTag}§a for §6${buyPrice*a.formValues[index]} coins`)
+        return player.sendMessage(`§aYou purchased §ex${a.formValues[index]} §f${item.nameTag ? item.nameTag : cleanName}§a for §6${buyPrice*a.formValues[index]} coins`)
     })
 }
 
@@ -721,7 +778,15 @@ export function buyCustomMenu(player, buyPrice, item) {
  * @param {ItemStack} item
  */
 export function sellCustomMenu(player, sellPrice, item) {
-    let cleanName = item.nameTag.replace(/§./g, "")
+
+    let cleanName 
+    if (item.nameTag) { 
+        cleanName = item.nameTag.replace(/§./g, "")
+    } else {
+        cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+        console.warn("cleanName")
+    }
+
     let maxSellable = checkItemAmount(player, item.typeId)
 
     const form = new ModalFormData()
@@ -735,12 +800,20 @@ export function sellCustomMenu(player, sellPrice, item) {
         setPlayerDynamicProperty(player, "coins", (sellPrice*a.formValues[0]), true)
 
         player.playSound("random.orb")
-        return player.sendMessage(`§aYou sold §ex${a.formValues[0]} ${item.nameTag}§a for §6${sellPrice*a.formValues[0]} coins`)
+        return player.sendMessage(`§aYou sold §ex${a.formValues[0]} §f${item.nameTag ? item.nameTag : cleanName}§a for §6${sellPrice*a.formValues[0]} coins`)
     })
 }
 
 export function sellNamedCustomMenu(player, sellPrice, item) {
-    let cleanName = item.nameTag.replace(/§./g, "")
+
+    let cleanName 
+    if (item.nameTag) { 
+        cleanName = item.nameTag.replace(/§./g, "")
+    } else {
+        cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+        console.warn("cleanName")
+    }
+
     let maxSellable = checkItemAmount(player, item.typeId, false, item.nameTag)
 
     const form = new ModalFormData()

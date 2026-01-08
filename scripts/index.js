@@ -287,11 +287,11 @@ export const getFreeSlots = (player) => {
     return slots
 }
 
-export function rollWeightedItem(table, luck = 0) { // chatgpt my goat
-    // apply luck (rare items benefit more)
+export function rollWeightedItem(table, luck = 0) {
     const adjusted = table.map(e => ({
         item: e.item,
-        weight: e.weight * (1 + luck * (1 / e.weight) * 0.15)
+        // rare items (low weight) scale much harder with luck
+        weight: e.weight * (1 + luck * 0.15 / e.weight)
     }))
 
     const totalWeight = adjusted.reduce((sum, e) => sum + e.weight, 0)
@@ -419,7 +419,7 @@ system.runInterval(() => {
     })
 }, 5)
 
-//let fishingList = []
+let fishQueue
 
 world.afterEvents.itemUse.subscribe(data => {
     const player = data.source
@@ -440,11 +440,13 @@ world.afterEvents.itemUse.subscribe(data => {
             mainMenu(player)
             return
         } case "minecraft:fishing_rod": {
-            setGlobalDynamicProperty("fishQueue", player.name)
+            fishQueue = player.name
             //console.warn(fishingList)
         }
     }
 })
+
+
 
 const basicRodLootTable = [
     { item: () => items.rawCod, weight: 50 },
@@ -469,8 +471,8 @@ world.afterEvents.entitySpawn.subscribe(data => {
         return
     }
     
-    const player = data.entity.dimension.getPlayers({name: getGlobalDynamicProperty("fishQueue")})[0]
-    setGlobalDynamicProperty("fishQueue", "empty")
+    const player = data.entity.dimension.getPlayers({name: fishQueue})[0]
+    fishQueue = undefined
 
     const rod = player.getComponent("equippable").getEquipmentSlot("Mainhand") 
     let luck = 0
@@ -487,6 +489,7 @@ world.afterEvents.entitySpawn.subscribe(data => {
         }
         case items.inkRod.nameTag: {
             item = rollWeightedItem(inkRodLootTable, stats.luck)
+            break
         }
     }
 
