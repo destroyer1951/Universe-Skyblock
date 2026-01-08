@@ -308,6 +308,19 @@ export function rollWeightedItem(table, luck = 0) { // chatgpt my goat
     return adjusted[adjusted.length - 1].item()
 }
 
+/** @param {ItemStack} item */
+function itemStatReader(item) {
+    let stats = {
+        luck: 0
+    }
+    const lore = item.getLore()
+    if (lore.length === 0) return
+    for (const i of lore) {
+        if (i.toLowerCase().includes("luck:")) {
+            
+        } else continue
+    }
+}
 
 
 
@@ -425,7 +438,6 @@ world.afterEvents.itemUse.subscribe(data => {
             return
         } case "minecraft:fishing_rod": {
             fishingList.push(player.name)
-            console.warn("sob")
             system.runTimeout(() => {
                 return fishingList.shift()
             }, 4)
@@ -444,14 +456,17 @@ const basicRodLootTable = [
 
 world.afterEvents.entitySpawn.subscribe(data => {
     try {
-        if (!(data.entity.getComponent("item")?.itemStack?.typeId === "minecraft:element_1")) return;
+        if (data.entity.getComponent("item").itemStack.typeId !== "minecraft:element_1") return;
     } catch (e) {
         return
     }
     const player = world.getPlayers({name:fishingList[0]})[0]
-    const rod = player.getComponent("equippable").getEquipmentSlot("Mainhand")
+    const rod = player.getComponent("equippable").getEquipmentSlot("Mainhand") // give basic rod luck and stuff here wow coooool
+    let luck = 0
 
-    let item = items.diamond
+    let lore = rod.getLore()
+
+    let item = items.rawCod
     switch (rod.nameTag) {
         case items.basicRod.nameTag: {
             item = rollWeightedItem(basicRodLootTable)
@@ -468,22 +483,17 @@ world.afterEvents.entitySpawn.subscribe(data => {
     entity.kill()
 })
 
-/*
-world.beforeEvents.playerInventoryItemChange.subscribe(data => { // this will work in the next update hopefully
-    console.warn("test")
-})*/
-
 
 world.beforeEvents.entityRemove.subscribe(data => { // it all makes sense now
- 
+
     try {
-        if (!(data.removedEntity.getComponent("item")?.itemStack?.typeId === "minecraft:element_1")) return;
+        if (data.removedEntity.getComponent("item").itemStack.typeId !== "minecraft:element_1") return
     } catch (e) {
         return
     }
-    
 
-    const players = entity.dimension.getPlayers({location: data.removedEntity.location, maxDistance: 1.5})
+    const entity = data.removedEntity
+    const players = entity.dimension.getPlayers({location: data.removedEntity.location, maxDistance: 2})
 
     players.forEach(player => {
         const inv = player.getComponent("inventory").container

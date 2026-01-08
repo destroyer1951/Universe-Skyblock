@@ -145,7 +145,7 @@ export function shopMainMenu(player) {
 /** @param {Player} player  */
 export function generalShopMenu(player) {
     new ChestFormData("54")
-    .title('Shop Menu')
+    .title('General Shop Menu')
 
     .button(10, 'Lava Bucket', ["", `§7Buy Price:§6 ${prices.buy.lavaBucket}`, `§7Sell Price:§6 ${prices.sell.lavaBucket}`], 'minecraft:lava_bucket', 1)
     .button(11, 'Ice', ["", `§7Buy Price:§6 ${prices.buy.ice}`, `§7Sell Price:§6 ${prices.sell.ice}`], 'minecraft:ice', 1)
@@ -255,7 +255,7 @@ export function generalShopMenu(player) {
 /** @param {Player} player  */
 export function farmShopMenu(player) {
     new ChestFormData("54")
-    .title('Shop Menu')
+    .title('Farming Shop Menu')
 
     .button(10, 'Wheat', ["", `§7Buy Price:§6 ${prices.buy.wheat}`, `§7Sell Price:§6 ${prices.sell.wheat}`], 'minecraft:wheat', 1)
     .button(11, 'Wheat Seeds', ["", `§7Buy Price:§6 ${prices.buy.wheatSeeds}`, `§7Sell Price:§6 ${prices.sell.wheatSeeds}`], 'minecraft:wheat_seeds', 1)
@@ -300,7 +300,7 @@ export function farmShopMenu(player) {
 
 export function fishingShopMenu(player) {
     new ChestFormData("54")
-    .title('Shop Menu')
+    .title('Fishing Shop Menu')
 
     .button(10, 'Basic Fishing Rod', ["", `§7Buy Price:§6 ${prices.buy.basicRod}`, `§7Sell Price:§6 ${prices.sell.basicRod}`], 'minecraft:fishing_rod', 1)
     .button(11, 'Raw Cod', ["", `§7Buy Price:§6 ${prices.buy.rawCod}`, `§7Sell Price:§6 ${prices.sell.rawCod}`], 'minecraft:cod', 1)
@@ -365,9 +365,8 @@ export function buyPreviewMenu(player, buyPrice, sellPrice, item) {
     let cleanName = item.nameTag.replace(/§./g, "")
 
     let lore = item.getLore()
-    if (lore.length > 0) {
-        lore.pop()
-        lore.pop()
+    if (lore.length !== 0 && lore[lore.length-1].includes("*")) {
+        lore.push(...["","§r§8Star count is randomized", "§r§8upon purchase!","§r§8Stars may affect stats!"])
     }
 
     new ChestFormData("27")
@@ -418,9 +417,8 @@ export function buyUnavailablePreviewMenu(player, sellPrice, item) {
     let cleanName = item.nameTag.replace(/§./g, "")
 
     let lore = item.getLore()
-    if (lore.length > 0) {
-        lore.pop()
-        lore.pop()
+    if (lore.length !== 0 && lore[lore.length-1].includes("*")) {
+        lore.push(...["","§r§8Star count is randomized", "§r§8upon purchase!","§r§8Stars may affect stats!"])
     }
 
     new ChestFormData("27")
@@ -463,9 +461,8 @@ export function buyNamedUnavailablePreviewMenu(player, sellPrice, item) {
     let cleanName = item.nameTag.replace(/§./g, "")
 
     let lore = item.getLore()
-    if (lore.length > 0) {
-        lore.pop()
-        lore.pop()
+    if (lore.length !== 0 && lore[lore.length-1].includes("*")) {
+        lore.push(...["","§r§8Star count is randomized", "§r§8upon purchase!","§r§8Stars may affect stats!"])
     }
 
     new ChestFormData("27")
@@ -509,9 +506,8 @@ export function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item) {
     let cleanName = item.nameTag.replace(/§./g, "") 
 
     let lore = item.getLore()
-    if (lore.length > 0) {
-        lore.pop()
-        lore.pop()
+    if (lore.length !== 0 && lore[lore.length-1].includes("*")) {
+        lore.push(...["","§r§8Star count is randomized", "§r§8upon purchase!","§r§8Stars may affect stats!"])
     }
 
     new ChestFormData("27")
@@ -561,9 +557,8 @@ export function buySellUnavailablePreviewMenu(player, buyPrice, item) {
     let cleanName = item.nameTag.replace(/§./g, "")
 
     let lore = item.getLore()
-    if (lore.length > 0) {
-        lore.pop()
-        lore.pop()
+    if (lore.length !== 0 && lore[lore.length-1].includes("*")) {
+        lore.push(...["","§r§8Star count is randomized", "§r§8upon purchase!","§r§8Stars may affect stats!"])
     }
 
     new ChestFormData("27")
@@ -608,10 +603,10 @@ export function buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item)
     let cleanName = item.nameTag.replace(/§./g, "")
 
     let lore = item.getLore()
-    if (lore.length > 0) {
-        lore.pop()
-        lore.pop()
+    if (lore.length !== 0 && lore[lore.length-1].includes("*")) {
+        lore.push(...["","§r§8Star count is randomized", "§r§8upon purchase!","§r§8Stars may affect stats!"])
     }
+
 
     new ChestFormData("27")
     .title(`Buy §8${cleanName}`)

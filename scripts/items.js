@@ -119,8 +119,10 @@ system.run(() => {
     Object.defineProperty(items, "basicRod", {
         get() {
             return makeItem("minecraft:fishing_rod", item => {
+                const stars = rollStars()
+                const starCount = (stars.match(/\*/g) || []).length
                 item.nameTag = "§r§fBasic Fishing Rod"
-                item.setLore(["", "§r§8It's not much but", "it gets the job done", '', `§r§e${rollStars()}`])
+                item.setLore(["", `§r§7Luck: §a${(starCount*0.2).toFixed(1)}`, "", "§r§8It's not much but", "§r§8it gets the job done", '', `§r§e${stars}`])
             })
         }
     })
