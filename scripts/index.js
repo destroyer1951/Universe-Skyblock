@@ -522,6 +522,39 @@ world.beforeEvents.entityRemove.subscribe(data => { // it all makes sense now
     })
 })
 
+const defaultPickaxeLootTable = [
+    { item: () => "minecraft:air", weight: 93 },
+    { item: () => "minecraft:coal_ore", weight: 7 },
+    { item: () => "minecraft:iron_ore", weight: 0.1 },
+]
+
+world.afterEvents.playerBreakBlock.subscribe(data => {
+    const player = data.player
+    const oldBlock = data.block
+    const brokenBlock = data.brokenBlockPermutation
+    if (brokenBlock.type.id !== 'minecraft:cobblestone') return
+
+    if (!(
+        (oldBlock.east(1).typeId === "minecraft:lava" || // im good code
+        oldBlock.west(1).typeId === "minecraft:lava" ||
+        oldBlock.north(1).typeId === "minecraft:lava" ||
+        oldBlock.south(1).typeId === "minecraft:lava") &&
+        ((oldBlock.east(1).typeId === "minecraft:water" ||
+        oldBlock.west(1).typeId === "minecraft:water" ||
+        oldBlock.north(1).typeId === "minecraft:water" ||
+        oldBlock.south(1).typeId === "minecraft:water") ||
+        (oldBlock.east(1).isWaterlogged ||
+        oldBlock.west(1).isWaterlogged ||
+        oldBlock.north(1).isWaterlogged ||
+        oldBlock.south(1).isWaterlogged))
+    )) return
+
+    const newBlock = rollWeightedItem(defaultPickaxeLootTable)
+    if (newBlock === "minecraft:air") return
+    return player.dimension.setBlockType(oldBlock.location, newBlock)
+
+})
+
 system.runInterval(() => {
     const players = world.getPlayers()
     players.forEach(player => {
@@ -529,4 +562,4 @@ system.runInterval(() => {
             `Coins: §6${getPlayerDynamicProperty(player, "coins")}
 §9discord.gg/HRGNN3pzQN`)
     })
-}, 4)
+}, 8)
