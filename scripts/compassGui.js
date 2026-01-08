@@ -15,6 +15,7 @@ export function mainMenu(player) {
         .button(12, 'Codes', ['', '§7Redeem Codes for Rewards!'], 'minecraft:name_tag', 1)
         .button(13, 'Your Island', ['', '§7Warp to your Island!'], 'minecraft:compass', 1)
         .button(14, 'Shop', ['', '§7Buy and Sell some Items!'], 'minecraft:gold_ingot', 1)
+        .button(22, 'Crafting', ['', '§7Craft custom items!'], 'minecraft:crafting_table', 1)
 
         .show(player).then(a => {
             if (a.canceled) return;
@@ -32,9 +33,32 @@ export function mainMenu(player) {
                 case 14: {
                     return shopMainMenu(player)
                 }
+                case 22: {
+                    return craftingMenu(player)
+                }
             }
         })
 };
+
+export function craftingMenu(player) {
+    new ChestFormData("54")
+        .title("Crafting Menu")
+        .button("4", "§aCustom Crafting", ["", "§r§7This is a list of all", "§r§7custom crafting recipes", "§r§7currently in the game.","","§r§7Custom crafting items","§r§7may only be crafted","§r§7through this menu!"], "minecraft:emerald")
+        .button("10", "Ink Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
+
+        .show(player).then(a => {
+            if (a.canceled) return
+
+            switch (a.selection) {
+                case 4: {
+                    return craftingMenu(player)
+                }
+                case 10: {
+                    return inkRodMenu(player)
+                }
+            }
+        })
+}
 
 
 /** @param {Player} player  */
@@ -755,5 +779,49 @@ export function cantSellMenu(player) {
     .button(13, "§cInsufficient Funds!", ["", "§7You can't afford to", "§7sell this!"], "minecraft:hopper")
     .show(player).then(a => {
         return shopMainMenu(player)
+    })
+}
+
+/** 
+ * @param {Player} player
+*/
+function inkRodMenu(player) {
+    const itemLore = items.inkRod.getLore()
+    let stickReq
+    let inkReq
+    if (checkItemAmount(player, "minecraft:stick") >= 3) { stickReq = "§a" } else { stickReq = "§c" }
+    if (checkItemAmount(player, "minecraft:ink_sac") >= 2) { inkReq = "§a" } else { inkReq = "§c" }
+    new ChestFormData("45")
+    .title("Ink Rod")
+    .pattern([
+        "xxxxxxxxx",
+        "xx___xxxx",
+        "xx_____xx",
+        "xx___xxxx",
+        "xxxxxxxxx",
+    ], {x: {itemName: "", texture: "minecraft:copper_bars"}})
+    .button(23, "§eCraft this item!", ["", "§r§7Required materials:",'', `§r${stickReq}x3 Stick`, `§r${inkReq}x2 Ink Sac`], "minecraft:crafting_table")
+
+    .button(13, "Stick", [], "minecraft:stick")
+    .button(21, "Stick", [], "minecraft:stick")
+    .button(29, "Stick", [], "minecraft:stick")
+
+    .button(22, "Ink Sac", [], "minecraft:ink_sac")
+    .button(31, "Ink Sac", [], "minecraft:ink_sac")
+
+    .show(player).then(a => {
+        if (a.canceled) return
+
+        if (a.selection === 23) {
+            if (inkReq == "§c" || stickReq == "§c") {
+                return player.sendMessage("§cYou do not have the required materials to craft this item!")
+            } else {
+                clearItem(player, "minecraft:stick", 3)
+                clearItem(player, "minecraft:ink_sac", 2)
+                player.getComponent("inventory").container.addItem(items.inkRod)
+                player.sendMessage("§aSuccessfully crafted §fInk Rod§a!")
+                return player.playSound("random.levelup")
+            }
+        } else return inkRodMenu(player)
     })
 }

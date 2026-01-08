@@ -453,8 +453,15 @@ const basicRodLootTable = [
     { item: () => items.rawSalmon, weight: 30 },
     { item: () => items.tropicalFish, weight: 15 },
     { item: () => items.cherryLog, weight: 9 },
+    { item: () => items.inkSac, weight: 5 },
     { item: () => items.copperIngot, weight: 1 },
     { item: () => items.prismarineShard, weight: 0.2 },
+]
+
+const inkRodLootTable = [
+    { item: () => items.inkSac, weight: 95 },
+    { item: () => items.coal, weight: 5 },
+    { item: () => items.prismarineShard, weight: 0.3 },
 ]
 
 world.afterEvents.entitySpawn.subscribe(data => {
@@ -474,6 +481,9 @@ world.afterEvents.entitySpawn.subscribe(data => {
         case items.basicRod.nameTag: {
             item = rollWeightedItem(basicRodLootTable, stats.luck)
             break
+        }
+        case items.inkRod.nameTag: {
+
         }
     }
 

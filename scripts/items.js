@@ -155,4 +155,17 @@ system.run(() => {
         }
     })
 
+
+// Custom Crafting items
+
+Object.defineProperty(items, "inkRod", {
+        get() {
+            return makeItem("minecraft:fishing_rod", item => {
+                const stars = rollStars()
+                const starCount = (stars.match(/\*/g) || []).length
+                item.nameTag = "§r§fInk Rod"
+                item.setLore(["", `§r§7Luck: §a${(starCount*0.4).toFixed(1)}`, '', `§r§e${stars}`])
+            })
+        }
+    })
 })
