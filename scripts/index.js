@@ -317,9 +317,12 @@ function itemStatReader(item) {
     if (lore.length === 0) return
     for (const i of lore) {
         if (i.toLowerCase().includes("luck:")) {
-            
+            const clean = i.replace(/§./g, '')
+            clean.substring(5)
+            stats.luck = Number(clean)
         } else continue
     }
+    return stats
 }
 
 
@@ -449,7 +452,7 @@ const basicRodLootTable = [
     { item: () => items.rawCod, weight: 50 },
     { item: () => items.rawSalmon, weight: 30 },
     { item: () => items.tropicalFish, weight: 15 },
-    { item: () => items.cherrySapling, weight: 4 },
+    { item: () => items.cherryLog, weight: 9 },
     { item: () => items.copperIngot, weight: 1 },
     { item: () => items.prismarineShard, weight: 0.2 },
 ]
@@ -461,15 +464,15 @@ world.afterEvents.entitySpawn.subscribe(data => {
         return
     }
     const player = world.getPlayers({name:fishingList[0]})[0]
-    const rod = player.getComponent("equippable").getEquipmentSlot("Mainhand") // give basic rod luck and stuff here wow coooool
+    const rod = player.getComponent("equippable").getEquipmentSlot("Mainhand") 
     let luck = 0
 
-    let lore = rod.getLore()
+    const stats = itemStatReader(rod)
 
     let item = items.rawCod
     switch (rod.nameTag) {
         case items.basicRod.nameTag: {
-            item = rollWeightedItem(basicRodLootTable)
+            item = rollWeightedItem(basicRodLootTable, stats.luck)
             break
         }
     }
