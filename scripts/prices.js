@@ -105,4 +105,4 @@ prices.buy.cherryLog = "§cN/A"
 prices.sell.cherryLog = 12
 
 prices.buy.prismarineShard = "§cN/A"
-prices.sell.prismarineShard = 2500
+prices.sell.prismarineShard = 1750
