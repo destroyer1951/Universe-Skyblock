@@ -385,7 +385,10 @@ export function fishingShopMenu(player) {
 export function buyPreviewMenu(player, buyPrice, sellPrice, item) {
     const freeSlots = getFreeSlots(player)
     if (freeSlots == 0) return player.sendMessage("§cYou need free inventory space for this!")
-    let cleanName = item.nameTag.replace(/§./g, "")
+    let cleanName 
+    if (item.nameTag) { 
+        cleanName = item.nameTag.replace(/§./g, "")
+    } else cleanName = "placeholder"
 
     let lore = item.getLore()
     if (lore.length !== 0 && lore[lore.length-1].includes("*")) {
@@ -397,7 +400,7 @@ export function buyPreviewMenu(player, buyPrice, sellPrice, item) {
     .button(10, 'Buy 1', [`§8${cleanName}`, "", `§7Buy 1 for: §6${buyPrice}`], "minecraft:yellow_dye", 1)
     .button(11, 'Buy Custom', [`§8${cleanName}`, "", `§7Per item price: §6${buyPrice}`], "minecraft:red_dye", 1)
 
-    .button(13, `${item.nameTag}`, lore, item.typeId, 1)
+    .button(13, `${item.nameTag ? item.nameTag : cleanName}`, lore, item.typeId, 1)
 
     .button(15, 'Sell 1', [`§8${cleanName}`, "", `§7Sell 1 for: §6${sellPrice}`], "minecraft:lime_dye", 1)
     .button(16, 'Sell Custom', [`§8${cleanName}`, "", `§7Per item price: §6${sellPrice}`], "minecraft:green_dye", 1)
@@ -412,7 +415,7 @@ export function buyPreviewMenu(player, buyPrice, sellPrice, item) {
                 item.amount = 1
                 player.getComponent("inventory").container.addItem(item)
                 player.playSound("random.orb")
-                player.sendMessage(`§aYou purchased §ex1 ${item.nameTag}§a for §6${buyPrice} coins`)
+                player.sendMessage(`§aYou purchased §ex1 ${item.nameTag ? item.nameTag : cleanName}§a for §6${buyPrice} coins`)
                 return buyPreviewMenu(player, buyPrice, sellPrice, item)
 
             } case 11: {
@@ -425,7 +428,7 @@ export function buyPreviewMenu(player, buyPrice, sellPrice, item) {
                     setPlayerDynamicProperty(player, "coins", (sellPrice), true)
 
                     player.playSound("random.orb")
-                    return player.sendMessage(`§aYou sold §ex1 ${item.nameTag}§a for §6${sellPrice} coins`)
+                    return player.sendMessage(`§aYou sold §ex1 ${item.nameTag ? item.nameTag : cleanName}§a for §6${sellPrice} coins`)
                 } else return cantSellMenu(player)
 
             } case 16: {

@@ -317,8 +317,8 @@ function itemStatReader(item) {
     if (lore.length === 0) return
     for (const i of lore) {
         if (i.toLowerCase().includes("luck:")) {
-            const clean = i.replace(/§./g, '')
-            clean.substring(5)
+            let clean = i.replace(/§./g, '')
+            clean = clean.substring(6)
             stats.luck = Number(clean)
         } else continue
     }
@@ -419,7 +419,7 @@ system.runInterval(() => {
     })
 }, 5)
 
-let fishingList = []
+//let fishingList = []
 
 world.afterEvents.itemUse.subscribe(data => {
     const player = data.source
@@ -440,10 +440,8 @@ world.afterEvents.itemUse.subscribe(data => {
             mainMenu(player)
             return
         } case "minecraft:fishing_rod": {
-            fishingList.push(player.name)
-            system.runTimeout(() => {
-                return fishingList.shift()
-            }, 4)
+            setGlobalDynamicProperty("fishQueue", player.name)
+            //console.warn(fishingList)
         }
     }
 })
@@ -470,20 +468,25 @@ world.afterEvents.entitySpawn.subscribe(data => {
     } catch (e) {
         return
     }
-    const player = world.getPlayers({name:fishingList[0]})[0]
+    
+    const player = data.entity.dimension.getPlayers({name: getGlobalDynamicProperty("fishQueue")})[0]
+    setGlobalDynamicProperty("fishQueue", "empty")
+
     const rod = player.getComponent("equippable").getEquipmentSlot("Mainhand") 
     let luck = 0
 
     const stats = itemStatReader(rod)
 
     let item = items.rawCod
+    console.warn(stats.luck)
     switch (rod.nameTag) {
         case items.basicRod.nameTag: {
-            item = rollWeightedItem(basicRodLootTable, stats.luck)
+            console.warn("test")
+            item = rollWeightedItem(basicRodLootTable, 999999999999999)
             break
         }
         case items.inkRod.nameTag: {
-
+            item = rollWeightedItem(inkRodLootTable, stats.luck)
         }
     }
 
