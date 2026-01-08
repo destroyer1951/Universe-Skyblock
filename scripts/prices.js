@@ -95,7 +95,7 @@ prices.sell.rawSalmon = 12
 prices.buy.tropicalFish = 100
 prices.sell.tropicalFish = 20
 
-prices.buy.inkSac = 100
+prices.buy.inkSac = 250
 prices.sell.inkSac = 5
 
 prices.buy.cherrySapling = "§cN/A"
