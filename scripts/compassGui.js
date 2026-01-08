@@ -743,7 +743,7 @@ export function buyCustomMenu(player, buyPrice, item) {
     .title(`§8${cleanName}`)
     if (maxBuyable > freeSlots*64)  {
         maxBuyable = freeSlots*64
-        form.label("\n§cYour maximum purchaseable is limited by your inventory space!\n\nFree up inventory slots to buy more items!") // i spelt purchasable wrong
+        form.label("\n§cYour maximum purchasable is limited by your inventory space!\n\nFree up inventory slots to buy more items!") 
         index = 1
     }
     form.slider("Amount to buy", 1, maxBuyable, {defaultValue: 1, valueStep: 1})
