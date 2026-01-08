@@ -391,7 +391,7 @@ export function buyPreviewMenu(player, buyPrice, sellPrice, item) {
         cleanName = item.nameTag.replace(/§./g, "")
     } else {
         cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
-        console.warn("cleanName")
+        
     }
 
     let lore = item.getLore()
@@ -451,7 +451,7 @@ export function buyUnavailablePreviewMenu(player, sellPrice, item) {
         cleanName = item.nameTag.replace(/§./g, "")
     } else {
         cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
-        console.warn("cleanName")
+        
     }
 
     let lore = item.getLore()
@@ -502,7 +502,7 @@ export function buyNamedUnavailablePreviewMenu(player, sellPrice, item) {
         cleanName = item.nameTag.replace(/§./g, "")
     } else {
         cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
-        console.warn("cleanName")
+        
     }
 
     let lore = item.getLore()
@@ -557,7 +557,7 @@ export function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item) {
         cleanName = item.nameTag.replace(/§./g, "")
     } else {
         cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
-        console.warn("cleanName")
+        
     }
 
     let lore = item.getLore()
@@ -618,7 +618,7 @@ export function buySellUnavailablePreviewMenu(player, buyPrice, item) {
         cleanName = item.nameTag.replace(/§./g, "")
     } else {
         cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
-        console.warn("cleanName")
+        
     }
 
     let lore = item.getLore()
@@ -674,7 +674,7 @@ export function buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item)
         cleanName = item.nameTag.replace(/§./g, "")
     } else {
         cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
-        console.warn("cleanName")
+        
     }
 
     let lore = item.getLore()
@@ -731,7 +731,7 @@ export function buyCustomMenu(player, buyPrice, item) {
         cleanName = item.nameTag.replace(/§./g, "")
     } else {
         cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
-        console.warn("cleanName")
+        
     }
 
     let maxBuyable = Math.floor(getPlayerDynamicProperty(player, "coins")/buyPrice)
@@ -784,7 +784,7 @@ export function sellCustomMenu(player, sellPrice, item) {
         cleanName = item.nameTag.replace(/§./g, "")
     } else {
         cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
-        console.warn("cleanName")
+        
     }
 
     let maxSellable = checkItemAmount(player, item.typeId)
@@ -811,7 +811,7 @@ export function sellNamedCustomMenu(player, sellPrice, item) {
         cleanName = item.nameTag.replace(/§./g, "")
     } else {
         cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
-        console.warn("cleanName")
+        
     }
 
     let maxSellable = checkItemAmount(player, item.typeId, false, item.nameTag)

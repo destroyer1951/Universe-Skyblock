@@ -441,7 +441,6 @@ world.afterEvents.itemUse.subscribe(data => {
             return
         } case "minecraft:fishing_rod": {
             fishQueue = player.name
-            //console.warn(fishingList)
         }
     }
 })
@@ -483,8 +482,7 @@ world.afterEvents.entitySpawn.subscribe(data => {
     console.warn(stats.luck)
     switch (rod.nameTag) {
         case items.basicRod.nameTag: {
-            console.warn("test")
-            item = rollWeightedItem(basicRodLootTable, 999999999999999)
+            item = rollWeightedItem(basicRodLootTable, stats.luck)
             break
         }
         case items.inkRod.nameTag: {
