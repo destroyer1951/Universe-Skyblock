@@ -29,58 +29,58 @@ export const items = {}
 system.run(() => {
     // General shop items
     items.lavaBucket = makeItem("minecraft:lava_bucket", item => {
-        item.nameTag = "§r§fLava Bucket"
+        //item.nameTag = "§r§fLava Bucket"
     })
     items.ice = makeItem("minecraft:ice", item => {
-        item.nameTag = "§r§fIce"
+        //item.nameTag = "§r§fIce"
     })
     items.oakLog = makeItem("minecraft:oak_log", item => {
-        item.nameTag = "§r§fOak Log"
+        //item.nameTag = "§r§fOak Log"
     })
     items.grassBlock = makeItem("minecraft:grass_block", item => {
-    item.nameTag = "§r§fGrass Block"
+        //item.nameTag = "§r§fGrass Block"
     })
     items.dirt = makeItem("minecraft:dirt", item => {
-        item.nameTag = "§r§fDirt"
+        //item.nameTag = "§r§fDirt"
     })
     items.cobblestone = makeItem("minecraft:cobblestone", item => {
-        item.nameTag = "§r§fCobblestone"
+        //item.nameTag = "§r§fCobblestone"
     })
     items.sand = makeItem("minecraft:sand", item => {
-        item.nameTag = "§r§fSand"
+        //item.nameTag = "§r§fSand"
     })
     items.boneMeal = makeItem("minecraft:bone_meal", item => {
-        item.nameTag = "§r§fBone Meal"
+        //item.nameTag = "§r§fBone Meal"
     })
     items.charcoal = makeItem("minecraft:charcoal", item => {
-        item.nameTag = "§r§fCharcoal"
+        //item.nameTag = "§r§fCharcoal"
     })
     items.oakSapling = makeItem("minecraft:oak_sapling", item => {
-        item.nameTag = "§r§fOak Sapling"
+        //item.nameTag = "§r§fOak Sapling"
     })
     items.darkOakSapling = makeItem("minecraft:dark_oak_sapling", item => {
-        item.nameTag = "§r§fDark Oak Sapling"
+        //item.nameTag = "§r§fDark Oak Sapling"
     })
     items.darkOakLog = makeItem("minecraft:dark_oak_log", item => {
-        item.nameTag = "§r§fDark Oak Log"
+        //item.nameTag = "§r§fDark Oak Log"
     })
     items.birchSapling = makeItem("minecraft:birch_sapling", item => {
-        item.nameTag = "§r§fBirch Sapling"
+        //item.nameTag = "§r§fBirch Sapling"
     })
     items.birchLog = makeItem("minecraft:birch_log", item => {
-        item.nameTag = "§r§fBirch Log"
+        //item.nameTag = "§r§fBirch Log"
     })
     items.coal = makeItem("minecraft:coal", item => {
-        item.nameTag = "§r§fCoal"
+        //item.nameTag = "§r§fCoal"
     })
     items.copperIngot = makeItem("minecraft:copper_ingot", item => {
-        item.nameTag = "§r§fCopper Ingot"
+        //item.nameTag = "§r§fCopper Ingot"
     })
     items.ironIngot = makeItem("minecraft:iron_ingot", item => {
-        item.nameTag = "§r§fIron Ingot"
+        //item.nameTag = "§r§fIron Ingot"
     })
     items.goldIngot = makeItem("minecraft:gold_ingot", item => {
-        item.nameTag = "§r§fGold Ingot"
+        //item.nameTag = "§r§fGold Ingot"
     })
     items.diamond = makeItem("minecraft:diamond", item => {
         item.nameTag = "§r§fDiamond"
@@ -102,16 +102,16 @@ system.run(() => {
     // Farm shop items
 
     items.wheat = makeItem("minecraft:wheat", item => {
-        item.nameTag = "§r§fWheat"
+        //item.nameTag = "§r§fWheat"
     })
     items.wheatSeeds = makeItem("minecraft:wheat_seeds", item => {
-        item.nameTag = "§r§fWheat Seeds"
+        //item.nameTag = "§r§fWheat Seeds"
     })
     items.potato = makeItem("minecraft:potato", item => {
-        item.nameTag = "§r§fPotato"
+        //item.nameTag = "§r§fPotato"
     })
     items.sugarCane = makeItem("minecraft:sugar_cane", item => {
-        item.nameTag = "§r§fSugar Cane"
+        //item.nameTag = "§r§fSugar Cane"
     })
 
     // Fishing shop items
@@ -128,22 +128,22 @@ system.run(() => {
     })
 
     items.rawCod = makeItem("minecraft:cod", item => {
-        item.nameTag = "§r§fRaw Cod"
+        //item.nameTag = "§r§fRaw Cod"
     })
     items.rawSalmon = makeItem("minecraft:salmon", item => {
-        item.nameTag = "§r§fRaw Salmon"
+        //item.nameTag = "§r§fRaw Salmon"
     })
     items.tropicalFish = makeItem("minecraft:tropical_fish", item => {
-        item.nameTag = "§r§fTropical Fish"
+        //item.nameTag = "§r§fTropical Fish"
     })
     items.inkSac = makeItem("minecraft:ink_sac", item => {
-        item.nameTag = "§r§fInk Sac"
+        //item.nameTag = "§r§fInk Sac"
     })
     items.cherrySapling = makeItem("minecraft:cherry_sapling", item => {
-        item.nameTag = "§r§fCherry Sapling"
+        //item.nameTag = "§r§fCherry Sapling"
     })
     items.cherryLog = makeItem("minecraft:cherry_log", item => {
-        item.nameTag = "§r§fCherry Log"
+        //item.nameTag = "§r§fCherry Log"
     })
 
     Object.defineProperty(items, "prismarineShard", {

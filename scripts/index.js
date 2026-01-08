@@ -427,7 +427,7 @@ world.afterEvents.itemUse.subscribe(data => {
 
     switch (item.typeId) {
         case "minecraft:bucket": {
-            const block = player.getBlockFromViewDirection({maxDistance:7}).block
+            const block = player.getBlockFromViewDirection({maxDistance:7})?.block
             if (block?.typeId == "minecraft:obsidian") {
 
                 block.dimension.setBlockType(block.location, "minecraft:air")
