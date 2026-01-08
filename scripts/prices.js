@@ -16,10 +16,10 @@ prices.sell.grassBlock = 10
 prices.buy.dirt = 1000
 prices.sell.dirt = 50
 
-prices.buy.cobblestone = 15
+prices.buy.cobblestone = 8
 prices.sell.cobblestone = 1
 
-prices.buy.sand = 850
+prices.buy.sand = 600
 prices.sell.sand = 10
 
 prices.buy.boneMeal = 100
