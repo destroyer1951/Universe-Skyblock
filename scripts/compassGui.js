@@ -107,7 +107,6 @@ export function codesMenu(player) {
     .show(player).then(a => {
         if (a.canceled) return;
         const code = a.formValues[1]
-        console.warn(code)
 
         switch (code) {
             case 'UNIVERSESKYBLOCK2026': {
