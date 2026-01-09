@@ -490,6 +490,14 @@ const inkRodLootTable = [
     { item: () => items.prismarineShard, weight: 0.3 },
 ]
 
+const whaleRodLootTable = [
+    { item: () => items.inkSac, weight: 95 },
+    { item: () => items.coal, weight: 5 },
+    { item: () => items.prismarineShard, weight: 0.3 },
+]
+
+
+
 world.afterEvents.entitySpawn.subscribe(data => {
     try {
         if (data.entity.getComponent("item").itemStack.typeId !== "minecraft:element_1") return;

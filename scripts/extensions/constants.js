@@ -2,7 +2,7 @@
  * Turns the logic for inventory slots on/off. Only set this to false if you have disabled inventory in RP/ui/_global_variables.json side!
  * Disabling this may also reduce form opening lag a bit.
  */
-export const inventory_enabled = true;
+export const inventory_enabled = false;
 /**
  * Defines the custom block & item IDs for the form.
  * You can reference either a vanilla texture icon, which functions identically to other items...

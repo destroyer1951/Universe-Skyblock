@@ -180,3 +180,14 @@ Object.defineProperty(items, "coalPickaxe", {
         })
     }
 })
+
+Object.defineProperty(items, "whaleRod", {
+    get() {
+        return makeItem("minecraft:fishing_rod", item => {
+            const stars = rollStars()
+            const starCount = (stars.match(/\*/g) || []).length
+            item.nameTag = "§r§fWhale Rod"
+            item.setLore(["", `§r§7Luck: §a${(starCount*0.3).toFixed(1)}`, '', `§r§e${stars}`])
+        })
+    }
+})
