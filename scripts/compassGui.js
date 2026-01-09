@@ -40,27 +40,6 @@ export function mainMenu(player) {
         })
 };
 
-export function craftingMenu(player) {
-    new ChestFormData("54")
-        .title("Crafting Menu")
-        .button("4", "§aCustom Crafting", ["", "§r§7This is a list of all", "§r§7custom crafting recipes", "§r§7currently in the game.","","§r§7Custom crafting items","§r§7may only be crafted","§r§7through this menu!"], "minecraft:emerald")
-        .button("10", "Ink Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
-
-        .show(player).then(a => {
-            if (a.canceled) return
-
-            switch (a.selection) {
-                case 4: {
-                    return craftingMenu(player)
-                }
-                case 10: {
-                    return inkRodMenu(player)
-                }
-            }
-        })
-}
-
-
 /** @param {Player} player  */
 export function levelsMenu(player) {
     const miningLevel = getPlayerDynamicProperty(player, "miningLevel")
@@ -857,10 +836,35 @@ export function cantSellMenu(player) {
     })
 }
 
+
+export function craftingMenu(player) {
+    new ChestFormData("54")
+        .title("Crafting Menu")
+        .button(4, "§aCustom Crafting", ["", "§r§7This is a list of all", "§r§7custom crafting recipes", "§r§7currently in the game.","","§r§7Custom crafting items","§r§7may only be crafted","§r§7through this menu!"], "minecraft:emerald")
+        .button(10, "Ink Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
+        .button(11, "Coal Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
+
+        .show(player).then(a => {
+            if (a.canceled) return
+
+            switch (a.selection) {
+                case 4: {
+                    return craftingMenu(player)
+                }
+                case 10: {
+                    return inkRodMenu(player)
+                }
+                case 11: {
+                    return coalPickaxeMenu(player)
+                }
+            }
+        })
+}
+
 /** 
  * @param {Player} player
 */
-function inkRodMenu(player) {
+function inkRodMenu(player) { // bum outdated function dont copy me
     const itemLore = items.inkRod.getLore()
     let stickReq
     let inkReq
@@ -902,42 +906,56 @@ function inkRodMenu(player) {
 }
 
 function coalPickaxeMenu(player) {
-    const itemLore = items.inkRod.getLore()
-    let stickReq
-    let inkReq
-    if (checkItemAmount(player, "minecraft:stick") >= 3) { stickReq = "§a" } else { stickReq = "§c" }
-    if (checkItemAmount(player, "minecraft:ink_sac") >= 2) { inkReq = "§a" } else { inkReq = "§c" }
+    const itemLore = items.coalPickaxe.getLore()
+    const item = items.coalPickaxe
+    if (itemLore.length !== 0 && itemLore[itemLore.length-1].includes("*")) {
+        itemLore.push(...["","§r§8Star count is randomized", "§r§8upon craft!","§r§8Stars may affect stats!"])
+    }
+
+    let req1
+    let req2
+    if (checkItemAmount(player, "minecraft:coal") >= 3) { req1 = "§a" } else { req1 = "§c" }
+    if (checkItemAmount(player, "minecraft:stick") >= 2) { req2 = "§a" } else { req2 = "§c" }
     new ChestFormData("45")
-    .title("Ink Rod")
+    .title(item.nameTag.replace(/§./g, ""))
     .pattern([
         "xxxxxxxxx",
         "xx___xxxx",
         "xx_____xx",
         "xx___xxxx",
         "xxxxxxxxx",
-    ], {x: {itemName: "", texture: "minecraft:copper_bars"}})
-    .button(23, "§eCraft this item!", ["", "§r§7Required materials:",'', `§r${stickReq}x3 Stick`, `§r${inkReq}x2 Ink Sac`], "minecraft:crafting_table")
+    ], {x: {itemName: "", texture: "minecraft:copper_bars"}}) // make sure to change these from coal and stick
+    .button(23, "§eCraft this item!", ["", "§r§7Required materials:",'', `§r${req1}x3 Coal`, `§r${req2}x2 Stick`], "minecraft:crafting_table")
 
-    .button(13, "Stick", [], "minecraft:stick")
+    // here are your grid square indexes
+    // 11, 12, 13
+    // 20, 21, 22
+    // 29, 30, 31
+
     .button(21, "Stick", [], "minecraft:stick")
-    .button(29, "Stick", [], "minecraft:stick")
+    .button(30, "Stick", [], "minecraft:stick")
 
-    .button(22, "Ink Sac", [], "minecraft:ink_sac")
-    .button(31, "Ink Sac", [], "minecraft:ink_sac")
+    .button(11, "Coal", [], "minecraft:coal")
+    .button(12, "Coal", [], "minecraft:coal")
+    .button(13, "Coal", [], "minecraft:coal")
+
+    .button(24, item.nameTag, itemLore, "minecraft:stone_pickaxe")
 
     .show(player).then(a => {
         if (a.canceled) return
 
         if (a.selection === 23) {
-            if (inkReq == "§c" || stickReq == "§c") {
+            if (req1 == "§c" || req2 == "§c") {
                 return player.sendMessage("§cYou do not have the required materials to craft this item!")
             } else {
-                clearItem(player, "minecraft:stick", 3)
-                clearItem(player, "minecraft:ink_sac", 2)
-                player.getComponent("inventory").container.addItem(items.inkRod)
-                player.sendMessage("§aSuccessfully crafted §fInk Rod§a!")
+                
+                clearItem(player, "minecraft:stick", 2)
+                clearItem(player, "minecraft:coal", 3)
+
+                player.getComponent("inventory").container.addItem(item)
+                player.sendMessage(`§aSuccessfully crafted ${item.nameTag}§a!`)
                 return player.playSound("random.levelup")
             }
-        } else return inkRodMenu(player)
+        } else return coalPickaxeMenu(player)
     })
 }

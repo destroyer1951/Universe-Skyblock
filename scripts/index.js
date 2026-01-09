@@ -444,11 +444,13 @@ world.afterEvents.itemUse.subscribe(data => {
     const item = data.itemStack
 
     const tool = player.getComponent("equippable").getEquipment("Mainhand")
-    if (!tool) return
-    const durability = tool.getComponent("durability")
-    if (!durability) return
-    durability.unbreakable = true
-    player.getComponent('inventory').container.setItem(player.selectedSlotIndex, tool)
+    if (tool) {
+        const durability = tool.getComponent("durability")
+        if (durability) {
+            durability.unbreakable = true
+            player.getComponent('inventory').container.setItem(player.selectedSlotIndex, tool)
+        }
+    }
 
     switch (item.typeId) {
         case "minecraft:bucket": {
@@ -561,6 +563,14 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
     const player = data.player
     const oldBlock = data.block
     const brokenBlock = data.brokenBlockPermutation
+
+    const tool = player.getComponent("equippable").getEquipment("Mainhand")
+    if (!tool) return
+    const durability = tool.getComponent("durability")
+    if (!durability) return
+    durability.unbreakable = true
+    player.getComponent('inventory').container.setItem(player.selectedSlotIndex, tool)
+
     if (brokenBlock.type.id !== 'minecraft:cobblestone') return
 
     if (!(
@@ -592,13 +602,3 @@ system.runInterval(() => {
 §9discord.gg/HRGNN3pzQN`)
     })
 }, 8)
-
-world.afterEvents.playerBreakBlock.subscribe((data) => {
-    const player = data.player
-    const tool = player.getComponent("equippable").getEquipment("Mainhand")
-    if (!tool) return
-    const durability = tool.getComponent("durability")
-    if (!durability) return
-    durability.unbreakable = true
-    player.getComponent('inventory').container.setItem(player.selectedSlotIndex, tool)
-})
