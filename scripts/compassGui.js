@@ -866,6 +866,10 @@ export function craftingMenu(player) {
 */
 function inkRodMenu(player) { // bum outdated function dont copy me
     const itemLore = items.inkRod.getLore()
+    if (itemLore.length !== 0 && itemLore[itemLore.length-1].includes("*")) {
+        itemLore.push(...["","§r§8Star count is randomized", "§r§8upon craft!","§r§8Stars may affect stats!"])
+    }
+
     let stickReq
     let inkReq
     if (checkItemAmount(player, "minecraft:stick") >= 3) { stickReq = "§a" } else { stickReq = "§c" }
@@ -887,6 +891,8 @@ function inkRodMenu(player) { // bum outdated function dont copy me
 
     .button(22, "Ink Sac", [], "minecraft:ink_sac")
     .button(31, "Ink Sac", [], "minecraft:ink_sac")
+
+    .button(24, items.inkRod.nameTag, itemLore, items.inkRod.typeId)
 
     .show(player).then(a => {
         if (a.canceled) return
@@ -939,7 +945,7 @@ function coalPickaxeMenu(player) {
     .button(12, "Coal", [], "minecraft:coal")
     .button(13, "Coal", [], "minecraft:coal")
 
-    .button(24, item.nameTag, itemLore, "minecraft:stone_pickaxe")
+    .button(24, item.nameTag, itemLore, item.typeId)
 
     .show(player).then(a => {
         if (a.canceled) return
