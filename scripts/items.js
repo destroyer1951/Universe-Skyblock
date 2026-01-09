@@ -169,3 +169,14 @@ Object.defineProperty(items, "inkRod", {
         }
     })
 })
+
+Object.defineProperty(items, "coalPickaxe", {
+    get() {
+        return makeItem("minecraft:stone_pickaxe", item => {
+            const stars = rollStars()
+            const starCount = (stars.match(/\*/g) || []).length
+            item.nameTag = "§r§fCoal Pickaxe"
+            item.setLore(["", `§r§7Luck: §a${(starCount*0.2).toFixed(1)}`, '', `§r§e${stars}`])
+        })
+    }
+})

@@ -900,3 +900,44 @@ function inkRodMenu(player) {
         } else return inkRodMenu(player)
     })
 }
+
+function coalPickaxeMenu(player) {
+    const itemLore = items.inkRod.getLore()
+    let stickReq
+    let inkReq
+    if (checkItemAmount(player, "minecraft:stick") >= 3) { stickReq = "§a" } else { stickReq = "§c" }
+    if (checkItemAmount(player, "minecraft:ink_sac") >= 2) { inkReq = "§a" } else { inkReq = "§c" }
+    new ChestFormData("45")
+    .title("Ink Rod")
+    .pattern([
+        "xxxxxxxxx",
+        "xx___xxxx",
+        "xx_____xx",
+        "xx___xxxx",
+        "xxxxxxxxx",
+    ], {x: {itemName: "", texture: "minecraft:copper_bars"}})
+    .button(23, "§eCraft this item!", ["", "§r§7Required materials:",'', `§r${stickReq}x3 Stick`, `§r${inkReq}x2 Ink Sac`], "minecraft:crafting_table")
+
+    .button(13, "Stick", [], "minecraft:stick")
+    .button(21, "Stick", [], "minecraft:stick")
+    .button(29, "Stick", [], "minecraft:stick")
+
+    .button(22, "Ink Sac", [], "minecraft:ink_sac")
+    .button(31, "Ink Sac", [], "minecraft:ink_sac")
+
+    .show(player).then(a => {
+        if (a.canceled) return
+
+        if (a.selection === 23) {
+            if (inkReq == "§c" || stickReq == "§c") {
+                return player.sendMessage("§cYou do not have the required materials to craft this item!")
+            } else {
+                clearItem(player, "minecraft:stick", 3)
+                clearItem(player, "minecraft:ink_sac", 2)
+                player.getComponent("inventory").container.addItem(items.inkRod)
+                player.sendMessage("§aSuccessfully crafted §fInk Rod§a!")
+                return player.playSound("random.levelup")
+            }
+        } else return inkRodMenu(player)
+    })
+}

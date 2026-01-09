@@ -337,10 +337,7 @@ function itemStatReader(item) {
 
 
 
-// ban nether portals, more coming soon
-
 // im banning boats and minecarts in a function because i have no idea what im doing
-
 
 
 world.beforeEvents.playerInteractWithBlock.subscribe(data => {
@@ -356,7 +353,21 @@ world.beforeEvents.playerInteractWithBlock.subscribe(data => {
   ████       ███████ ███████ ██   ██   ████   ███████ ██   ██       ████   
 */                                                               
                                                                            
-
+world.afterEvents.worldLoad.subscribe(() => {
+    world.gameRules.keepInventory = true
+    world.gameRules.doFireTick = false
+    world.gameRules.commandBlockOutput = false
+    world.gameRules.commandBlocksEnabled = false
+    world.gameRules.doDayLightCycle = false
+    world.gameRules.doWeatherCycle = false
+    world.gameRules.doMobSpawning = false
+    world.gameRules.mobGriefing = false
+    world.gameRules.locatorBar = false
+    world.gameRules.pvp = false
+    world.gameRules.showRecipeMessages = false
+    world.gameRules.recipesUnlock = false
+    world.gameRules.tntExplodes = false
+})
 
 
 const achievements = [ // idk why this list is here tbh
@@ -431,6 +442,13 @@ let fishQueue
 world.afterEvents.itemUse.subscribe(data => {
     const player = data.source
     const item = data.itemStack
+
+    const tool = player.getComponent("equippable").getEquipment("Mainhand")
+    if (!tool) return
+    const durability = tool.getComponent("durability")
+    if (!durability) return
+    durability.unbreakable = true
+    player.getComponent('inventory').container.setItem(player.selectedSlotIndex, tool)
 
     switch (item.typeId) {
         case "minecraft:bucket": {
@@ -574,3 +592,13 @@ system.runInterval(() => {
 §9discord.gg/HRGNN3pzQN`)
     })
 }, 8)
+
+world.afterEvents.playerBreakBlock.subscribe((data) => {
+    const player = data.player
+    const tool = player.getComponent("equippable").getEquipment("Mainhand")
+    if (!tool) return
+    const durability = tool.getComponent("durability")
+    if (!durability) return
+    durability.unbreakable = true
+    player.getComponent('inventory').container.setItem(player.selectedSlotIndex, tool)
+})
