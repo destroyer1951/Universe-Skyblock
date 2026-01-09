@@ -340,6 +340,12 @@ function itemStatReader(item) {
 // ban boats, minecarts, nether portals, obsidian, anvil,  more coming soon
 // restrict crafting recipes like anvil, enchantment table, higher level tools like iron and diamond
 
+// im banning boats and minecarts in a function because i have no idea what im doing
+
+world.beforeEvents.playerInteractWithBlock.subscribe(data => {
+    if (data.block.typeId === "minecraft:anvil" || data.block.typeId === "minecraft:enchanting_table") return data.cancel = true
+})
+
 
 /*
 ██    ██     ███████ ███████ ██████  ██    ██ ███████ ██████      ██    ██ 
