@@ -559,6 +559,12 @@ const defaultPickaxeLootTable = [
     { item: () => "minecraft:iron_ore", weight: 0.1 },
 ]
 
+const coalPickaxeLootTable = [
+    { item: () => "minecraft:air", weight: 85 },
+    { item: () => "minecraft:coal_ore", weight: 10 },
+    { item: () => "minecraft:iron_ore", weight: 0.15 },
+]
+
 world.afterEvents.playerBreakBlock.subscribe(data => {
     const player = data.player
     const oldBlock = data.block
