@@ -19,7 +19,7 @@ export const inkRodLootTable = [
 ]
 
 export const whaleRodLootTable = [
-    { item: () => items.inkSac, weight: 95 },
+    { item: () => {const item = items.rawCod.clone(); item.amount = 5; return item}, weight: 95 },
     { item: () => items.coal, weight: 5 },
     { item: () => items.prismarineShard, weight: 0.3 },
 ]

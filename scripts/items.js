@@ -83,7 +83,7 @@ system.run(() => {
         //item.nameTag = "§r§fGold Ingot"
     })
     items.diamond = makeItem("minecraft:diamond", item => {
-        item.nameTag = "§r§fDiamond"
+        //item.nameTag = "§r§fDiamond"
     })
     items.quartzCrystal = makeItem("minecraft:quartz", item => {
         item.nameTag = "§r§fQuartz Crystal"
