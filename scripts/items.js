@@ -145,6 +145,9 @@ system.run(() => {
     items.cherryLog = makeItem("minecraft:cherry_log", item => {
         //item.nameTag = "§r§fCherry Log"
     })
+    items.blubber = makeItem("minecraft:slime_ball", item => {
+        item.nameTag = "§r§fBlubber"
+    })
 
     Object.defineProperty(items, "prismarineShard", {
         get() {
