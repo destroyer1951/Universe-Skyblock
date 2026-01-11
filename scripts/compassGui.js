@@ -311,20 +311,10 @@ export function fishingShopMenu(player) {
     .button(14, 'Ink Sac', ["", `§7Buy Price:§6 ${prices.buy.inkSac}`, `§7Sell Price:§6 ${prices.sell.inkSac}`], 'minecraft:ink_sac', 1)
     .button(15, 'Cherry Sapling', ["", `§7Buy Price:§6 ${prices.buy.cherrySapling}`, `§7Sell Price:§6 ${prices.sell.cherrySapling}`], 'minecraft:cherry_sapling', 1)
     .button(16, 'Cherry Log', ["", `§7Buy Price:§6 ${prices.buy.cherryLog}`, `§7Sell Price:§6 ${prices.sell.cherryLog}`], 'minecraft:cherry_log', 1)
+
     .button(19, 'Prismarine Shard', ["", `§7Buy Price:§6 ${prices.buy.prismarineShard}`, `§7Sell Price:§6 ${prices.sell.prismarineShard}`], 'minecraft:prismarine_shard', 1)
+    .button(20, 'Blubber', ["", `§7Buy Price:§6 ${prices.buy.blubber}`, `§7Sell Price:§6 ${prices.sell.blubber}`], 'minecraft:slime_ball', 1)
 
-    
-
-    /*
-    .button(37, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
-    .button(38, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
-    .button(39, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
-    .button(40, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
-    .button(41, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
-    .button(42, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
-    .button(43, '', ["", "§7Buy Price:§6 1", "§7Sell Price:§6 1"], 'minecraft:', 1)
-    */
-    
 
     .show(player).then(a => {
         if (a.canceled) return;
@@ -352,6 +342,9 @@ export function fishingShopMenu(player) {
             }
             case 19: {
                 return buyUnavailablePreviewMenu(player, prices.sell.prismarineShard, items.prismarineShard)
+            }
+            case 20: {
+                return buyPreviewMenu(player, prices.buy.blubber, prices.sell.blubber, items.blubber)
             }
         }
     })

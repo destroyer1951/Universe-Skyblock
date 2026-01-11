@@ -106,3 +106,6 @@ prices.sell.cherryLog = 12
 
 prices.buy.prismarineShard = "§cN/A"
 prices.sell.prismarineShard = 1750
+
+prices.buy.blubber = 500
+prices.sell.blubber = 40
