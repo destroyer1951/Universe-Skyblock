@@ -836,6 +836,7 @@ export function craftingMenu(player) {
         .button(4, "§aCustom Crafting", ["", "§r§7This is a list of all", "§r§7custom crafting recipes", "§r§7currently in the game.","","§r§7Custom crafting items","§r§7may only be crafted","§r§7through this menu!"], "minecraft:emerald")
         .button(10, "Ink Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
         .button(11, "Coal Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
+        .button(12, "Whale Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
 
         .show(player).then(a => {
             if (a.canceled) return
@@ -849,6 +850,9 @@ export function craftingMenu(player) {
                 }
                 case 11: {
                     return coalPickaxeMenu(player)
+                }
+                case 12: {
+                    return whaleRodMenu(player)
                 }
             }
         })
@@ -905,8 +909,8 @@ function inkRodMenu(player) { // bum outdated function dont copy me
 }
 
 function coalPickaxeMenu(player) {
-    const itemLore = items.coalPickaxe.getLore()
     const item = items.coalPickaxe
+    const itemLore = item.getLore()
     if (itemLore.length !== 0 && itemLore[itemLore.length-1].includes("*")) {
         itemLore.push(...["","§r§8Star count is randomized", "§r§8upon craft!","§r§8Stars may affect stats!"])
     }
@@ -956,5 +960,68 @@ function coalPickaxeMenu(player) {
                 return player.playSound("random.levelup")
             }
         } else return coalPickaxeMenu(player)
+    })
+}
+
+function whaleRodMenu(player) {
+    const item = items.whaleRod
+    const itemLore = item.getLore()
+    if (itemLore.length !== 0 && itemLore[itemLore.length-1].includes("*")) {
+        itemLore.push(...["","§r§8Star count is randomized", "§r§8upon craft!","§r§8Stars may affect stats!"])
+    }
+
+    let req1
+    let req2
+    let req3
+    let req4
+    if (checkItemAmount(player, "minecraft:oak_fence") >= 32) { req1 = "§a" } else { req1 = "§c" }
+    if (checkItemAmount(player, "minecraft:water_bucket") >= 1) { req2 = "§a" } else { req2 = "§c" }
+    if (checkItemAmount(player, "minecraft:cod") >= 64) { req3 = "§a" } else { req3 = "§c" }
+    if (checkItemAmount(player, "minecraft:prismarine_shard") >= 1) { req4 = "§a" } else { req4 = "§c" }
+    new ChestFormData("45")
+    .title(item.nameTag.replace(/§./g, ""))
+    .pattern([
+        "xxxxxxxxx",
+        "xx___xxxx",
+        "xx_____xx",
+        "xx___xxxx",
+        "xxxxxxxxx",
+    ], {x: {itemName: "", texture: "minecraft:copper_bars"}}) // make sure to change these from coal and stick
+    .button(23, "§eCraft this item!", ["", "§r§7Required materials:",'', `§r${req1}x32 Oak Fence`, `§r${req2}x1 Water Bucket`, `§r${req3}x64 Raw Cod`, `§r${req4}x1 Prismarine Shard`], "minecraft:crafting_table")
+
+    // here are your grid square indexes
+    // 11, 12, 13
+    // 20, 21, 22
+    // 29, 30, 31
+
+    .button(29, "Oak Fence", [], "minecraft:oak_fence", 32)
+
+    .button(21, "Water Bucket", [], "minecraft:water_bucket")
+
+    .button(13, "Raw Cod", [], "minecraft:cod", 32)
+    .button(22, "Raw Cod", [], "minecraft:cod", 32)
+
+    .button(31, "Prismarine Shard", [], "minecraft:prismarine_shard")
+
+    .button(24, item.nameTag, itemLore, item.typeId)
+
+    .show(player).then(a => {
+        if (a.canceled) return
+
+        if (a.selection === 23) {
+            if (req1 == "§c" || req2 == "§c" || req3 == "§c" || req4 == "§c") { // ABSOLUTELY REMEMBER TO CHANGE THIS IS REALLY BAD
+                return player.sendMessage("§cYou do not have the required materials to craft this item!")
+            } else {
+                
+                clearItem(player, "minecraft:oak_fence", 32)
+                clearItem(player, "minecraft:water_bucket", 1)
+                clearItem(player, "minecraft:cod", 64)
+                clearItem(player, "minecraft:prismarine_shard", 1)
+
+                player.getComponent("inventory").container.addItem(item)
+                player.sendMessage(`§aSuccessfully crafted ${item.nameTag}§a!`)
+                return player.playSound("random.levelup")
+            }
+        } else return whaleRodMenu(player)
     })
 }

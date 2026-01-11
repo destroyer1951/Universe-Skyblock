@@ -500,6 +500,10 @@ world.afterEvents.entitySpawn.subscribe(data => {
             item = rollWeightedItem(tables.inkRodLootTable, stats.luck)
             break
         }
+        case items.whaleRod.nameTag: {
+            item = rollWeightedItem(tables.whaleRodLootTable, stats.luck)
+            break
+        }
     }
 
     const entity = data.entity
