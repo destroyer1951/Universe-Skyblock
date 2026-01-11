@@ -524,6 +524,45 @@ world.afterEvents.entitySpawn.subscribe(data => {
         }
     }
 
+    switch (item.typeId) {
+        case "minecraft:cod": {
+            setStat(player, "fishingXP", 25, true)
+            break
+        }
+        case "minecraft:salmon": {
+            setStat(player, "fishingXP", 40, true)
+            break
+        }
+        case "minecraft:tropical_fish": {
+            setStat(player, "fishingXP", 125, true)
+            break
+        }
+        case "minecraft:cherry_log": {
+            setStat(player, "fishingXP", 150, true)
+            break
+        }
+        case "minecraft:ink_sac": {
+            setStat(player, "fishingXP", 60, true)
+            break
+        }
+        case "minecraft:copper_ingot": {
+            setStat(player, "fishingXP", 400, true)
+            break
+        }
+        case "minecraft:prismarine_shard": {
+            setStat(player, "fishingXP", 1250, true)
+            break
+        }
+        case "minecraft:coal": {
+            setStat(player, "fishingXP", 250, true)
+            break
+        }
+        case "minecraft:slime_ball": {
+            setStat(player, "fishingXP", 90, true)
+            break
+        }
+    }
+
     const entity = data.entity
     const velocity = data.entity.getVelocity()
 
