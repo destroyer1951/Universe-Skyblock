@@ -19,11 +19,14 @@ export const inkRodLootTable = [
 ]
 
 export const whaleRodLootTable = [
-    { item: () => {const item = items.rawCod.clone(); item.amount = 3; return item}, weight: 40 },
-    { item: () => {const item = items.rawSalmon.clone(); item.amount = 2; return item}, weight: 35 },
+    { item: () => items.rawCod, weight: 17 },
+    { item: () => {const item = items.rawCod.clone(); item.amount = 2; return item}, weight: 15 },
+    { item: () => {const item = items.rawCod.clone(); item.amount = 3; return item}, weight: 8 },
+    { item: () => items.rawSalmon, weight: 20 },
+    { item: () => {const item = items.rawSalmon.clone(); item.amount = 2; return item}, weight: 15 },
     { item: () => items.inkSac, weight: 20 },
     { item: () => items.blubber, weight: 20 },
-]
+] // remember to add cherry saplings into the next fishing rod loot table brotha
 
 
 // Pickaxe loot tables
