@@ -177,6 +177,24 @@ export const xpRequirements = [
     125000 // 15
 ]
 
+export const levelCoins = [
+    100,
+    200,
+    350,
+    750,
+    1500,
+    3500,
+    6500,
+    10000,
+    17500,
+    25000,
+    40000,
+    75000,
+    110000,
+    150000,
+    200000 // 15
+]
+
 function checkLevelUp(player, skill) {
     let level = getPlayerDynamicProperty(player, `${skill}Level`)
     let xp = getPlayerDynamicProperty(player, `${skill}XP`)
@@ -553,6 +571,18 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
     durability.unbreakable = true
     player.getComponent('inventory').container.setItem(player.selectedSlotIndex, tool)
 
+    switch (brokenBlock.type.id) {
+        case 'minecraft:coal_ore': {
+            setStat(player, "miningXP", 150, true)
+            break
+        }
+        case 'minecraft:iron_ore': {
+            setStat(player, "miningXP", 1500, true)
+            break
+        }
+    }
+    checkLevelUp(player, "mining")
+
     if (brokenBlock.type.id !== 'minecraft:cobblestone') return
 
     if (!(
@@ -569,6 +599,10 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
         oldBlock.north(1).isWaterlogged ||
         oldBlock.south(1).isWaterlogged))
     )) return
+
+    setStat(player, "miningXP", 15, true)
+    checkLevelUp(player, "mining")
+
 
     const stats = itemStatReader(tool)
     console.warn("test")
