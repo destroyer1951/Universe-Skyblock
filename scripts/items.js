@@ -187,7 +187,7 @@ Object.defineProperty(items, "whaleRod", {
             const stars = rollStars()
             const starCount = (stars.match(/\*/g) || []).length
             item.nameTag = "§r§fWhale Rod"
-            item.setLore(["", `§r§7Luck: §a${(starCount*0.3).toFixed(1)}`, '', `§r§e${stars}`])
+            item.setLore(["", `§r§7Luck: §a${(starCount*0.5).toFixed(1)}`, '', `§r§e${stars}`])
         })
     }
 })

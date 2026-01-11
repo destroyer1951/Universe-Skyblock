@@ -6,6 +6,7 @@ import { items, makeItem, rollStars } from './items.js'
 import { prices } from './prices.js'
 import { getPlayerDynamicProperty, setPlayerDynamicProperty, getGlobalDynamicProperty, setGlobalDynamicProperty, getScore, setScore, setStat } from './stats.js'
 import * as Menus from './compassGui.js'
+import * as tables from './myLootTables.js'
 
 const { 
     mainMenu, 
@@ -287,7 +288,7 @@ export const getFreeSlots = (player) => {
     return slots
 }
 
-export function rollWeightedItem(table, luck = 0) {
+export function rollWeightedItem(table, luck = 0) { // god bless gpt
     const adjusted = table.map(e => ({
         item: e.item,
         // rare items (low weight) scale much harder with luck
@@ -473,31 +474,6 @@ world.afterEvents.itemUse.subscribe(data => {
 })
 
 
-
-const basicRodLootTable = [
-    { item: () => items.rawCod, weight: 50 },
-    { item: () => items.rawSalmon, weight: 30 },
-    { item: () => items.tropicalFish, weight: 15 },
-    { item: () => items.cherryLog, weight: 9 },
-    { item: () => items.inkSac, weight: 5 },
-    { item: () => items.copperIngot, weight: 1 },
-    { item: () => items.prismarineShard, weight: 0.2 },
-]
-
-const inkRodLootTable = [
-    { item: () => items.inkSac, weight: 95 },
-    { item: () => items.coal, weight: 5 },
-    { item: () => items.prismarineShard, weight: 0.3 },
-]
-
-const whaleRodLootTable = [
-    { item: () => items.inkSac, weight: 95 },
-    { item: () => items.coal, weight: 5 },
-    { item: () => items.prismarineShard, weight: 0.3 },
-]
-
-
-
 world.afterEvents.entitySpawn.subscribe(data => {
     try {
         if (data.entity.getComponent("item").itemStack.typeId !== "minecraft:element_1") return;
@@ -517,11 +493,11 @@ world.afterEvents.entitySpawn.subscribe(data => {
     console.warn(stats.luck)
     switch (rod.nameTag) {
         case items.basicRod.nameTag: {
-            item = rollWeightedItem(basicRodLootTable, stats.luck)
+            item = rollWeightedItem(tables.basicRodLootTable, stats.luck)
             break
         }
         case items.inkRod.nameTag: {
-            item = rollWeightedItem(inkRodLootTable, stats.luck)
+            item = rollWeightedItem(tables.inkRodLootTable, stats.luck)
             break
         }
     }
@@ -561,17 +537,6 @@ world.beforeEvents.entityRemove.subscribe(data => { // it all makes sense now
     })
 })
 
-const defaultPickaxeLootTable = [
-    { item: () => "minecraft:air", weight: 93 },
-    { item: () => "minecraft:coal_ore", weight: 7 },
-    { item: () => "minecraft:iron_ore", weight: 0.1 },
-]
-
-const coalPickaxeLootTable = [
-    { item: () => "minecraft:air", weight: 85 },
-    { item: () => "minecraft:coal_ore", weight: 10 },
-    { item: () => "minecraft:iron_ore", weight: 0.15 },
-]
 
 world.afterEvents.playerBreakBlock.subscribe(data => {
     const player = data.player
@@ -602,7 +567,18 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
         oldBlock.south(1).isWaterlogged))
     )) return
 
-    const newBlock = rollWeightedItem(defaultPickaxeLootTable)
+    const stats = itemStatReader(tool)
+    console.warn("test")
+
+    let newBlock = rollWeightedItem(tables.defaultPickaxeLootTable)
+    switch (tool.nameTag) {
+        case items.coalPickaxe.nameTag: {
+            newBlock = rollWeightedItem(tables.coalPickaxeLootTable, stats.luck)
+            console.warn(newBlock)
+            break
+        }
+    }
+    
     if (newBlock === "minecraft:air") return
     return player.dimension.setBlockType(oldBlock.location, newBlock)
 
