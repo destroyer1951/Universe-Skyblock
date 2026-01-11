@@ -1,4 +1,4 @@
-import { world, system, ItemStack, Player } from '@minecraft/server'
+import { world, system, ItemStack, Player, EntityPushThroughComponent } from '@minecraft/server'
 import { ModalFormData } from '@minecraft/server-ui';
 import { ChestFormData } from './extensions/forms.js';
 
@@ -155,6 +155,10 @@ player.sendMessage(`§aInformation for the player property §e${property}
                 })
             }
         }
+    } else {
+        data.cancel = true
+        if (data.message.includes("§")) return data.sender.sendMessage("§cYou cannot use formatting codes in chat messages!")
+        world.sendMessage(`§8[§a${getPlayerDynamicProperty(data.sender, 'skyblockLevel')}§8] §8<§7${data.sender.name}§8> §f${data.message}`)
     }
 })
 
@@ -206,10 +210,17 @@ function checkLevelUp(player, skill) {
         case "combat": color = "§c"; break;
     }
     const skillDisplay = skill[0].toUpperCase() + skill.slice(1)
+
     if (xp >= xpRequirements[level]) {
+
         setPlayerDynamicProperty(player, `${skill}Level`, level + 1)
         setPlayerDynamicProperty(player, `${skill}XP`, xp - xpRequirements[level])
+
         setPlayerDynamicProperty(player, 'coins', levelCoins[level], true)
+
+        const levelAverage = ((getPlayerDynamicProperty(player, 'miningLevel') + getPlayerDynamicProperty(player, 'fishingLevel'))/2).toFixed(1) // remember to add farming and combat later
+        setPlayerDynamicProperty(player, 'skyblockLevel', levelAverage)
+
         player.sendMessage(`§b-------------------------------------\n\n§l§e LEVEL UP >> §r§aYour ${color}${skillDisplay}§a level is now §l${color}${level + 1}§r§a!\n §r§6+${levelCoins[level]} Coins\n\n§b-------------------------------------`)
         player.playSound("random.levelup")
     }
@@ -562,6 +573,7 @@ world.afterEvents.entitySpawn.subscribe(data => {
             break
         }
     }
+    checkLevelUp(player, "fishing")
 
     const entity = data.entity
     const velocity = data.entity.getVelocity()
@@ -645,13 +657,11 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
 
 
     const stats = itemStatReader(tool)
-    console.warn("test")
 
     let newBlock = rollWeightedItem(tables.defaultPickaxeLootTable)
     switch (tool.nameTag) {
         case items.coalPickaxe.nameTag: {
             newBlock = rollWeightedItem(tables.coalPickaxeLootTable, stats.luck)
-            console.warn(newBlock)
             break
         }
     }
