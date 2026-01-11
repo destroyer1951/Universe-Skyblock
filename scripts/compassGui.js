@@ -97,12 +97,12 @@ export function codesMenu(player) {
                 player.sendMessage("§aSuccessfully redeemed code §eUNIVERSESKYBLOCK2026§a!\n§r§a+§6750 coins\n§r§a+§f6 Iron Ingots")
                 return player.playSound("random.levelup")
             }
-            case 'HACKER': { // you can only get this code from looking at this code file hahahahahaha open source
-                if (getPlayerDynamicProperty(player, 'HACKER')) return player.sendMessage('§cYou already redeemed this code!')
+            case 'NAISHO': { // you can only get this code from looking at this code file hahahahahaha open source
+                if (getPlayerDynamicProperty(player, 'NAISHO')) return player.sendMessage('§cYou already redeemed this code!')
                 setPlayerDynamicProperty(player, "coins", 5000, true)
 
-                setPlayerDynamicProperty(player, 'HACKER', 1)
-                player.sendMessage("§aSuccessfully redeemed code §eHACKER§a!\n§r§a+§65000 coins")
+                setPlayerDynamicProperty(player, 'NAISHO', 1)
+                player.sendMessage("§aSuccessfully redeemed code §eNAISHO§a!\n§r§a+§65000 coins")
                 return player.playSound("random.levelup")
             }
             default: {

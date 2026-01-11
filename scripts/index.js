@@ -373,18 +373,20 @@ world.afterEvents.worldLoad.subscribe(() => {
 
 const achievements = [ // idk why this list is here tbh
     "How did you mess that up",
+    "That's a secret!",
 ] // achievement idea: "You actually suck", get this by failing the lava thing like 10 times
 
 function achieve(player, name) {
-    switch (name) {
+    if (getPlayerDynamicProperty(player, name)) return
+    world.sendMessage(`${player.name} has reached the achievement §a[${name}]`)
+    player.playSound("random.levelup")
+    setPlayerDynamicProperty(player, name, true)
+
+    /*switch (name) { // implement this if you want achievement specific rewards (you prolly do at some point)
         case "How did you mess that up":  {
-            if (getPlayerDynamicProperty(player, name)) return
-                world.sendMessage(`${player.name} has reached the achievement §a[${name}]`)
-                player.playSound("random.levelup")
-                setPlayerDynamicProperty(player, name, true)
-                return
+
         }
-    }
+    }*/
 }
 
 /*
