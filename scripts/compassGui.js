@@ -91,10 +91,10 @@ export function codesMenu(player) {
             case 'UNIVERSESKYBLOCK2026': {
                 if (getPlayerDynamicProperty(player, 'UNIVERSESKYBLOCK2026')) return player.sendMessage('§cYou already redeemed this code!')
                 setPlayerDynamicProperty(player, "coins", 750, true)
-                player.getComponent("inventory").container.addItem(new ItemStack("minecraft:iron_ingot", 6))
+                player.getComponent("inventory").container.addItem(new ItemStack("minecraft:iron_ingot", 3))
 
                 setPlayerDynamicProperty(player, 'UNIVERSESKYBLOCK2026', 1)
-                player.sendMessage("§aSuccessfully redeemed code §eUNIVERSESKYBLOCK2026§a!\n§r§a+§6750 coins\n§r§a+§f6 Iron Ingots")
+                player.sendMessage("§aSuccessfully redeemed code §eUNIVERSESKYBLOCK2026§a!\n§r§a+§6750 coins\n§r§a+§f3 Iron Ingots")
                 return player.playSound("random.levelup")
             }
             case 'NAISHO': { // you can only get this code from looking at this code file hahahahahaha open source

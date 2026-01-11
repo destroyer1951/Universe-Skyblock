@@ -108,4 +108,4 @@ prices.buy.prismarineShard = "§cN/A"
 prices.sell.prismarineShard = 1750
 
 prices.buy.blubber = 500
-prices.sell.blubber = 40
+prices.sell.blubber = 40 // some kind of item like "reinforced blubber" thats a slimeblock made of this stuff and used for future crafting recipes like armor or diving armor idk

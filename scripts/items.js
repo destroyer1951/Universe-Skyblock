@@ -184,7 +184,7 @@ Object.defineProperty(items, "coalPickaxe", {
     }
 })
 
-Object.defineProperty(items, "whaleRod", {
+Object.defineProperty(items, "whaleRod", { // credit to my goat Enzo for this item and recipe
     get() {
         return makeItem("minecraft:fishing_rod", item => {
             const stars = rollStars()
