@@ -209,7 +209,8 @@ function checkLevelUp(player, skill) {
     if (xp >= xpRequirements[level]) {
         setPlayerDynamicProperty(player, `${skill}Level`, level + 1)
         setPlayerDynamicProperty(player, `${skill}XP`, xp - xpRequirements[level])
-        player.sendMessage(`§b-------------------------------------\n\n§l§e LEVEL UP >> §r§aYour ${color}${skillDisplay}§a level is now §l${color}${level + 1}§r§a!\n\n§b-------------------------------------`)
+        setPlayerDynamicProperty(player, 'coins', levelCoins[level], true)
+        player.sendMessage(`§b-------------------------------------\n\n§l§e LEVEL UP >> §r§aYour ${color}${skillDisplay}§a level is now §l${color}${level + 1}§r§a!\n §r§6+${levelCoins[level]} Coins\n\n§b-------------------------------------`)
         player.playSound("random.levelup")
     }
 }
