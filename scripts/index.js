@@ -49,8 +49,8 @@ world.afterEvents.playerSpawn.subscribe(data => {
     if (!getPlayerDynamicProperty(player, 'fishingXP')) setPlayerDynamicProperty(player, 'fishingXP', 0)
     if (!getPlayerDynamicProperty(player, 'farmingLevel')) setPlayerDynamicProperty(player, 'farmingLevel', 0)
     if (!getPlayerDynamicProperty(player, 'farmingXP')) setPlayerDynamicProperty(player, 'farmingXP', 0)
-    if (!getPlayerDynamicProperty(player, 'combatLevel')) setPlayerDynamicProperty(player, 'combatLevel', 0)
-    if (!getPlayerDynamicProperty(player, 'combatXP')) setPlayerDynamicProperty(player, 'combatXP', 0)
+    if (!getPlayerDynamicProperty(player, 'cookingLevel')) setPlayerDynamicProperty(player, 'cookingLevel', 0)
+    if (!getPlayerDynamicProperty(player, 'cookingXP')) setPlayerDynamicProperty(player, 'cookingXP', 0)
 })
 
 world.beforeEvents.chatSend.subscribe(data => {
@@ -208,7 +208,7 @@ function checkLevelUp(player, skill) {
         case "mining": color = "§b"; break;
         case "fishing": color = "§9"; break;
         case "farming": color = "§a"; break;
-        case "combat": color = "§c"; break;
+        case "cooking": color = "§4"; break;
     }
     const skillDisplay = skill[0].toUpperCase() + skill.slice(1)
 
@@ -219,7 +219,7 @@ function checkLevelUp(player, skill) {
 
         setPlayerDynamicProperty(player, 'coins', levelCoins[level], true)
 
-        const levelAverage = ((getPlayerDynamicProperty(player, 'miningLevel') + getPlayerDynamicProperty(player, 'fishingLevel'))/2).toFixed(1) // remember to add farming and combat later
+        const levelAverage = ((getPlayerDynamicProperty(player, 'miningLevel') + getPlayerDynamicProperty(player, 'fishingLevel'))/2).toFixed(1) // remember to add farming and cooking later
         setPlayerDynamicProperty(player, 'skyblockLevel', levelAverage)
 
         player.sendMessage(`§b-------------------------------------\n\n§l§e LEVEL UP >> §r§aYour ${color}${skillDisplay}§a level is now §l${color}${level + 1}§r§a!\n §r§6+${levelCoins[level]} Coins\n\n§b-------------------------------------`)
@@ -512,26 +512,20 @@ FishingEvent.playerReleaseFishing.subscribe(data => {
 
     if (player["fishDebounce"]) return
     player["fishDebounce"] = true
-    player.sendMessage(`PlayerFished: ${player.name}\nResult: ${result}\nDuration: ${duration} ticks\nFished items: ${fishedItems.map(i => i.typeId).join(", ")}`)
 
     const rod = beforeItemStack
-    console.warn(beforeItemStack.nameTag) 
 
     let entity
     const entities = player.dimension.getEntities({location: location, maxDistance: 2, type: "minecraft:item"})
     entities.forEach(e => {
         if (e.getComponent("minecraft:item").itemStack.typeId === "minecraft:element_1") entity = e
     })
-    console.warn(entity.typeId)
 
 
     let luck = 0
-
     const stats = itemStatReader(rod)
-
     let item = items.rawCod
-    console.warn(player.name)
-    console.warn(stats.luck)
+
     switch (rod.nameTag) {
         case items.basicRod.nameTag: {
             item = rollWeightedItem(tables.basicRodLootTable, stats.luck)
@@ -599,89 +593,6 @@ FishingEvent.playerReleaseFishing.subscribe(data => {
     }, 10)
 })
 
-/*
-world.afterEvents.entitySpawn.subscribe(data => {
-    try {
-        if (data.entity.getComponent("item").itemStack.typeId !== "minecraft:element_1") return;
-    } catch (e) {
-        return
-    }
-    
-    const player = data.entity.dimension.getPlayers({name: fishQueue})[0]
-    fishQueue = undefined
-
-    const rod = player.getComponent("equippable").getEquipmentSlot("Mainhand") 
-    let luck = 0
-
-    const stats = itemStatReader(rod)
-
-    let item = items.rawCod
-    console.warn(player.name)
-    console.warn(stats.luck)
-    switch (rod.nameTag) {
-        case items.basicRod.nameTag: {
-            item = rollWeightedItem(tables.basicRodLootTable, stats.luck)
-            break
-        }
-        case items.inkRod.nameTag: {
-            item = rollWeightedItem(tables.inkRodLootTable, stats.luck)
-            break
-        }
-        case items.whaleRod.nameTag: {
-            item = rollWeightedItem(tables.whaleRodLootTable, stats.luck)
-            break
-        }
-    }
-
-    switch (item.typeId) {
-        case "minecraft:cod": {
-            setStat(player, "fishingXP", 25, true)
-            break
-        }
-        case "minecraft:salmon": {
-            setStat(player, "fishingXP", 40, true)
-            break
-        }
-        case "minecraft:tropical_fish": {
-            setStat(player, "fishingXP", 125, true)
-            break
-        }
-        case "minecraft:cherry_log": {
-            setStat(player, "fishingXP", 150, true)
-            break
-        }
-        case "minecraft:ink_sac": {
-            setStat(player, "fishingXP", 60, true)
-            break
-        }
-        case "minecraft:copper_ingot": {
-            setStat(player, "fishingXP", 400, true)
-            break
-        }
-        case "minecraft:prismarine_shard": {
-            setStat(player, "fishingXP", 1250, true)
-            break
-        }
-        case "minecraft:coal": {
-            setStat(player, "fishingXP", 250, true)
-            break
-        }
-        case "minecraft:slime_ball": {
-            setStat(player, "fishingXP", 90, true)
-            break
-        }
-    }
-    checkLevelUp(player, "fishing")
-
-    const entity = data.entity
-    const velocity = data.entity.getVelocity()
-
-    const newEntity = entity.dimension.spawnItem(item, entity.location)
-    const newVelo = {x: velocity.x*.75, y:velocity.y*.50, z:velocity.z*.75}
-    newEntity.applyImpulse(newVelo)
-    entity.kill()
-})
-*/
 
 world.beforeEvents.entityRemove.subscribe(data => { // it all makes sense now
 

@@ -45,7 +45,7 @@ export function levelsMenu(player) {
     const miningLevel = getPlayerDynamicProperty(player, "miningLevel")
     //const farmingLevel = getPlayerDynamicProperty(player, "farmingLevel")
     const fishingLevel = getPlayerDynamicProperty(player, "fishingLevel")
-    //const combatLevel = getPlayerDynamicProperty(player, "combatLevel")
+    //const cookingLevel = getPlayerDynamicProperty(player, "cookingLevel")
     const skyblockLevel = getPlayerDynamicProperty(player, "skyblockLevel")
 
     const miningXP = getPlayerDynamicProperty(player, "miningXP")
@@ -58,7 +58,7 @@ export function levelsMenu(player) {
     const fishingLevelProgress = xpRequirements[fishingLevel + 1] ? xpRequirements[fishingLevel] : "MAX"
     const skyblockLevelProgress = xpRequirements[skyblockLevel + 1] ? xpRequirements[skyblockLevel] : "MAX"
         //const farmingLevelProgress = xpRequirements[farmingLevel + 1] ? xpRequirements[farmingLevel] : "MAX"
-        //const combatLevelProgress = xpRequirements[combatLevel + 1] ? xpRequirements[combatLevel] : "MAX"
+        //const cookingLevelProgress = xpRequirements[cookingLevel + 1] ? xpRequirements[cookingLevel] : "MAX"
 
 
 
