@@ -26,7 +26,7 @@ class FishingEventInstance {
     }
     setAttachedEntity(entity) { this.#attachedToEntity = entity; }
     manageLoot(entity) {
-        if (!this.#hook.isValid() && Date.now() - this.#removedTime <= 5
+        if (!this.#hook.isValid && Date.now() - this.#removedTime <= 5
         && Math.abs(entity.location.x - this.#hookLocation.x) <= 2.5 && Math.abs(entity.location.z - this.#hookLocation.z) <= 2.5
         ) this.#spawnedItems.push(entity.getComponent('minecraft:item')?.itemStack);
     }
@@ -43,7 +43,7 @@ class FishingEventInstance {
             if (!FishingEvent['playerReleaseFishing'].subscribers.size) this.#cleanup();
         }
         this.#run = system.runInterval(async () => {
-            if (this.#hook?.isValid()) {
+            if (this.#hook?.isValid) {
                 if (!this.#isInWater) this.#isInWater = this.#hook.isInWater;
                 this.#hookLocation = this.#hook.location; return;
             }
@@ -72,16 +72,16 @@ class FishingEventInstance {
 class FishingEventManager {
     static _activeInstances = new Set();
     static _entitySpawnCallback = ({ entity }) => {
-        if (!entity?.isValid()) return;
+        if (!entity?.isValid) return;
         if (entity.typeId === 'minecraft:fishing_hook') FishingEventManager._activeInstances.add(new FishingEventInstance(entity));
         else if (entity.hasComponent(EntityComponentTypes.Item)) FishingEventManager._activeInstances.forEach(inst => inst.manageLoot(entity));
     }
     static _itemUseCallback = ({ source, itemStack }) => {
-        if (source?.isValid() && itemStack.typeId === 'minecraft:fishing_rod') { for (const inst of FishingEventManager._activeInstances) inst.setSource(source); }
+        if (source?.isValid && itemStack.typeId === 'minecraft:fishing_rod') { for (const inst of FishingEventManager._activeInstances) inst.setSource(source); }
     }
     static _projectileHitEntityCallback = (data) => {
         const { entity } = data.getEntityHit();
-        if (!data.projectile.isValid() || !entity.isValid()) return;
+        if (!data.projectile.isValid || !entity.isValid) return;
         for (const inst of FishingEventManager._activeInstances) if (inst.hook?.id === data.projectile?.id) inst.setAttachedEntity(entity);
     }
     static triggerEvent(data, eventName) { FishingEvent[eventName].subscribers.forEach(cb => cb(data)); }
