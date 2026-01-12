@@ -50,9 +50,9 @@ export function levelsMenu(player) {
 
     const miningXP = getPlayerDynamicProperty(player, "miningXP")
     const fishingXP = getPlayerDynamicProperty(player, "fishingXP")
-    const skyblockXP = getPlayerDynamicProperty(player, "skyblockXP")
+    //const skyblockXP = getPlayerDynamicProperty(player, "skyblockXP")
     //const farmingXP = getPlayerDynamicProperty(player, "farmingXP")
-    //const combatXP = getPlayerDynamicProperty(player, "combatXP")
+    //const cookingXP = getPlayerDynamicProperty(player, "cookingXP")
 
     const miningLevelProgress = xpRequirements[miningLevel + 1] ? xpRequirements[miningLevel] : "MAX"
     const fishingLevelProgress = xpRequirements[fishingLevel + 1] ? xpRequirements[fishingLevel] : "MAX"
@@ -64,9 +64,9 @@ export function levelsMenu(player) {
 
     new ChestFormData("27")
         .title('Skill Levels')
-        .button(11, `§cCombat Level`, ['', '§l§5COMING SOON'], 'minecraft:iron_sword', 1)
+        .button(11, `§4Cooking Level`, ['', '§l§5COMING SOON'], 'minecraft:campfire', 1)
         .button(12, `§bMining Level: ${miningLevel}`, ['', `Progress: ${miningXP}/${miningLevelProgress} XP`, '', '§7Mining XP is earned through', 'breaking cobblestone and', 'related ores'], 'minecraft:iron_pickaxe', 1)
-        .button(13, `§aSkyblock Level: ${skyblockLevel}`, ['', `Progress: ${skyblockXP}/${skyblockLevelProgress} XP`, '', '§7Your Skyblock Level is an', 'average of the 4 other', 'skill levels!'], 'minecraft:turtle_scute', 1)
+        .button(13, `§aSkyblock Level: ${skyblockLevel}`, ['', '§7Your Skyblock Level is an', 'average of the 4 other', 'skill levels!'], 'minecraft:turtle_scute', 1)
         .button(14, `§9Fishing Level: ${fishingLevel}`, ['', `Progress: ${fishingXP}/${fishingLevelProgress} XP`, '', '§7Fishing XP is earned through', 'fishing and catching rare items'], 'minecraft:fishing_rod', 1)
         .button(15, `§eFarming Level`, ['', '§l§5COMING SOON'], 'minecraft:wheat', 1)
         .show(player).then(a => {
