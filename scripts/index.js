@@ -519,6 +519,7 @@ world.afterEvents.entitySpawn.subscribe(data => {
     const stats = itemStatReader(rod)
 
     let item = items.rawCod
+    console.warn(player.name)
     console.warn(stats.luck)
     switch (rod.nameTag) {
         case items.basicRod.nameTag: {
