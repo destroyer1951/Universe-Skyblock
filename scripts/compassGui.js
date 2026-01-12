@@ -155,7 +155,7 @@ export function generalShopMenu(player) {
     .button(13, 'Dirt', ["", `§7Buy Price:§6 ${prices.buy.dirt}`, `§7Sell Price:§6 ${prices.sell.dirt}`], 'minecraft:dirt', 1)
     .button(14, 'Cobblestone', ["", `§7Buy Price:§6 ${prices.buy.cobblestone}`, `§7Sell Price:§6 ${prices.sell.cobblestone}`], 'minecraft:cobblestone', 1)
     .button(15, 'Sand', ["", `§7Buy Price:§6 ${prices.buy.sand}`, `§7Sell Price:§6 ${prices.sell.sand}`], 'minecraft:sand', 1)
-    .button(16, 'Bone Meal', ["", `§7Buy Price:§6 ${prices.buy.boneMeal}`, `§7Sell Price:§6 ${prices.sell.boneMeal}`], 'minecraft:bone_meal', 1)
+    .button(16, 'Basic Fishing Rod', ["", `§7Buy Price:§6 ${prices.buy.basicRod}`, `§7Sell Price:§6 ${prices.sell.basicRod}`], 'minecraft:fishing_rod', 1)
 
     .button(19, 'Charcoal', ["", `§7Buy Price:§6 ${prices.buy.charcoal}`, `§7Sell Price:§6 ${prices.sell.charcoal}`], 'minecraft:charcoal', 1)
     .button(20, 'Oak Sapling', ["", `§7Buy Price:§6 ${prices.buy.oakSapling}`, `§7Sell Price:§6 ${prices.sell.oakSapling}`], 'minecraft:oak_sapling', 1)
@@ -206,7 +206,7 @@ export function generalShopMenu(player) {
                 return buyPreviewMenu(player, prices.buy.sand, prices.sell.sand, items.sand)
             }
             case 16: {
-                return buyPreviewMenu(player, prices.buy.boneMeal, prices.sell.boneMeal, items.boneMeal)
+                return buyUnstackableSellUnavailablePreviewMenu(player, prices.buy.basicRod, prices.sell.basicRod, items.basicRod)
             }
             case 19: {
                 return buyPreviewMenu(player, prices.buy.charcoal, prices.sell.charcoal, items.charcoal)
@@ -304,46 +304,42 @@ export function fishingShopMenu(player) {
     new ChestFormData("54")
     .title('Fishing Shop Menu')
 
-    .button(10, 'Basic Fishing Rod', ["", `§7Buy Price:§6 ${prices.buy.basicRod}`, `§7Sell Price:§6 ${prices.sell.basicRod}`], 'minecraft:fishing_rod', 1)
-    .button(11, 'Raw Cod', ["", `§7Buy Price:§6 ${prices.buy.rawCod}`, `§7Sell Price:§6 ${prices.sell.rawCod}`], 'minecraft:cod', 1)
-    .button(12, 'Raw Salmon', ["", `§7Buy Price:§6 ${prices.buy.rawSalmon}`, `§7Sell Price:§6 ${prices.sell.rawSalmon}`], 'minecraft:salmon', 1)
-    .button(13, 'Tropical Fish', ["", `§7Buy Price:§6 ${prices.buy.tropicalFish}`, `§7Sell Price:§6 ${prices.sell.tropicalFish}`], 'minecraft:tropical_fish', 1)
-    .button(14, 'Ink Sac', ["", `§7Buy Price:§6 ${prices.buy.inkSac}`, `§7Sell Price:§6 ${prices.sell.inkSac}`], 'minecraft:ink_sac', 1)
-    .button(15, 'Cherry Sapling', ["", `§7Buy Price:§6 ${prices.buy.cherrySapling}`, `§7Sell Price:§6 ${prices.sell.cherrySapling}`], 'minecraft:cherry_sapling', 1)
-    .button(16, 'Cherry Log', ["", `§7Buy Price:§6 ${prices.buy.cherryLog}`, `§7Sell Price:§6 ${prices.sell.cherryLog}`], 'minecraft:cherry_log', 1)
+    .button(10, 'Raw Cod', ["", `§7Buy Price:§6 ${prices.buy.rawCod}`, `§7Sell Price:§6 ${prices.sell.rawCod}`], 'minecraft:cod', 1)
+    .button(11, 'Raw Salmon', ["", `§7Buy Price:§6 ${prices.buy.rawSalmon}`, `§7Sell Price:§6 ${prices.sell.rawSalmon}`], 'minecraft:salmon', 1)
+    .button(12, 'Tropical Fish', ["", `§7Buy Price:§6 ${prices.buy.tropicalFish}`, `§7Sell Price:§6 ${prices.sell.tropicalFish}`], 'minecraft:tropical_fish', 1)
+    .button(13, 'Ink Sac', ["", `§7Buy Price:§6 ${prices.buy.inkSac}`, `§7Sell Price:§6 ${prices.sell.inkSac}`], 'minecraft:ink_sac', 1)
+    .button(14, 'Cherry Sapling', ["", `§7Buy Price:§6 ${prices.buy.cherrySapling}`, `§7Sell Price:§6 ${prices.sell.cherrySapling}`], 'minecraft:cherry_sapling', 1)
+    .button(15, 'Cherry Log', ["", `§7Buy Price:§6 ${prices.buy.cherryLog}`, `§7Sell Price:§6 ${prices.sell.cherryLog}`], 'minecraft:cherry_log', 1)
+    .button(16, 'Prismarine Shard', ["", `§7Buy Price:§6 ${prices.buy.prismarineShard}`, `§7Sell Price:§6 ${prices.sell.prismarineShard}`], 'minecraft:prismarine_shard', 1)
 
-    .button(19, 'Prismarine Shard', ["", `§7Buy Price:§6 ${prices.buy.prismarineShard}`, `§7Sell Price:§6 ${prices.sell.prismarineShard}`], 'minecraft:prismarine_shard', 1)
-    .button(20, 'Blubber', ["", `§7Buy Price:§6 ${prices.buy.blubber}`, `§7Sell Price:§6 ${prices.sell.blubber}`], 'minecraft:slime_ball', 1)
+    .button(19, 'Blubber', ["", `§7Buy Price:§6 ${prices.buy.blubber}`, `§7Sell Price:§6 ${prices.sell.blubber}`], 'minecraft:slime_ball', 1)
 
 
     .show(player).then(a => {
         if (a.canceled) return;
         switch (a.selection) {
             case 10: {
-                return buyUnstackableSellUnavailablePreviewMenu(player, prices.buy.basicRod, items.basicRod)
-            }
-            case 11: {
                 return buyPreviewMenu(player, prices.buy.rawCod, prices.sell.rawCod, items.rawCod)
             }
-            case 12: {
+            case 11: {
                 return buyPreviewMenu(player, prices.buy.rawSalmon, prices.sell.rawSalmon, items.rawSalmon)
             }
-            case 13: {
+            case 12: {
                 return buyPreviewMenu(player, prices.buy.tropicalFish, prices.sell.tropicalFish, items.tropicalFish)
             }
-            case 14: {
+            case 13: {
                 return buyPreviewMenu(player, prices.buy.inkSac, prices.sell.inkSac, items.inkSac)
             }
-            case 15: {
+            case 14: {
                 return buyUnavailablePreviewMenu(player, prices.sell.cherrySapling, items.cherrySapling)
             }
-            case 16: {
+            case 15: {
                 return buyUnavailablePreviewMenu(player, prices.sell.cherryLog, items.cherryLog)
             }
-            case 19: {
+            case 16: {
                 return buyUnavailablePreviewMenu(player, prices.sell.prismarineShard, items.prismarineShard)
             }
-            case 20: {
+            case 19: {
                 return buyPreviewMenu(player, prices.buy.blubber, prices.sell.blubber, items.blubber)
             }
         }
