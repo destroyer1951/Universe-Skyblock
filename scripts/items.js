@@ -25,6 +25,10 @@ export function rollStars(maxStars=5) {
     return starString.trim()
 }
 
+export function itemFactory() {
+    
+}
+
 export const items = {}
 system.run(() => {
     // General shop items

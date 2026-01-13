@@ -206,7 +206,7 @@ export function generalShopMenu(player) {
                 return buyPreviewMenu(player, prices.buy.sand, prices.sell.sand, items.sand)
             }
             case 16: {
-                return buyUnstackableSellUnavailablePreviewMenu(player, prices.buy.basicRod, prices.sell.basicRod, items.basicRod)
+                return buyUnstackableSellUnavailablePreviewMenu(player, prices.buy.basicRod, () => items.basicRod)
             }
             case 19: {
                 return buyPreviewMenu(player, prices.buy.charcoal, prices.sell.charcoal, items.charcoal)
@@ -350,9 +350,12 @@ export function fishingShopMenu(player) {
  * @param {Player} player
  * @param {ItemStack} item
  */
-export function buyPreviewMenu(player, buyPrice, sellPrice, item) {
+export function buyPreviewMenu(player, buyPrice, sellPrice, itemOrFactory) {
     const freeSlots = getFreeSlots(player)
     if (freeSlots == 0) return player.sendMessage("§cYou need free inventory space for this!")
+
+    const itemFactory = typeof itemOrFactory === "function" ? itemOrFactory : () => itemOrFactory.clone()
+    const item = itemFactory()
 
     let cleanName 
     if (item.nameTag) { 
@@ -385,7 +388,7 @@ export function buyPreviewMenu(player, buyPrice, sellPrice, item) {
                 
                 setPlayerDynamicProperty(player, "coins", -buyPrice, true)
                 item.amount = 1
-                player.getComponent("inventory").container.addItem(item)
+                player.getComponent("inventory").container.addItem(itemOrFactory instanceof Function ? itemOrFactory() : itemOrFactory)
                 player.playSound("random.orb")
                 player.sendMessage(`§aYou purchased §ex1 §f${item.nameTag ? item.nameTag : cleanName}§a for §6${buyPrice} coins`)
                 return buyPreviewMenu(player, buyPrice, sellPrice, item)
@@ -411,8 +414,10 @@ export function buyPreviewMenu(player, buyPrice, sellPrice, item) {
     })
 }
 
-export function buyUnavailablePreviewMenu(player, sellPrice, item) {
+export function buyUnavailablePreviewMenu(player, sellPrice, itemOrFactory) {
 
+    const itemFactory = typeof itemOrFactory === "function" ? itemOrFactory : () => itemOrFactory.clone()
+    const item = itemFactory()
 
     let cleanName 
     if (item.nameTag) { 
@@ -441,10 +446,10 @@ export function buyUnavailablePreviewMenu(player, sellPrice, item) {
         if (a.canceled) return
         switch (a.selection) {
             case 10: {
-                return buyUnavailablePreviewMenu(player, sellPrice, item)
+                return buyUnavailablePreviewMenu(player, sellPrice, itemOrFactory)
             } 
             case 11: {
-                return buyUnavailablePreviewMenu(player, sellPrice, item)
+                return buyUnavailablePreviewMenu(player, sellPrice, itemOrFactory)
             }
             case 15: {
                 if (checkItemAmount(player, item.typeId) >= 1) {
@@ -463,7 +468,10 @@ export function buyUnavailablePreviewMenu(player, sellPrice, item) {
     })
 }
 
-export function buyNamedUnavailablePreviewMenu(player, sellPrice, item) {
+export function buyNamedUnavailablePreviewMenu(player, sellPrice, itemOrFactory) {
+
+    const itemFactory = typeof itemOrFactory === "function" ? itemOrFactory : () => itemOrFactory.clone()
+    const item = itemFactory()
 
     let cleanName 
     if (item.nameTag) { 
@@ -492,10 +500,10 @@ export function buyNamedUnavailablePreviewMenu(player, sellPrice, item) {
         if (a.canceled) return
         switch (a.selection) {
             case 10: {
-                return buyNamedUnavailablePreviewMenu(player, sellPrice, item)
+                return buyNamedUnavailablePreviewMenu(player, sellPrice, itemOrFactory)
             } 
             case 11: {
-                return buyNamedUnavailablePreviewMenu(player, sellPrice, item)
+                return buyNamedUnavailablePreviewMenu(player, sellPrice, itemOrFactory)
             }
             case 15: {
                 if (checkItemAmount(player, item.typeId, false, item.nameTag) >= 1) {
@@ -515,10 +523,13 @@ export function buyNamedUnavailablePreviewMenu(player, sellPrice, item) {
 }
 
 
-export function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item) {
+export function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, itemOrFactory) {
 
     const freeSlots = getFreeSlots(player)
     if (freeSlots == 0) return player.sendMessage("§cYou need free inventory space for this!")
+
+    const itemFactory = typeof itemOrFactory === "function" ? itemOrFactory : () => itemOrFactory.clone()
+    const item = itemFactory()
 
     let cleanName 
     if (item.nameTag) { 
@@ -551,13 +562,13 @@ export function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item) {
 
                 setPlayerDynamicProperty(player, "coins", -buyPrice, true)
                 item.amount = 1
-                player.getComponent("inventory").container.addItem(item)
+                player.getComponent("inventory").container.addItem(itemOrFactory instanceof Function ? itemOrFactory() : itemOrFactory)
                 player.playSound("random.orb")
                 player.sendMessage(`§aYou purchased §ex1 §f${item.nameTag ? item.nameTag : cleanName}§a for §6${buyPrice} coins`)
-                return buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item)
+                return buyUnstackablePreviewMenu(player, buyPrice, sellPrice, itemOrFactory)
 
             } case 11: {
-                return buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item)
+                return buyUnstackablePreviewMenu(player, buyPrice, sellPrice, itemOrFactory)
             }
             case 15: {
                 if (checkItemAmount(player, item.typeId) >= 1) {
@@ -576,10 +587,13 @@ export function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, item) {
     })
 }
 
-export function buySellUnavailablePreviewMenu(player, buyPrice, item) {
+export function buySellUnavailablePreviewMenu(player, buyPrice, itemOrFactory) {
 
     const freeSlots = getFreeSlots(player)
     if (freeSlots == 0) return player.sendMessage("§cYou need free inventory space for this!")
+
+    const itemFactory = typeof itemOrFactory === "function" ? itemOrFactory : () => itemOrFactory.clone()
+    const item = itemFactory()
 
     let cleanName 
     if (item.nameTag) { 
@@ -612,10 +626,10 @@ export function buySellUnavailablePreviewMenu(player, buyPrice, item) {
                 
                 setPlayerDynamicProperty(player, "coins", -buyPrice, true)
                 item.amount = 1
-                player.getComponent("inventory").container.addItem(item)
+                player.getComponent("inventory").container.addItem(itemOrFactory instanceof Function ? itemOrFactory() : itemOrFactory)
                 player.playSound("random.orb")
                 player.sendMessage(`§aYou purchased §ex1 §f${item.nameTag ? item.nameTag : cleanName}§a for §6${buyPrice} coins`)
-                return buySellUnavailablePreviewMenu(player, buyPrice, item)
+                return buySellUnavailablePreviewMenu(player, buyPrice, itemOrFactory)
 
             } 
             case 11: {
@@ -623,19 +637,22 @@ export function buySellUnavailablePreviewMenu(player, buyPrice, item) {
                 return buyCustomMenu(player, buyPrice, item)
             }
             case 15: {
-                return buySellUnavailablePreviewMenu(player, buyPrice, item)
+                return buySellUnavailablePreviewMenu(player, buyPrice, itemOrFactory)
             }
             case 16: {
-                return buySellUnavailablePreviewMenu(player, buyPrice, item)
+                return buySellUnavailablePreviewMenu(player, buyPrice, itemOrFactory)
             }
         }
     })
 }     
 
-export function buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item) {
+export function buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, itemOrFactory) { // copy this item factory thing to the rest of the shop functions to fix the most evil bug in history
 
     const freeSlots = getFreeSlots(player)
     if (freeSlots == 0) return player.sendMessage("§cYou need free inventory space for this!")
+
+    const itemFactory = typeof itemOrFactory === "function" ? itemOrFactory : () => itemOrFactory.clone()
+    const item = itemFactory()
 
     let cleanName 
     if (item.nameTag) { 
@@ -669,20 +686,22 @@ export function buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item)
                 
                 setPlayerDynamicProperty(player, "coins", -buyPrice, true)
                 item.amount = 1
-                player.getComponent("inventory").container.addItem(item)
+
+                
+                player.getComponent("inventory").container.addItem(itemOrFactory instanceof Function ? itemOrFactory() : itemOrFactory)
                 player.playSound("random.orb")
                 player.sendMessage(`§aYou purchased §ex1 §f${item.nameTag ? item.nameTag : cleanName}§a for §6${buyPrice} coins`)
-                return buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item)
+                return buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, itemOrFactory)
 
             } 
             case 11: {
-                return buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item)
+                return buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, itemOrFactory)
             }
             case 15: {
-                return buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item)
+                return buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, itemOrFactory)
             }
             case 16: {
-                return buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, item)
+                return buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, itemOrFactory)
             }
         }
     })
