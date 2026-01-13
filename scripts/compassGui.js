@@ -259,11 +259,11 @@ export function farmShopMenu(player) {
     new ChestFormData("54")
     .title('Farming Shop Menu')
 
-    .button(10, 'Wheat', ["", `§7Buy Price:§6 ${prices.buy.wheat}`, `§7Sell Price:§6 ${prices.sell.wheat}`], 'minecraft:wheat', 1)
-    .button(11, 'Wheat Seeds', ["", `§7Buy Price:§6 ${prices.buy.wheatSeeds}`, `§7Sell Price:§6 ${prices.sell.wheatSeeds}`], 'minecraft:wheat_seeds', 1)
-    .button(12, 'Potato', ["", `§7Buy Price:§6 ${prices.buy.potato}`, `§7Sell Price:§6 ${prices.sell.potato}`], 'minecraft:potato', 1)
-    .button(13, 'Sugar Cane', ["", `§7Buy Price:§6 ${prices.buy.sugarCane}`, `§7Sell Price:§6 ${prices.sell.sugarCane}`], 'minecraft:sugar_cane', 1)
-    .button(14, 'Bone Meal', ["", `§7Buy Price:§6 ${prices.buy.boneMeal}`, `§7Sell Price:§6 ${prices.sell.boneMeal}`], 'minecraft:bone_meal', 1)
+    .button(10, 'Bone Meal', ["", `§7Buy Price:§6 ${prices.buy.boneMeal}`, `§7Sell Price:§6 ${prices.sell.boneMeal}`], 'minecraft:bone_meal', 1)
+    .button(11, 'Wheat', ["", `§7Buy Price:§6 ${prices.buy.wheat}`, `§7Sell Price:§6 ${prices.sell.wheat}`], 'minecraft:wheat', 1)
+    .button(12, 'Wheat Seeds', ["", `§7Buy Price:§6 ${prices.buy.wheatSeeds}`, `§7Sell Price:§6 ${prices.sell.wheatSeeds}`], 'minecraft:wheat_seeds', 1)
+    .button(13, 'Potato', ["", `§7Buy Price:§6 ${prices.buy.potato}`, `§7Sell Price:§6 ${prices.sell.potato}`], 'minecraft:potato', 1)
+    .button(14, 'Sugar Cane', ["", `§7Buy Price:§6 ${prices.buy.sugarCane}`, `§7Sell Price:§6 ${prices.sell.sugarCane}`], 'minecraft:sugar_cane', 1)
 
     
 
@@ -282,19 +282,19 @@ export function farmShopMenu(player) {
         if (a.canceled) return;
         switch (a.selection) {
             case 10: {
-                return buyPreviewMenu(player, prices.buy.wheat, prices.sell.wheat, items.wheat)
+                return buyPreviewMenu(player, prices.buy.boneMeal, prices.sell.boneMeal, items.boneMeal)
             }
             case 11: {
-                return buyPreviewMenu(player, prices.buy.wheatSeeds, prices.sell.wheatSeeds, items.wheatSeeds)
+                return buyPreviewMenu(player, prices.buy.wheat, prices.sell.wheat, items.wheat)
             }
             case 12: {
-                return buyPreviewMenu(player, prices.buy.potato, prices.sell.potato, items.potato)
+                return buyPreviewMenu(player, prices.buy.wheatSeeds, prices.sell.wheatSeeds, items.wheatSeeds)
             }
             case 13: {
-                return buyPreviewMenu(player, prices.buy.sugarCane, prices.sell.sugarCane, items.sugarCane)
+                return buyPreviewMenu(player, prices.buy.potato, prices.sell.potato, items.potato)
             }
             case 14: {
-                return buyPreviewMenu(player, prices.buy.boneMeal, prices.sell.boneMeal, items.boneMeal)
+                return buyPreviewMenu(player, prices.buy.sugarCane, prices.sell.sugarCane, items.sugarCane)
             }
         }
     })
