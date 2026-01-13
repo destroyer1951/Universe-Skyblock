@@ -109,3 +109,32 @@ prices.sell.prismarineShard = 1750
 
 prices.buy.blubber = 500
 prices.sell.blubber = 40 // some kind of item like "reinforced blubber" thats a slimeblock made of this stuff and used for future crafting recipes like armor or diving armor idk
+
+// Building shop items
+
+prices.buy.bricks = 100
+prices.sell.bricks = "§cN/A"
+
+prices.buy.gravel = 1000
+prices.sell.gravel = "§cN/A"
+
+prices.buy.scaffolding = 250
+prices.sell.scaffolding = "§cN/A"
+
+prices.buy.moss = 300
+prices.sell.moss = "§cN/A"
+
+prices.buy.glass = 100
+prices.sell.glass = "§cN/A"
+
+prices.buy.concretePowder = 100
+prices.sell.concretePowder = "§cN/A"
+
+prices.buy.wool = 100
+prices.sell.wool = "§cN/A"
+
+prices.buy.stainedGlass = 100
+prices.sell.stainedGlass = "§cN/A"
+
+prices.buy.coral = 500
+prices.sell.coral = "§cN/A"

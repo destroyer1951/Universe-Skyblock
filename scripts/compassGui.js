@@ -115,20 +115,30 @@ export function codesMenu(player) {
 
 /** @param {Player} player  */
 export function shopMainMenu(player) {
-    new ChestFormData("27")
-    .title('Shop Menu')
-    .button(11, "Cooking Shop", ["", "§l§5COMING SOON"], 'minecraft:painting')
-    .button(12, 'Fishing Shop', ['', '§7Someone has to throw the rod'], 'minecraft:fishing_rod', 1)
-    .button(13, 'General Shop', ['', '§7Basic Skyblock Necessities'], 'minecraft:lava_bucket', 1)
-    .button(14, 'Farming Shop', ['', '§7Put on your Straw Hats'], 'minecraft:wheat', 1)
-    .button(15, 'Building Shop', ['', '§7Brick by Brick'], 'minecraft:brick_block', 1)
-    .show(player).then(a => {
+
+    const fishingLevel = getPlayerDynamicProperty(player, "fishingLevel")
+    const miningLevel = getPlayerDynamicProperty(player, "miningLevel")
+    const cookingLevel = getPlayerDynamicProperty(player, "cookingLevel")
+
+    const menu = new ChestFormData("27")
+    menu.title('Shop Menu')
+    menu.button(11, "Cooking Shop", ["", "§l§5COMING SOON"], 'minecraft:painting')
+    if (fishingLevel < 3) {
+        menu.button(12, 'Fishing Shop', ['', '§cRequires Fishing Level 3!'], 'minecraft:fishing_rod', 1)
+    } else menu.button(12, 'Fishing Shop', ['', '§7Someone has to throw the rod'], 'minecraft:fishing_rod', 1)
+    menu.button(13, 'General Shop', ['', '§7Basic Skyblock Necessities'], 'minecraft:lava_bucket', 1)
+    menu.button(14, 'Farming Shop', ['', '§7Put on your Straw Hats'], 'minecraft:wheat', 1)
+    if (miningLevel < 5) {
+        menu.button(15, 'Building Shop', ['', '§cRequires Mining Level 5!'], 'minecraft:brick_block', 1)
+    } else menu.button(15, 'Building Shop', ['', '§7Brick by Brick'], 'minecraft:brick_block', 1)
+    menu.show(player).then(a => {
         if (a.canceled) return;
         switch (a.selection) {
             case 11: {
                 return
             }
             case 12: {
+                if (fishingLevel < 3) return player.sendMessage('§cYou need Fishing Level 3 to access this shop!')
                 return fishingShopMenu(player)
             }
             case 13: {
@@ -138,7 +148,8 @@ export function shopMainMenu(player) {
                 return farmShopMenu(player)
             }
             case 15: {
-                return
+                if (miningLevel < 5) return player.sendMessage('§cYou need Mining Level 5 to access this shop!')
+                return buildingShopMenu(player)
             }
         }
     })
@@ -342,6 +353,249 @@ export function fishingShopMenu(player) {
             case 19: {
                 return buyPreviewMenu(player, prices.buy.blubber, prices.sell.blubber, items.blubber)
             }
+        }
+    })
+}
+
+export function buildingShopMenu(player) {
+    new ChestFormData("54")
+    .title('Building Shop Menu')
+    
+    .button(10, "Bricks", ["", `§7Buy Price:§6 ${prices.buy.bricks}`, `§7Sell Price:§6 ${prices.sell.bricks}`], 'minecraft:brick_block', 1)
+    .button(11, "Gravel", ["", `§7Buy Price:§6 ${prices.buy.gravel}`, `§7Sell Price:§6 ${prices.sell.gravel}`], 'minecraft:gravel', 1)
+    .button(12, "Scaffolding", ["", `§7Buy Price:§6 ${prices.buy.scaffolding}`, `§7Sell Price:§6 ${prices.sell.scaffolding}`], 'minecraft:scaffolding', 1)
+    .button(13, "Moss Block", ["", `§7Buy Price:§6 ${prices.buy.moss}`, `§7Sell Price:§6 ${prices.sell.moss}`], 'minecraft:moss_block', 1)
+    .button(14, "Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:white_concrete_powder', 1)
+    .button(15, "Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:white_wool', 1)
+    .button(16, "Coral", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:tube_coral_block', 1)
+
+    .button(19, "Glass", ["", `§7Buy Price:§6 ${prices.buy.glass}`, `§7Sell Price:§6 ${prices.sell.glass}`], 'minecraft:glass', 1)
+    .button(20, "Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:white_stained_glass', 1)
+
+    .show(player).then(a => {
+        if (a.canceled) return;
+        switch (a.selection) {
+            case 10: {
+                return buySellUnavailablePreviewMenu(player, prices.buy.bricks, items.bricks)
+            }
+            case 11: {
+                return buySellUnavailablePreviewMenu(player, prices.buy.gravel, items.gravel)
+            }
+            case 12: {
+                return buySellUnavailablePreviewMenu(player, prices.buy.scaffolding, items.scaffolding)
+            }
+            case 13: {
+                return buySellUnavailablePreviewMenu(player, prices.buy.moss, items.moss)
+            }
+            case 14: {
+                return buyConcretePowderMenu(player)
+            }
+            case 15: {
+                return buyWoolMenu(player)
+            }
+            case 16: {
+                return buyCoralMenu(player)
+            }
+            case 19: {
+                return buySellUnavailablePreviewMenu(player, prices.buy.glass, items.glass)
+            }
+            case 20: {
+                return buyStainedGlassMenu(player)
+            }
+        }
+    })  
+
+}
+
+function buyConcretePowderMenu(player) { // horbbile programming practices
+    new ChestFormData("45")
+    .title('Concrete Powder Colors')
+
+    .button(10, "White Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:white_concrete_powder', 1)
+    .button(11, "Light Gray Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:light_gray_concrete_powder', 1)
+    .button(12, "Gray Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:gray_concrete_powder', 1)
+    .button(13, "Black Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:black_concrete_powder', 1)
+    .button(14, "Brown Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:brown_concrete_powder', 1)
+    .button(15, "Red Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:red_concrete_powder', 1)
+    .button(16, "Orange Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:orange_concrete_powder', 1)
+
+    .button(19, "Yellow Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:yellow_concrete_powder', 1)
+    .button(20, "Lime Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:lime_concrete_powder', 1)
+    .button(21, "Green Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:green_concrete_powder', 1)
+    .button(22, "Cyan Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:cyan_concrete_powder', 1)
+    .button(23, "Light Blue Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:light_blue_concrete_powder', 1)
+    .button(24, "Blue Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:blue_concrete_powder', 1)
+    .button(25, "Purple Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:purple_concrete_powder', 1)
+
+    .button(28, "Magenta Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:magenta_concrete_powder', 1)
+    .button(29, "Pink Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:pink_concrete_powder', 1)
+
+    .show(player).then(a => {
+        if (a.canceled) return;
+        switch (a.selection) { // oh my goodness
+            case 10: { return buySellUnavailablePreviewMenu(player, prices.buy.concretePowder, items.whiteConcretePowder) }
+            case 11: { return buySellUnavailablePreviewMenu(player, prices.buy.concretePowder, items.lightGrayConcretePowder) }
+            case 12: { return buySellUnavailablePreviewMenu(player, prices.buy.concretePowder, items.grayConcretePowder) }
+            case 13: { return buySellUnavailablePreviewMenu(player, prices.buy.concretePowder, items.blackConcretePowder) }
+            case 14: { return buySellUnavailablePreviewMenu(player, prices.buy.concretePowder, items.brownConcretePowder) }
+            case 15: { return buySellUnavailablePreviewMenu(player, prices.buy.concretePowder, items.redConcretePowder) }
+            case 16: { return buySellUnavailablePreviewMenu(player, prices.buy.concretePowder, items.orangeConcretePowder) }
+            case 19: { return buySellUnavailablePreviewMenu(player, prices.buy.concretePowder, items.yellowConcretePowder) }
+            case 20: { return buySellUnavailablePreviewMenu(player, prices.buy.concretePowder, items.limeConcretePowder) }
+            case 21: { return buySellUnavailablePreviewMenu(player, prices.buy.concretePowder, items.greenConcretePowder) }
+            case 22: { return buySellUnavailablePreviewMenu(player, prices.buy.concretePowder, items.cyanConcretePowder) }
+            case 23: { return buySellUnavailablePreviewMenu(player, prices.buy.concretePowder, items.lightBlueConcretePowder) }
+            case 24: { return buySellUnavailablePreviewMenu(player, prices.buy.concretePowder, items.blueConcretePowder) }
+            case 25: { return buySellUnavailablePreviewMenu(player, prices.buy.concretePowder, items.purpleConcretePowder) }
+            case 28: { return buySellUnavailablePreviewMenu(player, prices.buy.concretePowder, items.magentaConcretePowder) }
+            case 29: { return buySellUnavailablePreviewMenu(player, prices.buy.concretePowder, items.pinkConcretePowder) }
+        }
+    })
+}
+
+function buyWoolMenu(player) {
+    new ChestFormData("45")
+    .title('Wool Colors')
+
+    .button(10, "White Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:white_wool', 1)
+    .button(11, "Light Gray Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:light_gray_wool', 1)
+    .button(12, "Gray Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:gray_wool', 1)
+    .button(13, "Black Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:black_wool', 1)
+    .button(14, "Brown Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:brown_wool', 1)
+    .button(15, "Red Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:red_wool', 1)
+    .button(16, "Orange Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:orange_wool', 1)
+
+    .button(19, "Yellow Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:yellow_wool', 1)
+    .button(20, "Lime Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:lime_wool', 1)
+    .button(21, "Green Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:green_wool', 1)
+    .button(22, "Cyan Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:cyan_wool', 1)
+    .button(23, "Light Blue Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:light_blue_wool', 1)
+    .button(24, "Blue Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:blue_wool', 1)
+    .button(25, "Purple Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:purple_wool', 1)
+
+    .button(28, "Magenta Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:magenta_wool', 1)
+    .button(29, "Pink Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:pink_wool', 1)
+
+    .show(player).then(a => {
+        if (a.canceled) return;
+        switch (a.selection) {
+            case 10: { return buySellUnavailablePreviewMenu(player, prices.buy.wool, items.whiteWool) }
+            case 11: { return buySellUnavailablePreviewMenu(player, prices.buy.wool, items.lightGrayWool) }
+            case 12: { return buySellUnavailablePreviewMenu(player, prices.buy.wool, items.grayWool) }
+            case 13: { return buySellUnavailablePreviewMenu(player, prices.buy.wool, items.blackWool) }
+            case 14: { return buySellUnavailablePreviewMenu(player, prices.buy.wool, items.brownWool) }
+            case 15: { return buySellUnavailablePreviewMenu(player, prices.buy.wool, items.redWool) }
+            case 16: { return buySellUnavailablePreviewMenu(player, prices.buy.wool, items.orangeWool) }
+            case 19: { return buySellUnavailablePreviewMenu(player, prices.buy.wool, items.yellowWool) }
+            case 20: { return buySellUnavailablePreviewMenu(player, prices.buy.wool, items.limeWool) }
+            case 21: { return buySellUnavailablePreviewMenu(player, prices.buy.wool, items.greenWool) }
+            case 22: { return buySellUnavailablePreviewMenu(player, prices.buy.wool, items.cyanWool) }
+            case 23: { return buySellUnavailablePreviewMenu(player, prices.buy.wool, items.lightBlueWool) }
+            case 24: { return buySellUnavailablePreviewMenu(player, prices.buy.wool, items.blueWool) }
+            case 25: { return buySellUnavailablePreviewMenu(player, prices.buy.wool, items.purpleWool) }
+            case 28: { return buySellUnavailablePreviewMenu(player, prices.buy.wool, items.magentaWool) }
+            case 29: { return buySellUnavailablePreviewMenu(player, prices.buy.wool, items.pinkWool) }
+        }
+    })
+}
+
+function buyStainedGlassMenu(player) {
+    new ChestFormData("45")
+    .title('Stained Glass Colors')
+
+    .button(10, "White Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:white_stained_glass', 1)
+    .button(11, "Light Gray Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:light_gray_stained_glass', 1)
+    .button(12, "Gray Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:gray_stained_glass', 1)
+    .button(13, "Black Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:black_stained_glass', 1)
+    .button(14, "Brown Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:brown_stained_glass', 1)
+    .button(15, "Red Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:red_stained_glass', 1)
+    .button(16, "Orange Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:orange_stained_glass', 1)
+
+    .button(19, "Yellow Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:yellow_stained_glass', 1)
+    .button(20, "Lime Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:lime_stained_glass', 1)
+    .button(21, "Green Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:green_stained_glass', 1)
+    .button(22, "Cyan Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:cyan_stained_glass', 1)
+    .button(23, "Light Blue Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:light_blue_stained_glass', 1)
+    .button(24, "Blue Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:blue_stained_glass', 1)
+    .button(25, "Purple Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:purple_stained_glass', 1)
+
+    .button(28, "Magenta Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:magenta_stained_glass', 1)
+    .button(29, "Pink Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:pink_stained_glass', 1)
+
+    .show(player).then(a => {
+        if (a.canceled) return;
+        switch (a.selection) {
+            case 10: { return buySellUnavailablePreviewMenu(player, prices.buy.stainedGlass, items.whiteStainedGlass) }
+            case 11: { return buySellUnavailablePreviewMenu(player, prices.buy.stainedGlass, items.lightGrayStainedGlass) }
+            case 12: { return buySellUnavailablePreviewMenu(player, prices.buy.stainedGlass, items.grayStainedGlass) }
+            case 13: { return buySellUnavailablePreviewMenu(player, prices.buy.stainedGlass, items.blackStainedGlass) }
+            case 14: { return buySellUnavailablePreviewMenu(player, prices.buy.stainedGlass, items.brownStainedGlass) }
+            case 15: { return buySellUnavailablePreviewMenu(player, prices.buy.stainedGlass, items.redStainedGlass) }
+            case 16: { return buySellUnavailablePreviewMenu(player, prices.buy.stainedGlass, items.orangeStainedGlass) }
+            case 19: { return buySellUnavailablePreviewMenu(player, prices.buy.stainedGlass, items.yellowStainedGlass) }
+            case 20: { return buySellUnavailablePreviewMenu(player, prices.buy.stainedGlass, items.limeStainedGlass) }
+            case 21: { return buySellUnavailablePreviewMenu(player, prices.buy.stainedGlass, items.greenStainedGlass) }
+            case 22: { return buySellUnavailablePreviewMenu(player, prices.buy.stainedGlass, items.cyanStainedGlass) }
+            case 23: { return buySellUnavailablePreviewMenu(player, prices.buy.stainedGlass, items.lightBlueStainedGlass) }
+            case 24: { return buySellUnavailablePreviewMenu(player, prices.buy.stainedGlass, items.blueStainedGlass) }
+            case 25: { return buySellUnavailablePreviewMenu(player, prices.buy.stainedGlass, items.purpleStainedGlass) }
+            case 28: { return buySellUnavailablePreviewMenu(player, prices.buy.stainedGlass, items.magentaStainedGlass) }
+            case 29: { return buySellUnavailablePreviewMenu(player, prices.buy.stainedGlass, items.pinkStainedGlass) }
+        }
+    })
+}
+
+function buyCoralMenu(player) {
+    new ChestFormData("45")
+    .title('Coral Colors')
+
+    // Tube Coral
+    .button(11, "Tube Coral Block", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:tube_coral_block', 1)
+    .button(20, "Tube Coral", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:tube_coral', 1)
+    .button(29, "Tube Coral Fan", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:tube_coral_fan', 1)
+
+    // Brain Coral
+    .button(12, "Brain Coral Block", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:brain_coral_block', 1)
+    .button(21, "Brain Coral", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:brain_coral', 1)
+    .button(30, "Brain Coral Fan", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:brain_coral_fan', 1)
+
+    // Bubble Coral
+    .button(13, "Bubble Coral Block", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:bubble_coral_block', 1)
+    .button(22, "Bubble Coral", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:bubble_coral', 1)
+    .button(31, "Bubble Coral Fan", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:bubble_coral_fan', 1)
+
+    // Fire Coral
+    .button(14, "Fire Coral Block", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:fire_coral_block', 1)
+    .button(23, "Fire Coral", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:fire_coral', 1)
+    .button(32, "Fire Coral Fan", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:fire_coral_fan', 1)
+
+    // Horn Coral
+    .button(15, "Horn Coral Block", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:horn_coral_block', 1)
+    .button(24, "Horn Coral", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:horn_coral', 1)
+    .button(33, "Horn Coral Fan", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:horn_coral_fan', 1)
+
+    .show(player).then(a => {
+        if (a.canceled) return;
+        switch (a.selection) {
+            case 11: { return buySellUnavailablePreviewMenu(player, prices.buy.coral, items.tubeCoralBlock) }
+            case 20: { return buySellUnavailablePreviewMenu(player, prices.buy.coral, items.tubeCoral) }
+            case 29: { return buySellUnavailablePreviewMenu(player, prices.buy.coral, items.tubeCoralFan) }
+
+            case 12: { return buySellUnavailablePreviewMenu(player, prices.buy.coral, items.brainCoralBlock) }
+            case 21: { return buySellUnavailablePreviewMenu(player, prices.buy.coral, items.brainCoral) }
+            case 30: { return buySellUnavailablePreviewMenu(player, prices.buy.coral, items.brainCoralFan) }
+
+            case 13: { return buySellUnavailablePreviewMenu(player, prices.buy.coral, items.bubbleCoralBlock) }
+            case 22: { return buySellUnavailablePreviewMenu(player, prices.buy.coral, items.bubbleCoral) }
+            case 31: { return buySellUnavailablePreviewMenu(player, prices.buy.coral, items.bubbleCoralFan) }
+
+            case 14: { return buySellUnavailablePreviewMenu(player, prices.buy.coral, items.fireCoralBlock) }
+            case 23: { return buySellUnavailablePreviewMenu(player, prices.buy.coral, items.fireCoral) }
+            case 32: { return buySellUnavailablePreviewMenu(player, prices.buy.coral, items.fireCoralFan) }
+
+            case 15: { return buySellUnavailablePreviewMenu(player, prices.buy.coral, items.hornCoralBlock) }
+            case 24: { return buySellUnavailablePreviewMenu(player, prices.buy.coral, items.hornCoral) }
+            case 33: { return buySellUnavailablePreviewMenu(player, prices.buy.coral, items.hornCoralFan) }
         }
     })
 }
