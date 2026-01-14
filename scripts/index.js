@@ -373,6 +373,12 @@ world.beforeEvents.playerInteractWithBlock.subscribe(data => {
     if (data.block.typeId === "minecraft:anvil" || data.block.typeId === "minecraft:enchanting_table") return data.cancel = true
 })
 
+world.beforeEvents.playerPlaceBlock.subscribe(data => {
+    const block = data.block
+    const player = data.player
+    if (player.getComponent("minecraft:equippable").getEquipment("Mainhand").nameTag === '§r§f') return data.cancel = true
+})
+
 
 /*
 ██    ██     ███████ ███████ ██████  ██    ██ ███████ ██████      ██    ██ 

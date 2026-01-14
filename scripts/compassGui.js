@@ -1116,10 +1116,17 @@ export function craftingMenu(player) {
             menu.button(11, "Coal Pickaxe", ["", "§r§cRequires Mining Level 3!"], "minecraft:stone_pickaxe", 1)
         } else menu.button(11, "Coal Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
 
+        if (miningLevel < 4)  { 
+            menu.button(12, "Dense Stone", ["", "§r§cRequires Mining Level 4!"], "minecraft:stone_bricks", 1)
+        } else menu.button(12, "Dense Stone", ["", "§r§7View Recipe"], "minecraft:stone_bricks", 1)
+
+        if (miningLevel < 5)  { 
+            menu.button(13, "Dense Pickaxe", ["", "§r§cRequires Mining Level 5!"], "minecraft:stone_pickaxe", 1)
+        } else menu.button(13, "Dense Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
 
         if (fishingLevel < 6)  { 
-            menu.button(12, "Whale Rod", ["", "§r§cRequires Fishing Level 6!"], "minecraft:fishing_rod", 1)
-        } else menu.button(12, "Whale Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
+            menu.button(14, "Whale Rod", ["", "§r§cRequires Fishing Level 6!"], "minecraft:fishing_rod", 1)
+        } else menu.button(14, "Whale Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
 
 
         menu.show(player).then(a => {
@@ -1140,10 +1147,19 @@ export function craftingMenu(player) {
                     } else return coalPickaxeMenu(player)
                 }
                 case 12: {
+                    if (miningLevel < 4)  { 
+                        return player.sendMessage("§cYou need Mining Level 4 to craft this item!")
+                    } else return denseStoneMenu(player)
+                }
+                case 13: {
+                    if (miningLevel < 5)  { 
+                        return player.sendMessage("§cYou need Mining Level 5 to craft this item!")
+                    } else return densePickaxeMenu(player)
+                }
+                case 14: {
                     if (fishingLevel < 6)  { 
                         return player.sendMessage("§cYou need Fishing Level 6 to craft this item!")
                     } else return whaleRodMenu(player)
-
                 }
             }
         })
@@ -1314,5 +1330,116 @@ function whaleRodMenu(player) {
                 return player.playSound("random.levelup")
             }
         } else return whaleRodMenu(player)
+    })
+}
+
+function denseStoneMenu(player) {
+    const item = items.denseStone
+    const itemLore = item.getLore()
+    if (itemLore.length !== 0 && itemLore[itemLore.length-1].includes("*")) {
+        itemLore.push(...["","§r§8Star count is randomized", "§r§8upon craft!","§r§8Stars may affect stats!"])
+    }
+
+    let req1
+    if (checkItemAmount(player, "minecraft:cobblestone") >= 9) { req1 = "§a" } else { req1 = "§c" }
+    new ChestFormData("45")
+    .title(item.nameTag.replace(/§./g, ""))
+    .pattern([
+        "xxxxxxxxx",
+        "xx___xxxx",
+        "xx_____xx",
+        "xx___xxxx",
+        "xxxxxxxxx",
+    ], {x: {itemName: "", texture: "minecraft:copper_bars"}}) // make sure to change these from coal and stick
+    .button(23, "§eCraft this item!", ["", "§r§7Required materials:",'', `§r${req1}x9 Cobblestone`], "minecraft:crafting_table")
+
+    // here are your grid square indexes
+    // 11, 12, 13
+    // 20, 21, 22
+    // 29, 30, 31
+
+    .button(11, "Cobblestone", [], "minecraft:cobblestone")
+    .button(12, "Cobblestone", [], "minecraft:cobblestone")
+    .button(13, "Cobblestone", [], "minecraft:cobblestone")
+    .button(20, "Cobblestone", [], "minecraft:cobblestone")
+    .button(21, "Cobblestone", [], "minecraft:cobblestone")
+    .button(22, "Cobblestone", [], "minecraft:cobblestone")
+    .button(29, "Cobblestone", [], "minecraft:cobblestone")
+    .button(30, "Cobblestone", [], "minecraft:cobblestone")
+    .button(31, "Cobblestone", [], "minecraft:cobblestone")
+
+    .button(24, item.nameTag, itemLore, item.typeId)
+
+    .show(player).then(a => {
+        if (a.canceled) return
+
+        if (a.selection === 23) {
+            if (req1 == "§c") { // ABSOLUTELY REMEMBER TO CHANGE THIS IS REALLY BAD
+                return player.sendMessage("§cYou do not have the required materials to craft this item!")
+            } else {
+
+                clearItem(player, "minecraft:cobblestone", 9)
+
+                player.getComponent("inventory").container.addItem(item)
+                player.sendMessage(`§aSuccessfully crafted ${item.nameTag}§a!`)
+                return player.playSound("random.levelup")
+            }
+        } else return denseStoneMenu(player)
+    })
+}
+
+function densePickaxeMenu(player) {
+    const item = items.densePickaxe
+    const itemLore = item.getLore()
+    if (itemLore.length !== 0 && itemLore[itemLore.length-1].includes("*")) {
+        itemLore.push(...["","§r§8Star count is randomized", "§r§8upon craft!","§r§8Stars may affect stats!"])
+    }
+
+    let req1
+    let req2
+    if (checkItemAmount(player, items.denseStone.typeId, false, items.denseStone.nameTag) >= 30) { req1 = "§a" } else { req1 = "§c" }
+    if (checkItemAmount(player, "minecraft:stick") >= 2) { req2 = "§a" } else { req2 = "§c" }
+    new ChestFormData("45")
+    .title(item.nameTag.replace(/§./g, ""))
+    .pattern([
+        "xxxxxxxxx",
+        "xx___xxxx",
+        "xx_____xx",
+        "xx___xxxx",
+        "xxxxxxxxx",
+    ], {x: {itemName: "", texture: "minecraft:copper_bars"}}) // make sure to change these from coal and stick
+    .button(23, "§eCraft this item!", ["", "§r§7Required materials:",'', `§r${req1}x30 Dense Stone`, `§r${req2}x2 Stick`], "minecraft:crafting_table")
+
+    // here are your grid square indexes
+    // 11, 12, 13
+    // 20, 21, 22
+    // 29, 30, 31
+
+    .button(11, "Dense Stone", [], "minecraft:stone_bricks")
+    .button(12, "Dense Stone", [], "minecraft:stone_bricks")
+    .button(13, "Dense Stone", [], "minecraft:stone_bricks")
+
+    .button(21, "Stick", [], "minecraft:stick")
+    .button(30, "Stick", [], "minecraft:stick")
+
+
+    .button(24, item.nameTag, itemLore, item.typeId)
+
+    .show(player).then(a => {
+        if (a.canceled) return
+
+        if (a.selection === 23) {
+            if (req1 == "§c" || req2 == "§c") { // ABSOLUTELY REMEMBER TO CHANGE THIS IS REALLY BAD
+                return player.sendMessage("§cYou do not have the required materials to craft this item!")
+            } else {
+
+                clearItem(player, items.denseStone.typeId, 30, items.denseStone.nameTag)
+                clearItem(player, "minecraft:stick", 2)
+
+                player.getComponent("inventory").container.addItem(item)
+                player.sendMessage(`§aSuccessfully crafted ${item.nameTag}§a!`)
+                return player.playSound("random.levelup")
+            }
+        } else return densePickaxeMenu(player)
     })
 }

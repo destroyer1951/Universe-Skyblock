@@ -283,4 +283,20 @@ system.run(() => {
             })
         }
     })
+
+    items.denseStone = makeItem("minecraft:stone_bricks", item => {
+        item.nameTag = "§r§fDense Stone"
+    })
+
+    Object.defineProperty(items, "densePickaxe", {
+        get() {
+            return makeItem("minecraft:stone_pickaxe", item => {
+                const stars = rollStars()
+                const starCount = (stars.match(/\*/g) || []).length
+                item.nameTag = "§r§fDense Pickaxe"
+                item.setLore(["", `§r§7Luck: §a${(starCount*0.01).toFixed(2)}`, '', `§r§e${stars}`])
+            })
+        }
+    })
+
 })
