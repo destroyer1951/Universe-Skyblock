@@ -1131,18 +1131,18 @@ export function craftingMenu(player) {
                 }
                 case 10: {
                     if (fishingLevel < 3)  { 
-                        return inkRodMenu(player)
-                    } else return player.sendMessage("§cYou need Fishing Level 3 to craft this item!")
+                        return player.sendMessage("§cYou need Fishing Level 3 to craft this item!")
+                    } else return inkRodMenu(player)
                 }
                 case 11: {
                     if (miningLevel < 3)  { 
-                        return coalPickaxeMenu(player)
-                    } else return player.sendMessage("§cYou need Mining Level 3 to craft this item!")
+                        return player.sendMessage("§cYou need Mining Level 3 to craft this item!")
+                    } else return coalPickaxeMenu(player)
                 }
                 case 12: {
                     if (fishingLevel < 6)  { 
-                        return whaleRodMenu(player)
-                    } else return player.sendMessage("§cYou need Fishing Level 6 to craft this item!")
+                        return player.sendMessage("§cYou need Fishing Level 6 to craft this item!")
+                    } else return whaleRodMenu(player)
 
                 }
             }
