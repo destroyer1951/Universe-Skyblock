@@ -42,3 +42,10 @@ export const coalPickaxeLootTable = [
     { item: () => "minecraft:coal_ore", weight: 10 },
     { item: () => "minecraft:iron_ore", weight: 0.15 },
 ]
+
+export const densePickaxeLootTable = [
+    { item: () => "minecraft:air", weight: 40 },
+    { item: () => "minecraft:granite", weight: 10 },
+    { item: () => "minecraft:andesite", weight: 10 },
+    { item: () => "minecraft:diorite", weight: 10 },
+]

@@ -640,11 +640,23 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
 
     switch (brokenBlock.type.id) {
         case 'minecraft:coal_ore': {
-            setStat(player, "miningXP", 150, true)
+            setStat(player, "miningXP", 140, true)
             break
         }
         case 'minecraft:iron_ore': {
             setStat(player, "miningXP", 1500, true)
+            break
+        }
+        case 'minecraft:granite': {
+            setStat(player, "miningXP", 20, true)
+            break
+        }
+        case 'minecraft:diorite': {
+            setStat(player, "miningXP", 20, true)
+            break
+        }
+        case 'minecraft:andesite': {
+            setStat(player, "miningXP", 20, true)
             break
         }
     }
@@ -677,6 +689,10 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
     switch (tool.nameTag) {
         case items.coalPickaxe.nameTag: {
             newBlock = rollWeightedItem(tables.coalPickaxeLootTable, stats.luck)
+            break
+        }
+        case items.densePickaxe.nameTag: {
+            newBlock = rollWeightedItem(tables.densePickaxeLootTable, stats.luck)
             break
         }
     }

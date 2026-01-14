@@ -34,6 +34,7 @@ export function mainMenu(player) {
                     return shopMainMenu(player)
                 }
                 case 22: {
+                    if (getFreeSlots(player) == 0) return player.sendMessage("§cYou need free inventory space for this!")
                     return craftingMenu(player)
                 }
             }
@@ -1209,7 +1210,8 @@ function inkRodMenu(player) { // bum outdated function dont copy me
                 clearItem(player, "minecraft:ink_sac", 2)
                 player.getComponent("inventory").container.addItem(items.inkRod)
                 player.sendMessage("§aSuccessfully crafted §fInk Rod§a!")
-                return player.playSound("random.levelup")
+                player.playSound("random.levelup")
+                return inkRodMenu(player)
             }
         } else return inkRodMenu(player)
     })
@@ -1262,9 +1264,10 @@ function coalPickaxeMenu(player) {
                 clearItem(player, "minecraft:stick", 2)
                 clearItem(player, "minecraft:coal", 3)
 
-                player.getComponent("inventory").container.addItem(item)
+                player.getComponent("inventory").container.addItem(items.coalPickaxe)
                 player.sendMessage(`§aSuccessfully crafted ${item.nameTag}§a!`)
-                return player.playSound("random.levelup")
+                player.playSound("random.levelup")
+                return coalPickaxeMenu(player)
             }
         } else return coalPickaxeMenu(player)
     })
@@ -1325,9 +1328,10 @@ function whaleRodMenu(player) {
                 clearItem(player, "minecraft:cod", 64)
                 clearItem(player, "minecraft:prismarine_shard", 1)
 
-                player.getComponent("inventory").container.addItem(item)
+                player.getComponent("inventory").container.addItem(items.whaleRod)
                 player.sendMessage(`§aSuccessfully crafted ${item.nameTag}§a!`)
-                return player.playSound("random.levelup")
+                player.playSound("random.levelup")
+                return whaleRodMenu(player)
             }
         } else return whaleRodMenu(player)
     })
@@ -1382,7 +1386,8 @@ function denseStoneMenu(player) {
 
                 player.getComponent("inventory").container.addItem(item)
                 player.sendMessage(`§aSuccessfully crafted ${item.nameTag}§a!`)
-                return player.playSound("random.levelup")
+                player.playSound("random.levelup")
+                return denseStoneMenu(player)
             }
         } else return denseStoneMenu(player)
     })
@@ -1436,9 +1441,11 @@ function densePickaxeMenu(player) {
                 clearItem(player, items.denseStone.typeId, 30, items.denseStone.nameTag)
                 clearItem(player, "minecraft:stick", 2)
 
-                player.getComponent("inventory").container.addItem(item)
+                player.getComponent("inventory").container.addItem(items.densePickaxe) // CHANGE THIS EVERY TIME MOST IMPORTANT
+
                 player.sendMessage(`§aSuccessfully crafted ${item.nameTag}§a!`)
-                return player.playSound("random.levelup")
+                player.playSound("random.levelup")
+                return densePickaxeMenu(player)
             }
         } else return densePickaxeMenu(player)
     })
