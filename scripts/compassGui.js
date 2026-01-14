@@ -1100,14 +1100,29 @@ export function cantSellMenu(player) {
 
 
 export function craftingMenu(player) {
-    new ChestFormData("54")
-        .title("Crafting Menu")
-        .button(4, "§aCustom Crafting", ["", "§r§7This is a list of all", "§r§7custom crafting recipes", "§r§7currently in the game.","","§r§7Custom crafting items","§r§7may only be crafted","§r§7through this menu!"], "minecraft:emerald")
-        .button(10, "Ink Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
-        .button(11, "Coal Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
-        .button(12, "Whale Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
+    const fishingLevel = getPlayerDynamicProperty(player, "fishingLevel")
+    const miningLevel = getPlayerDynamicProperty(player, "miningLevel")
 
-        .show(player).then(a => {
+    const menu = new ChestFormData("54")
+        menu.title("Crafting Menu")
+        menu.button(4, "§aCustom Crafting", ["", "§r§7This is a list of all", "§r§7custom crafting recipes", "§r§7currently in the game.","","§r§7Custom crafting items","§r§7may only be crafted","§r§7through this menu!"], "minecraft:emerald")
+
+        if (fishingLevel < 3)  { 
+            menu.button(10, "Ink Rod", ["", "§r§cRequires Fishing Level 3!"], "minecraft:fishing_rod", 1) 
+        } else menu.button(10, "§aInk Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
+
+
+        if (miningLevel < 3)  { 
+            menu.button(11, "Coal Pickaxe", ["", "§r§cRequires Mining Level 3!"], "minecraft:stone_pickaxe", 1)
+        } else menu.button(11, "Coal Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
+
+
+        if (fishingLevel < 6)  { 
+            menu.button(12, "Whale Rod", ["", "§r§cRequires Fishing Level 6!"], "minecraft:fishing_rod", 1)
+        } else menu.button(12, "Whale Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
+
+
+        menu.show(player).then(a => {
             if (a.canceled) return
 
             switch (a.selection) {
@@ -1115,13 +1130,20 @@ export function craftingMenu(player) {
                     return craftingMenu(player)
                 }
                 case 10: {
-                    return inkRodMenu(player)
+                    if (fishingLevel < 3)  { 
+                        return inkRodMenu(player)
+                    } else return player.sendMessage("§cYou need Fishing Level 3 to craft this item!")
                 }
                 case 11: {
-                    return coalPickaxeMenu(player)
+                    if (miningLevel < 3)  { 
+                        return coalPickaxeMenu(player)
+                    } else return player.sendMessage("§cYou need Mining Level 3 to craft this item!")
                 }
                 case 12: {
-                    return whaleRodMenu(player)
+                    if (fishingLevel < 6)  { 
+                        return whaleRodMenu(player)
+                    } else return player.sendMessage("§cYou need Fishing Level 6 to craft this item!")
+
                 }
             }
         })
