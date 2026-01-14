@@ -27,7 +27,7 @@ export function mainMenu(player) {
                     return codesMenu(player)
                 }
                 case 13: {
-                    player.teleport(player.getSpawnPoint())
+                    if (player.getSpawnPoint()) { player.teleport(player.getSpawnPoint()) } else 
                     return player.sendMessage("§eWarped to your Island")
                 }
                 case 14: {
