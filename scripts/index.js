@@ -524,7 +524,7 @@ FishingEvent.playerReleaseFishing.subscribe(data => {
     if (result !== FishingResult.Success) return console.warn(`failed fish by ${player.name}`)
 
     if (player["fishDebounce"] > Date.now()) return console.warn(`debounce ${player.name}`)
-    player["fishDebounce"] = Date.now() + 30000
+    player["fishDebounce"] = Date.now() + 10000
 
     const rod = beforeItemStack
 
