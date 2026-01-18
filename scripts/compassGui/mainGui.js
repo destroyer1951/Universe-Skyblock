@@ -1,4 +1,4 @@
-import { world, system, ItemStack, Player } from '@minecraft/server'
+import { world, system, ItemStack, Player, GameMode } from '@minecraft/server'
 import { ModalFormData } from '@minecraft/server-ui';
 import { ChestFormData } from '../extensions/forms.js';
 
@@ -16,7 +16,7 @@ export function mainMenu(player) {
         .title('Skyblock Menu')
         .button(4, 'Levels', ['', '§7Check your Skill Levels!'], 'minecraft:turtle_scute', 1)
         .button(12, 'Codes', ['', '§7Redeem Codes for Rewards!'], 'minecraft:name_tag', 1)
-        .button(13, 'Your Island', ['', '§7Warp to your Island!'], 'minecraft:compass', 1)
+        .button(13, 'Warps', ['', '§7Warp to other locations!'], 'minecraft:compass', 1)
         .button(14, 'Shop', ['', '§7Buy and Sell some Items!'], 'minecraft:gold_ingot', 1)
         .button(22, 'Crafting', ['', '§7Craft custom items!'], 'minecraft:crafting_table', 1)
 
@@ -30,8 +30,8 @@ export function mainMenu(player) {
                     return codesMenu(player)
                 }
                 case 13: {
-                    if (player.getSpawnPoint()) { player.teleport(player.getSpawnPoint()) } else 
-                    return player.sendMessage("§eWarped to your Island")
+                    if (!player.getSpawnPoint()) return player.sendMessage("§cYou need to finish the tutorial first!")
+                    return warpsMenu(player)
                 }
                 case 14: {
                     return shopMainMenu(player)
@@ -43,6 +43,31 @@ export function mainMenu(player) {
             }
         })
 };
+
+/** @param {Player} player  */
+export function warpsMenu(player) {
+    new ChestFormData("27")
+        .title('Warps Menu')
+        .button(13, 'Your Island', ['', '§7Warp to your Island!'], 'minecraft:grass_block', 1)
+        .button(14, 'Lobby', ['', '§7Warp to the Lobby!'], 'minecraft:nether_star', 1)
+        .show(player).then(a => {
+            if (a.canceled) return;
+
+            switch (a.selection) {
+                case 13: {
+                    if (player.getGameMode() === GameMode.Adventure) player.setGameMode(GameMode.Survival)
+                    player.teleport(player.getSpawnPoint())
+                    return player.sendMessage("§eWarped to your Island")
+                }
+                case 14: {
+                    if (player.getGameMode() === GameMode.Survival) player.setGameMode(GameMode.Adventure)
+                    player.teleport({x: -1000.5, y: 100, z: -1000.5})
+                    player.sendMessage("§eWarped to the Lobby")
+                    return player.sendMessage("§o§7Wow its empty here...")
+                }
+            }
+        })
+}
 
 /** @param {Player} player  */
 export function levelsMenu(player) {

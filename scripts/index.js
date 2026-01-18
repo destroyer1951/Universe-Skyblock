@@ -464,7 +464,7 @@ world.beforeEvents.playerInteractWithEntity.subscribe(data => {
 })
 
 system.runInterval(() => {
-    world.getPlayers({gameMode: "Survival"}).forEach(player => {
+    world.getPlayers({excludeGameModes: ["Creative", "Spectator"]}).forEach(player => {
         if (player.location.y < -20) {
             if (player.getSpawnPoint()) {
                 player.teleport({x: player.getSpawnPoint().x, y: player.getSpawnPoint().y, z: player.getSpawnPoint().z})
@@ -473,7 +473,7 @@ system.runInterval(() => {
             }
         }
     })
-}, 5)
+}, 10)
 
 let fishQueue
 
