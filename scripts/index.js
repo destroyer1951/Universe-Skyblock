@@ -5,7 +5,7 @@ import { ChestFormData } from './extensions/forms.js';
 import { items, makeItem, rollStars } from './items.js'
 import { prices } from './prices.js'
 import { getPlayerDynamicProperty, setPlayerDynamicProperty, getGlobalDynamicProperty, setGlobalDynamicProperty, getScore, setScore, setStat } from './stats.js'
-import * as Menus from './compassGui.js'
+import * as Menus from './compassGui/mainGui.js'
 import * as tables from './myLootTables.js'
 import { FishingEvent, FishingResult } from './fishingEvent.js'
 
@@ -514,6 +514,8 @@ FishingEvent.playerReleaseFishing.subscribe(data => {
     /** @type {{ player: Player }} */
     const { player, beforeItemStack, attachedToEntity } = data // attached entity is if the bobber grabs an entity
     const { result, fishedItems, location, duration } = data.fishingInfo // duration is in ticks, result is success if item is detected caught, fished items is an array of itemStacks caught
+    
+
     
     if (result !== FishingResult.Success) return
 
