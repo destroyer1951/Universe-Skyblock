@@ -119,19 +119,19 @@ export function codesMenu(player) {
         switch (code) {
             case 'UNIVERSESKYBLOCK2026': {
                 if (getPlayerDynamicProperty(player, 'UNIVERSESKYBLOCK2026')) return player.sendMessage('§cYou already redeemed this code!')
-                setPlayerDynamicProperty(player, "coins", 750, true)
+                setPlayerDynamicProperty(player, "coins", 7500, true)
                 player.getComponent("inventory").container.addItem(new ItemStack("minecraft:iron_ingot", 3))
 
                 setPlayerDynamicProperty(player, 'UNIVERSESKYBLOCK2026', 1)
-                player.sendMessage("§aSuccessfully redeemed code §eUNIVERSESKYBLOCK2026§a!\n§r§a+§6750 coins\n§r§a+§f3 Iron Ingots")
+                player.sendMessage("§aSuccessfully redeemed code §eUNIVERSESKYBLOCK2026§a!\n§r§a+§67500 coins\n§r§a+§f3 Iron Ingots")
                 return player.playSound("random.levelup")
             }
             case 'NAISHO': { // you can only get this code from looking at this code file hahahahahaha open source
                 if (getPlayerDynamicProperty(player, 'NAISHO')) return player.sendMessage('§cYou already redeemed this code!')
-                setPlayerDynamicProperty(player, "coins", 5000, true)
+                setPlayerDynamicProperty(player, "coins", 15000, true)
 
                 setPlayerDynamicProperty(player, 'NAISHO', 1)
-                player.sendMessage("§aSuccessfully redeemed code §eNAISHO§a!\n§r§a+§65000 coins")
+                player.sendMessage("§aSuccessfully redeemed code §eNAISHO§a!\n§r§a+§615000 coins")
                 return player.playSound("random.levelup")
             }
             default: {

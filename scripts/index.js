@@ -159,8 +159,12 @@ player.sendMessage(`§aInformation for the player property §e${property}
         }
     } else {
         data.cancel = true
+        let levelColor = "§7"
+        const level = getPlayerDynamicProperty(data.sender, 'skyblockLevel')
+        if (level >= 5) levelColor = "§f"
+        if (level >= 10) levelColor = "§a"
         if (data.message.includes("§")) return data.sender.sendMessage("§cYou cannot use formatting codes in chat messages!")
-        world.sendMessage(`§8[§a${getPlayerDynamicProperty(data.sender, 'skyblockLevel')}§8] §8<§7${data.sender.name}§8> §f${data.message}`)
+        world.sendMessage(`§8[${levelColor}${level}§8] §8<§7${data.sender.name}§8> §f${data.message}`)
     }
 })
 
@@ -517,10 +521,10 @@ FishingEvent.playerReleaseFishing.subscribe(data => {
     
 
     
-    if (result !== FishingResult.Success) return
+    if (result !== FishingResult.Success) return console.warn(`failed fish by ${player.name}`)
 
-    if (player["fishDebounce"]) return
-    player["fishDebounce"] = true
+    if (player["fishDebounce"] > Date.now()) return console.warn(`debounce ${player.name}`)
+    player["fishDebounce"] = Date.now() + 30000
 
     const rod = beforeItemStack
 
@@ -598,7 +602,7 @@ FishingEvent.playerReleaseFishing.subscribe(data => {
     entity.kill()
 
     system.runTimeout(() => {
-        player["fishDebounce"] = false
+        player["fishDebounce"] = Date.now()
     }, 10)
 })
 
