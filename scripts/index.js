@@ -439,31 +439,41 @@ world.beforeEvents.playerInteractWithEntity.subscribe(data => {
     const player = data.player
     const entity = data.target
 
-    if (entity.nameTag == "Right Click Me!" && entity.typeId == "minecraft:npc") {
-        data.cancel = true
-
-        setPlayerDynamicProperty(player, "playerID", getGlobalDynamicProperty("playerIDIndex"))
-        setGlobalDynamicProperty("playerIDIndex", 1, true)
-
-        system.run(() => {
-            const islandPos = getGlobalDynamicProperty("islandPos")
-            if (islandPos.x >= 65000) {
-                islandPos.x = 1100
-                islandPos.z += 700
+    if (entity.typeId === "minecraft:npc") {
+        switch (entity.nameTag) {
+            case "§1§r§fConstruction Worker": {
+                data.cancel = true
+                player.sendMessage("§8[§eNPC§8] §8<§fConstruction Worker§8>§r Cool beans bro")
+                return
             }
-        player.runCommand(`tickingarea add ${islandPos.x} ${islandPos.y} ${islandPos.z} ${islandPos.x+65} ${islandPos.y} ${islandPos.z+65} island true`)
-        player.teleport({x: islandPos.x+32.5, y: islandPos.y+6, z: islandPos.z+32.5})
-        player.setSpawnPoint({x: islandPos.x+32.5, y: islandPos.y+3, z: islandPos.z+32.5, dimension: player.dimension})
-        
-        system.runTimeout(() => {
-            player.runCommand(`structure load island ${islandPos.x} ${islandPos.y} ${islandPos.z}`)
-            player.teleport({x: islandPos.x+32.5, y: islandPos.y+6, z: islandPos.z+32.5})
-            player.runCommand(`tickingarea remove island`)
-            islandPos.x += 500
-            setGlobalDynamicProperty("islandPos", islandPos)
-        }, 10)
+            case "Right Click Me!": {
+                data.cancel = true
 
-        })
+                setPlayerDynamicProperty(player, "playerID", getGlobalDynamicProperty("playerIDIndex"))
+                setGlobalDynamicProperty("playerIDIndex", 1, true)
+
+                system.run(() => {
+                    const islandPos = getGlobalDynamicProperty("islandPos")
+                    if (islandPos.x >= 65000) {
+                        islandPos.x = 1100
+                        islandPos.z += 700
+                    }
+
+                    player.runCommand(`tickingarea add ${islandPos.x} ${islandPos.y} ${islandPos.z} ${islandPos.x+65} ${islandPos.y} ${islandPos.z+65} island true`)
+                    player.teleport({x: islandPos.x+32.5, y: islandPos.y+6, z: islandPos.z+32.5})
+                    player.setSpawnPoint({x: islandPos.x+32.5, y: islandPos.y+3, z: islandPos.z+32.5, dimension: player.dimension})
+                    
+                    system.runTimeout(() => {
+                        player.runCommand(`structure load island ${islandPos.x} ${islandPos.y} ${islandPos.z}`)
+                        player.teleport({x: islandPos.x+32.5, y: islandPos.y+6, z: islandPos.z+32.5})
+                        player.runCommand(`tickingarea remove island`)
+                        islandPos.x += 500
+                        setGlobalDynamicProperty("islandPos", islandPos)
+                    }, 10)
+
+                })
+            }
+        }
     }
 })
 

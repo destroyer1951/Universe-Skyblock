@@ -61,7 +61,7 @@ export function warpsMenu(player) {
                 }
                 case 14: {
                     if (player.getGameMode() === GameMode.Survival) player.setGameMode(GameMode.Adventure)
-                    player.teleport({x: -1000.5, y: 100, z: -1000.5})
+                    player.teleport({x: -999.5, y: 100.50, z: -999.5})
                     player.sendMessage("§eWarped to the Lobby")
                     return player.sendMessage("§o§7Wow its empty here...")
                 }
