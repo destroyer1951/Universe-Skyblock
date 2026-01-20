@@ -6,16 +6,12 @@ import { items, makeItem, rollStars } from './items.js'
 import { prices } from './prices.js'
 import { getPlayerDynamicProperty, setPlayerDynamicProperty, getGlobalDynamicProperty, setGlobalDynamicProperty, getScore, setScore, setStat } from './stats.js'
 import * as Menus from './compassGui/mainGui.js'
+import { shopMainMenu } from './compassGui/shopGui.js'
 import * as tables from './myLootTables.js'
 import { FishingEvent, FishingResult } from './fishingEvent.js'
 
 const { 
-    mainMenu, 
-    codesMenu, 
-    shopMainMenu, 
-    generalShopMenu, 
-    farmShopMenu, 
-    fishingShopMenu, 
+    mainMenu,  
 } = Menus
 
 
@@ -441,13 +437,99 @@ world.beforeEvents.playerInteractWithEntity.subscribe(data => {
 
     if (entity.typeId === "minecraft:npc") {
         switch (entity.nameTag) {
+            case "§r§bAkua": {
+                data.cancel = true
+                if (!player["chatDebounce"] || player["chatDebounce"] < Date.now()) {
+                    player["chatDebounce"] = Date.now() + 16000
+
+                    if (!player["akuaChat"]) {
+                        player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r What are you doing here? How did you find me??")
+
+                        system.runTimeout(() => {
+                            player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r Wait.. You aren't with them?")
+                        }, 60)
+
+                        system.runTimeout(() => {
+                            player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r I guess I can trust you then..")
+                        }, 100)
+
+                        system.runTimeout(() => {
+                            player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r In that case, I need some stuff from you.")
+                        }, 150)
+
+                        system.runTimeout(() => {
+                            player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r Please bring me: §e64x Raw Cod§r, §e32x Ink Sac§r, §e2x Prismarine Shard§r, §e4x Iron Ingots§r")
+                        }, 210)
+
+                        system.runTimeout(() => {
+                            player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r Then we can talk.")
+                            player["akuaChat"] = true
+                        }, 290)
+                    } else {
+                        player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r Please bring me: §e64x Raw Cod§r, §e32x Ink Sac§r, §e2x Prismarine Shard§r, §e4x Iron Ingots§r")
+                    }
+                }
+                return
+            }
+            case "§3§r§fConstruction Worker": {
+                data.cancel = true
+                if (!player["chatDebounce"] || player["chatDebounce"] < Date.now()) {
+                    player["chatDebounce"] = Date.now() + 4000
+                    player.sendMessage("§8[§eNPC§8] §8<§fConstruction Worker§8>§r We still have to work on this area. Not sure what to build here yet.")
+                }
+                return
+            }
+            case "§2§r§fConstruction Worker": {
+                data.cancel = true
+                if (!player["chatDebounce"] || player["chatDebounce"] < Date.now()) {
+                    player["chatDebounce"] = Date.now() + 4000
+                    player.sendMessage("§8[§eNPC§8] §8<§fConstruction Worker§8>§r Glad I finally got this house built!")
+                }
+                return
+            }
+            case "§r§fAmelia": {
+                data.cancel = true
+                if (!player["chatDebounce"] || player["chatDebounce"] < Date.now()) {
+                    player["chatDebounce"] = Date.now() + 4000
+                    player.sendMessage("§8[§eNPC§8] §8<§fAmelia§8>§r I'm so glad they were able to build my house first!")
+                }
+                return
+            }
+            case "§r§fShopkeeper Apprentice": {
+                data.cancel = true
+                if (!player["chatDebounce"] || player["chatDebounce"] < Date.now()) {
+                    player["chatDebounce"] = Date.now() + 8000
+                    player.sendMessage("§8[§eNPC§8] §8<§rShopkeeper Apprentice§8>§r We had to bring this tent because they're still building around here.")
+
+                    system.runTimeout(() => {
+                        player.sendMessage("§8[§eNPC§8] §8<§rShopkeeper Apprentice§8>§r For some reason they built that girl's house first..")
+                    }, 70)
+
+                    system.runTimeout(() => {
+                        player.sendMessage("§8[§eNPC§8] §8<§rShopkeeper Apprentice§8>§r I think one of the workers has a thing for her.")
+                    }, 140)
+                }
+                return
+            }
+            case "§r§fShopkeeper": {
+                data.cancel = true
+                system.run(() => {
+                    return shopMainMenu(player)
+                })
+                return
+            }
             case "§1§r§fConstruction Worker": {
                 data.cancel = true
-                player.sendMessage("§8[§eNPC§8] §8<§fConstruction Worker§8>§r Cool beans bro")
+                if (!player["chatDebounce"] || player["chatDebounce"] < Date.now()) {
+                    player["chatDebounce"] = Date.now() + 4000
+                    player.sendMessage("§8[§eNPC§8] §8<§fConstruction Worker§8>§r We're still trying to get this portal to work. Come back later or something.")
+                }
                 return
             }
             case "Right Click Me!": {
                 data.cancel = true
+
+                if (player.getSpawnPoint()) return
 
                 setPlayerDynamicProperty(player, "playerID", getGlobalDynamicProperty("playerIDIndex"))
                 setGlobalDynamicProperty("playerIDIndex", 1, true)
