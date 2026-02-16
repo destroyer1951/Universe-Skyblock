@@ -8,7 +8,6 @@ import { getPlayerDynamicProperty, setPlayerDynamicProperty, getGlobalDynamicPro
 import * as Menus from './compassGui/mainGui.js'
 import { shopMainMenu } from './compassGui/shopGui.js'
 import * as tables from './myLootTables.js'
-import { FishingEvent, FishingResult } from './fishingEvent.js'
 
 const { 
     mainMenu,  
@@ -629,6 +628,7 @@ world.afterEvents.itemCompleteUse.subscribe(data => {
     const player = data.source
     if (data.itemStack.typeId !== "minecraft:fishing_rod") return
 
+    player.removeTag("isFished")
     player.addTag("isFished")
     system.runTimeout(() => {
         player.removeTag("isFished")
