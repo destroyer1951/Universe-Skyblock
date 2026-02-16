@@ -1,3 +1,6 @@
+// this isnt used anymore (it also wasnt even written by me lmao)
+
+/*
 import { world, system, EntityComponentTypes, EquipmentSlot } from '@minecraft/server';
 
 export const FishingResult = Object.freeze({
@@ -118,3 +121,4 @@ class FishingEvents {
 }
 
 export const FishingEvent = new FishingEvents();
+*/
