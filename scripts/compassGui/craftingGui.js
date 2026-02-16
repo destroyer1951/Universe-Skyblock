@@ -18,7 +18,7 @@ export function craftingMenu(player) {
 
         if (fishingLevel < 3)  { 
             menu.button(10, "Ink Rod", ["", "§r§cRequires Fishing Level 3!"], "minecraft:fishing_rod", 1) 
-        } else menu.button(10, "§aInk Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
+        } else menu.button(10, "Ink Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
 
         if (miningLevel < 3)  { 
             menu.button(11, "Coal Pickaxe", ["", "§r§cRequires Mining Level 3!"], "minecraft:stone_pickaxe", 1)
@@ -412,9 +412,9 @@ function hybridPickaxeMenu(player) {
     .button(30, "Blubber", [], "minecraft:slime_ball", 4)
     .button(31, "Blubber", [], "minecraft:slime_ball", 4)
 
-    .button(20, "Coal Pickaxe", [], "minecraft:stone_pickaxe")
+    .button(20, "Coal Pickaxe", ['', '§r§l§e*'], "minecraft:stone_pickaxe")
 
-    .button(22, "Dense Pickaxe", [], "minecraft:stone_pickaxe")
+    .button(22, "Dense Pickaxe", ['', '§r§l§e*'], "minecraft:stone_pickaxe")
 
 
     .button(24, item.nameTag, itemLore, item.typeId)

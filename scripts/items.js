@@ -321,4 +321,39 @@ system.run(() => {
         }
     })
 
+    Object.defineProperty(items, "copperChunk", {
+        get() {
+            return makeItem("minecraft:copper_nautilus_armor", item => {
+                const stars = rollStars()
+                const starCount = (stars.match(/\*/g) || []).length
+                item.nameTag = "§r§nCopper Chunk"
+                item.setLore(['', `§r§e${stars}`])
+            })
+        }
+    })
+
+    Object.defineProperty(items, "ironChunk", {
+        get() {
+            return makeItem("minecraft:iron_nautilus_armor", item => {
+                const stars = rollStars()
+                const starCount = (stars.match(/\*/g) || []).length
+                item.nameTag = "§r§7Iron Chunk"
+                item.setLore(['', `§r§e${stars}`])
+            })
+        }
+    })
+
+    Object.defineProperty(items, "goldChunk", {
+        get() {
+            return makeItem("minecraft:golden_nautilus_armor", item => {
+                const stars = rollStars()
+                const starCount = (stars.match(/\*/g) || []).length
+                item.nameTag = "§r§eGold Chunk"
+                item.setLore(['', `§r§e${stars}`])
+            })
+        }
+    })
+
+    
+
 })

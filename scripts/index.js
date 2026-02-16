@@ -179,25 +179,27 @@ export const xpRequirements = [
     65000,
     80000,
     100000,
-    125000 // 15
+    125000, // 15
+    999999999999999
 ]
 
 export const levelCoins = [
     100,
     200,
     350,
-    750,
-    1500,
-    3500,
-    6500,
+    700,
+    1350,
+    2500,
+    4000,
+    7000,
     10000,
-    17500,
+    15000,
     25000,
-    40000,
+    35000,
+    50000,
     75000,
-    110000,
-    150000,
-    200000 // 15
+    90000, // 15
+    1
 ]
 
 function checkLevelUp(player, skill) {
@@ -759,24 +761,50 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
     player.getComponent('inventory').container.setItem(player.selectedSlotIndex, tool)
 
     switch (brokenBlock.type.id) {
-        case 'minecraft:coal_ore': {
-            setStat(player, "miningXP", 140, true)
-            break
-        }
-        case 'minecraft:iron_ore': {
-            setStat(player, "miningXP", 1500, true)
-            break
-        }
         case 'minecraft:granite': {
-            setStat(player, "miningXP", 20, true)
+            setStat(player, "miningXP", 30, true)
             break
         }
         case 'minecraft:diorite': {
-            setStat(player, "miningXP", 20, true)
+            setStat(player, "miningXP", 30, true)
             break
         }
         case 'minecraft:andesite': {
-            setStat(player, "miningXP", 20, true)
+            setStat(player, "miningXP", 30, true)
+            break
+        }
+        case 'minecraft:coal_ore': {
+            setStat(player, "miningXP", 90, true)
+            break
+        }
+        case 'minecraft:iron_ore': {
+            setStat(player, "miningXP", 1100, true)
+            if (Math.random() < .12) {
+                setStat(player, "miningXP", 1100, true)
+                player.getComponent('inventory').container.addItem(items.ironChunk)
+                player.sendMessage("§9§lRARE! §6>> §r§aYou found a §7Iron Chunk§a!")
+                player.playSound("armor.equip_gold", {volume: 1, pitch: 1.5})
+            }
+            break
+        }
+        case 'minecraft:copper_ore': {
+            setStat(player, "miningXP", 450, true)
+            if (Math.random() < .12) {
+                setStat(player, "miningXP", 450, true)
+                player.getComponent('inventory').container.addItem(items.copperChunk)
+                player.sendMessage("§9§lRARE! §6>> §r§aYou found a §nCopper Chunk§a!")
+                player.playSound("armor.equip_gold", {volume: 1, pitch: 1.5})
+            }
+            break
+        }
+        case 'minecraft:gold_ore': {
+            setStat(player, "miningXP", 4500, true)
+            if (Math.random() < .12) {
+                setStat(player, "miningXP", 4500, true)
+                player.getComponent('inventory').container.addItem(items.goldChunk)
+                player.sendMessage("§9§lRARE! §6>> §r§aYou found a §eGold Chunk§a!")
+                player.playSound("armor.equip_gold", {volume: 1, pitch: 1.5})
+            }
             break
         }
     }
