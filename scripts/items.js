@@ -310,4 +310,15 @@ system.run(() => {
         }
     })
 
+    Object.defineProperty(items, "ironPickaxe", {
+        get() {
+            return makeItem("minecraft:iron_pickaxe", item => {
+                const stars = rollStars()
+                const starCount = (stars.match(/\*/g) || []).length
+                item.nameTag = "§r§7Iron Pickaxe"
+                item.setLore(["", `§r§7Luck: §a${(starCount*0.3).toFixed(1)}`, '', `§r§e${stars}`])
+            })
+        }
+    })
+
 })

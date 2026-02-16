@@ -29,7 +29,7 @@ world.afterEvents.playerSpawn.subscribe(data => {
     const compass = new ItemStack("minecraft:compass")
     compass.lockMode = "slot"
     compass.nameTag = "§r§fMain Menu"
-    compass.setLore(["", "§7Right Click to Open the Main Menu!"])
+    compass.setLore(["", "§r§7Right Click to Open the Main Menu!"])
     player.getComponent('inventory').container.setItem(8, compass)
     player.addEffect("saturation", 20000000, { amplifier: 25, showParticles: false })
     
@@ -736,6 +736,10 @@ function rollPickaxeTable(tool, luck) {
         }
         case items.hybridPickaxe.nameTag: {
             const newBlock = rollWeightedItem(tables.hybridPickaxeLootTable, luck)
+            return newBlock
+        }
+        case items.ironPickaxe.nameTag:{
+            const newBlock = rollWeightedItem(tables.ironPickaxeLootTable, luck)
             return newBlock
         }
     }

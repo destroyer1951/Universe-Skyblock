@@ -58,3 +58,11 @@ export const hybridPickaxeLootTable = [
     { item: () => "minecraft:andesite", weight: 10 },
     { item: () => "minecraft:diorite", weight: 10 },
 ]
+
+export const ironPickaxeLootTable = [
+    { item: () => "minecraft:air", weight: 50 },
+    { item: () => "minecraft:coal_ore", weight: 15 },
+    { item: () => "minecraft:copper_ore", weight: 3 },
+    { item: () => "minecraft:iron_ore", weight: 1.5 },
+    { item: () => "minecraft:gold_ore", weight: 0.1 },
+] // finish adding crafting recipe for this
