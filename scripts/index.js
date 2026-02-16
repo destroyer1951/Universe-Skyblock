@@ -337,23 +337,6 @@ export function rollWeightedItem(table, luck = 0) { // god bless gpt
     return adjusted[adjusted.length - 1].item()
 }
 
-function rollFishingTable(rod, luck) {
-    switch (rod.nameTag) {
-        case items.basicRod.nameTag: {
-            const item = rollWeightedItem(tables.basicRodLootTable, luck)
-            return item
-        }
-        case items.inkRod.nameTag: {
-            const item = rollWeightedItem(tables.inkRodLootTable, luck)
-            return item
-        }
-        case items.whaleRod.nameTag: {
-            const item = rollWeightedItem(tables.whaleRodLootTable, luck)
-            return item
-        }
-    }
-}
-
 /** @param {ItemStack} item */
 function itemStatReader(item) {
     let stats = {
@@ -635,6 +618,22 @@ world.afterEvents.itemCompleteUse.subscribe(data => {
     }, 2)
 })
 
+function rollFishingTable(rod, luck) {
+    switch (rod.nameTag) {
+        case items.basicRod.nameTag: {
+            const item = rollWeightedItem(tables.basicRodLootTable, luck)
+            return item
+        }
+        case items.inkRod.nameTag: {
+            const item = rollWeightedItem(tables.inkRodLootTable, luck)
+            return item
+        }
+        case items.whaleRod.nameTag: {
+            const item = rollWeightedItem(tables.whaleRodLootTable, luck)
+            return item
+        }
+    }
+}
 
 world.afterEvents.entitySpawn.subscribe(data => {
     const entity = data.entity
@@ -725,6 +724,23 @@ world.beforeEvents.entityItemPickup.subscribe(data => {
     })
 })
 
+function rollPickaxeTable(tool, luck) {
+    switch (tool.nameTag) {
+        case items.coalPickaxe.nameTag: {
+            const newBlock = rollWeightedItem(tables.coalPickaxeLootTable, luck)
+            return newBlock
+        }
+        case items.densePickaxe.nameTag: {
+            const newBlock = rollWeightedItem(tables.densePickaxeLootTable, luck)
+            return newBlock
+        }
+        case items.hybridPickaxe.nameTag: {
+            const newBlock = rollWeightedItem(tables.hybridPickaxeLootTable, luck)
+            return newBlock
+        }
+    }
+}
+
 
 world.afterEvents.playerBreakBlock.subscribe(data => {
     const player = data.player
@@ -782,20 +798,12 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
     setStat(player, "miningXP", 15, true)
     checkLevelUp(player, "mining")
 
-
+    let luck = 0
     const stats = itemStatReader(tool)
+    if (stats?.luck) luck += stats.luck
 
     let newBlock = rollWeightedItem(tables.defaultPickaxeLootTable)
-    switch (tool.nameTag) {
-        case items.coalPickaxe.nameTag: {
-            newBlock = rollWeightedItem(tables.coalPickaxeLootTable, stats.luck)
-            break
-        }
-        case items.densePickaxe.nameTag: {
-            newBlock = rollWeightedItem(tables.densePickaxeLootTable, stats.luck)
-            break
-        }
-    }
+    newBlock = rollPickaxeTable(tool, luck) || newBlock
     
     if (newBlock === "minecraft:air") return
     return player.dimension.setBlockType(oldBlock.location, newBlock)
@@ -810,3 +818,5 @@ system.runInterval(() => {
 §9discord.gg/HRGNN3pzQN`)
     })
 }, 8)
+
+

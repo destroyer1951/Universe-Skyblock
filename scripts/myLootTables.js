@@ -52,7 +52,7 @@ export const densePickaxeLootTable = [
 
 export const hybridPickaxeLootTable = [
     { item: () => "minecraft:air", weight: 35 },
-    { item: () => "minecraft:coal_ore", weight: 10 },
+    { item: () => "minecraft:coal_ore", weight: 5 },
     { item: () => "minecraft:iron_ore", weight: 0.15 },
     { item: () => "minecraft:granite", weight: 10 },
     { item: () => "minecraft:andesite", weight: 10 },

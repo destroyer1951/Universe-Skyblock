@@ -20,7 +20,6 @@ export function craftingMenu(player) {
             menu.button(10, "Ink Rod", ["", "§r§cRequires Fishing Level 3!"], "minecraft:fishing_rod", 1) 
         } else menu.button(10, "§aInk Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
 
-
         if (miningLevel < 3)  { 
             menu.button(11, "Coal Pickaxe", ["", "§r§cRequires Mining Level 3!"], "minecraft:stone_pickaxe", 1)
         } else menu.button(11, "Coal Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
@@ -36,6 +35,10 @@ export function craftingMenu(player) {
         if (fishingLevel < 6)  { 
             menu.button(14, "Whale Rod", ["", "§r§cRequires Fishing Level 6!"], "minecraft:fishing_rod", 1)
         } else menu.button(14, "Whale Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
+
+        if (miningLevel < 6)  { 
+            menu.button(15, "Hybrid Pickaxe", ["", "§r§cRequires Mining Level 6!"], "minecraft:stone_pickaxe", 1)
+        } else menu.button(15, "Hybrid Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
 
 
         menu.show(player).then(a => {
@@ -69,6 +72,11 @@ export function craftingMenu(player) {
                     if (fishingLevel < 6)  { 
                         return player.sendMessage("§cYou need Fishing Level 6 to craft this item!")
                     } else return whaleRodMenu(player)
+                }
+                case 15: {
+                    if (miningLevel < 6)  { 
+                        return player.sendMessage("§cYou need Mining Level 6 to craft this item!")
+                    } else return hybridPickaxeMenu(player)
                 }
             }
         })
@@ -356,5 +364,70 @@ function densePickaxeMenu(player) {
                 return densePickaxeMenu(player)
             }
         } else return densePickaxeMenu(player)
+    })
+}
+
+function hybridPickaxeMenu(player) {
+    const item = items.hybridPickaxe
+    const itemLore = item.getLore()
+    if (itemLore.length !== 0 && itemLore[itemLore.length-1].includes("*")) {
+        itemLore.push(...["","§r§8Star count is randomized", "§r§8upon craft!","§r§8Stars may affect stats!"])
+    }
+
+    let req1
+    let req2
+    let req3
+    if (checkItemAmount(player, items.blubber.typeId, false, items.blubber.nameTag) >= 24) { req1 = "§a" } else { req1 = "§c" }
+    if (checkItemAmount(player, items.coalPickaxe.typeId, false, items.coalPickaxe.nameTag) >= 1) { req2 = "§a" } else { req2 = "§c" }
+    if (checkItemAmount(player, items.densePickaxe.typeId, false, items.densePickaxe.nameTag) >= 1) { req3 = "§a" } else { req3 = "§c" }
+    new ChestFormData("45")
+    .title(item.nameTag.replace(/§./g, ""))
+    .pattern([
+        "xxxxxxxxx",
+        "xx___xxxx",
+        "xx_____xx",
+        "xx___xxxx",
+        "xxxxxxxxx",
+    ], {x: {itemName: "", texture: "minecraft:copper_bars"}}) // make sure to change these from coal and stick
+    .button(23, "§eCraft this item!", ["", "§r§7Required materials:",'', `§r${req1}x24 Blubber`, `§r${req2}x1 Coal Pickaxe`, `§r${req3}x1 Dense Pickaxe`], "minecraft:crafting_table")
+
+    // here are your grid square indexes
+    // 11, 12, 13
+    // 20, 21, 22
+    // 29, 30, 31
+
+    .button(11, "Blubber", [], "minecraft:slime_ball", 4)
+    .button(12, "Blubber", [], "minecraft:slime_ball", 4)
+    .button(13, "Blubber", [], "minecraft:slime_ball", 4)
+    .button(29, "Blubber", [], "minecraft:slime_ball", 4)
+    .button(30, "Blubber", [], "minecraft:slime_ball", 4)
+    .button(31, "Blubber", [], "minecraft:slime_ball", 4)
+
+    .button(20, "Coal Pickaxe", [], "minecraft:stone_pickaxe")
+
+    .button(22, "Dense Pickaxe", [], "minecraft:stone_pickaxe")
+
+
+    .button(24, item.nameTag, itemLore, item.typeId)
+
+    .show(player).then(a => {
+        if (a.canceled) return
+
+        if (a.selection === 23) {
+            if (req1 == "§c" || req2 == "§c" || req3 == "§c") { // ABSOLUTELY REMEMBER TO CHANGE THIS IS REALLY BAD
+                return player.sendMessage("§cYou do not have the required materials to craft this item!")
+            } else {
+
+                clearItem(player, items.blubber.typeId, 24, items.blubber.nameTag)
+                clearItem(player, items.coalPickaxe.typeId, 1, items.coalPickaxe.nameTag)
+                clearItem(player, items.densePickaxe.typeId, 1, items.densePickaxe.nameTag)
+
+                player.getComponent("inventory").container.addItem(items.hybridPickaxe) // CHANGE THIS EVERY TIME MOST IMPORTANT
+
+                player.sendMessage(`§aSuccessfully crafted ${item.nameTag}§a!`)
+                player.playSound("random.levelup")
+                return hybridPickaxeMenu(player)
+            }
+        } else return hybridPickaxeMenu(player)
     })
 }
