@@ -5,7 +5,7 @@ import { ChestFormData } from '../extensions/forms.js';
 import { items, makeItem, rollStars } from '../items.js'
 import { prices } from '../prices.js'
 import { getPlayerDynamicProperty, setPlayerDynamicProperty, getGlobalDynamicProperty, setGlobalDynamicProperty, getScore, setScore, setStat } from '../stats.js'
-import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, rollWeightedItem, xpRequirements } from '../index.js'
+import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, rollWeightedItem, xpRequirements, achieve } from '../index.js'
 
 
 export function craftingMenu(player) {
@@ -497,6 +497,7 @@ function ironPickaxeMenu(player) {
 
                 player.sendMessage(`§aSuccessfully crafted ${item.nameTag}§a!`)
                 player.playSound("random.levelup")
+                achieve(player, "Real Steel")
                 return ironPickaxeMenu(player)
             }
         } else return ironPickaxeMenu(player)

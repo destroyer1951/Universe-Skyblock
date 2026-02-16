@@ -164,7 +164,7 @@ player.sendMessage(`§aInformation for the player property §e${property}
 })
 
 export const xpRequirements = [
-    50,
+    50, // 0 - 1
     125,
     250,
     600,
@@ -178,8 +178,8 @@ export const xpRequirements = [
     50000,
     65000,
     80000,
-    100000,
-    125000, // 15
+    100000, // 14 - 15
+    //125000, // 15 - 16
     999999999999999
 ]
 
@@ -198,7 +198,7 @@ export const levelCoins = [
     35000,
     50000,
     75000,
-    90000, // 15
+    90000, // 14 - 15
     1
 ]
 
@@ -408,21 +408,28 @@ world.afterEvents.worldLoad.subscribe(() => {
 
 
 const achievements = [ // idk why this list is here tbh
-    "How did you mess that up",
-    "That's a secret!",
+    "How did you mess that up", // screw up the cobble gen
+    "That's a secret!", // use code NAISHO
+    "Pristine", // somehow get a 5 star gold chunk
+    "Real Steel" // craft your first iron pickaxe
 ] // achievement idea: "You actually suck", get this by failing the lava thing like 10 times
 
-function achieve(player, name) {
-    if (getPlayerDynamicProperty(player, name)) return
+export function achieve(player, name) {
+    //if (getPlayerDynamicProperty(player, name)) return
     world.sendMessage(`${player.name} has reached the achievement §a[${name}]`)
     player.playSound("random.levelup")
     setPlayerDynamicProperty(player, name, true)
 
-    /*switch (name) { // implement this if you want achievement specific rewards (you prolly do at some point)
-        case "How did you mess that up":  {
-
+    switch (name) { // implement this if you want achievement specific rewards (you prolly do at some point)
+        case "Real Steel":  {
+            setStat(player, "coins", 2000, true)
+            return
         }
-    }*/
+        case "Pristine": {
+            setStat(player, "coins", 10000, true)
+            return
+        }
+    }
 }
 
 /*
@@ -801,7 +808,13 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
             setStat(player, "miningXP", 4500, true)
             if (Math.random() < .12) {
                 setStat(player, "miningXP", 4500, true)
-                player.getComponent('inventory').container.addItem(items.goldChunk)
+                const goldChunk = items.goldChunk
+                player.getComponent('inventory').container.addItem(goldChunk)
+
+                const chunkLore = goldChunk.getLore()
+                const chunkStars = chunkLore[chunkLore.length - 1].match(/\*/g)
+                if (chunkStars && chunkStars.length >= 5) achieve(player, "Pristine")       
+
                 player.sendMessage("§9§lRARE! §6>> §r§aYou found a §eGold Chunk§a!")
                 player.playSound("armor.equip_gold", {volume: 1, pitch: 1.5})
             }

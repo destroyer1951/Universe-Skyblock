@@ -134,9 +134,18 @@ export function codesMenu(player) {
                 player.sendMessage("§aSuccessfully redeemed code §eNAISHO§a!\n§r§a+§615000 coins")
                 return player.playSound("random.levelup")
             }
+            case 'RELEASE': { // remember to remove this after like 2 weeks or something
+                if (getPlayerDynamicProperty(player, 'RELEASE')) return player.sendMessage('§cYou already redeemed this code!')
+                setPlayerDynamicProperty(player, "coins", 15000, true)
+
+                setPlayerDynamicProperty(player, 'RELEASE', 1)
+                player.sendMessage("§aSuccessfully redeemed code §eRELEASE§a!\n§r§a+§67500 coins")
+                return player.playSound("random.levelup")
+            }
             default: {
                 return player.sendMessage('§cInvalid Code!')
             }
+            
         }
 
     })
