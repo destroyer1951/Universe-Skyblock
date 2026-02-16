@@ -338,6 +338,23 @@ export function rollWeightedItem(table, luck = 0) { // god bless gpt
     return adjusted[adjusted.length - 1].item()
 }
 
+function rollFishingTable(rod, luck) {
+    switch (rod.nameTag) {
+        case items.basicRod.nameTag: {
+            const item = rollWeightedItem(tables.basicRodLootTable, luck)
+            return item
+        }
+        case items.inkRod.nameTag: {
+            const item = rollWeightedItem(tables.inkRodLootTable, luck)
+            return item
+        }
+        case items.whaleRod.nameTag: {
+            const item = rollWeightedItem(tables.whaleRodLootTable, luck)
+            return item
+        }
+    }
+}
+
 /** @param {ItemStack} item */
 function itemStatReader(item) {
     let stats = {
@@ -605,9 +622,9 @@ world.afterEvents.itemUse.subscribe(data => {
         }
     }
 })
-/** @param { Player } player */
+
+/*
 FishingEvent.playerReleaseFishing.subscribe(data => {
-    /** @type {{ player: Player }} */
     const { player, beforeItemStack, attachedToEntity } = data // attached entity is if the bobber grabs an entity
     const { result, fishedItems, location, duration } = data.fishingInfo // duration is in ticks, result is success if item is detected caught, fished items is an array of itemStacks caught
     
@@ -696,31 +713,106 @@ FishingEvent.playerReleaseFishing.subscribe(data => {
     system.runTimeout(() => {
         player["fishDebounce"] = Date.now()
     }, 10)
+})*/
+
+world.afterEvents.itemCompleteUse.subscribe(data => {
+    const item = data.itemStack
+    const player = data.source
+    if (data.itemStack.typeId !== "minecraft:fishing_rod") return
+
+    player.addTag("isFished")
+    system.runTimeout(() => {
+        player.removeTag("isFished")
+    }, 2)
 })
 
 
-world.beforeEvents.entityRemove.subscribe(data => { // it all makes sense now
+world.afterEvents.entitySpawn.subscribe(data => {
+    const entity = data.entity
+    try { entity.getComponent("minecraft:item") } catch { return }
+    const fishedItem = entity.getComponent("minecraft:item")?.itemStack
+    if (!fishedItem) return
+    if (fishedItem.typeId !== "minecraft:element_1") return
 
-    try {
-        if (data.removedEntity.getComponent("item").itemStack.typeId !== "minecraft:element_1") return
-    } catch (e) {
-        return
-    }
+    const dimension = entity.dimension
+    const location = entity.location
+    const velocity = entity.getVelocity()
+    entity.kill()
 
-    const entity = data.removedEntity
-    const players = entity.dimension.getPlayers({location: data.removedEntity.location, maxDistance: 2})
+    const newVelo = {x: velocity.x*.75, y:velocity.y*.50, z:velocity.z*.75}
 
-    players.forEach(player => {
-        const inv = player.getComponent("inventory").container
+    system.runTimeout(() => {
+        dimension.getPlayers({location: location, maxDistance: 36, tags: ["isFished"]}).forEach(player => {
+            const rod = player.getComponent("equippable").getEquipment("Mainhand")
+            if (!rod || rod.typeId !== "minecraft:fishing_rod") return
+            
+            let luck = 0
+            const stats = itemStatReader(rod)
+            if (stats.luck) luck += stats.luck
+            let item = items.rawCod
 
-        system.run(() => {
+            item = rollFishingTable(rod, luck)
+
+            switch (item.typeId) {
+                case "minecraft:cod": {
+                    setStat(player, "fishingXP", 25, true)
+                    break
+                }
+                case "minecraft:salmon": {
+                    setStat(player, "fishingXP", 40, true)
+                    break
+                }
+                case "minecraft:tropical_fish": {
+                    setStat(player, "fishingXP", 125, true)
+                    break
+                }
+                case "minecraft:cherry_log": {
+                    setStat(player, "fishingXP", 150, true)
+                    break
+                }
+                case "minecraft:ink_sac": {
+                    setStat(player, "fishingXP", 60, true)
+                    break
+                }
+                case "minecraft:copper_ingot": {
+                    setStat(player, "fishingXP", 400, true)
+                    break
+                }
+                case "minecraft:prismarine_shard": {
+                    setStat(player, "fishingXP", 1250, true)
+                    break
+                }
+                case "minecraft:coal": {
+                    setStat(player, "fishingXP", 250, true)
+                    break
+                }
+                case "minecraft:slime_ball": {
+                    setStat(player, "fishingXP", 90, true)
+                    break
+                }
+            }
+            checkLevelUp(player, "fishing")
+
+            const newEntity = dimension.spawnItem(item, location)
+            newEntity.applyImpulse(newVelo)
+
+        })
+    },1)
+
+})
+
+world.beforeEvents.entityItemPickup.subscribe(data => {
+    const typeId = data.item.getComponent("minecraft:item").itemStack.typeId
+    const player = data.entity
+    if (typeId !== "minecraft:element_1") return
+
+    data.cancel = true
+
+    system.run(()=> {
+        data.item.remove()
+        if (!(player instanceof Player)) return 
         player.playSound("note.cow_bell")
         player.sendMessage("§c§lUh oh! §r§cYou stood too close to the fishing bobber and scared all the fish away!")
-            for (let i = 0; i < 36; i++) {
-                if (!(inv.getItem(i)?.typeId == "minecraft:element_1")) continue
-                inv.setItem(i, undefined)
-            }
-        })
     })
 })
 
