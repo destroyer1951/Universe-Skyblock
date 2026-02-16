@@ -299,4 +299,15 @@ system.run(() => {
         }
     })
 
+    Object.defineProperty(items, "hybridPickaxe", {
+        get() {
+            return makeItem("minecraft:stone_pickaxe", item => {
+                const stars = rollStars()
+                const starCount = (stars.match(/\*/g) || []).length
+                item.nameTag = "§r§fHybrid Pickaxe"
+                item.setLore(["", `§r§7Luck: §a${(starCount*0.15).toFixed(2)}`, '', `§r§e${stars}`])
+            })
+        }
+    })
+
 })

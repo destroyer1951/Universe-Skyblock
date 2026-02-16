@@ -328,9 +328,9 @@ function densePickaxeMenu(player) {
     // 20, 21, 22
     // 29, 30, 31
 
-    .button(11, "Dense Stone", [], "minecraft:stone_bricks")
-    .button(12, "Dense Stone", [], "minecraft:stone_bricks")
-    .button(13, "Dense Stone", [], "minecraft:stone_bricks")
+    .button(11, "Dense Stone", [], "minecraft:stone_bricks", 10)
+    .button(12, "Dense Stone", [], "minecraft:stone_bricks", 10)
+    .button(13, "Dense Stone", [], "minecraft:stone_bricks", 10)
 
     .button(21, "Stick", [], "minecraft:stick")
     .button(30, "Stick", [], "minecraft:stick")
