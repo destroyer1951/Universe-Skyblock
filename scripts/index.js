@@ -640,6 +640,10 @@ world.afterEvents.itemUse.subscribe(data => {
             fishQueue = player.name
         }
     }
+
+    if (item.typeId === "minecraft:candle") {
+        player.sendMessage("version 1.1")
+    }
 })
 
 
@@ -927,17 +931,4 @@ system.runInterval(() => {
         player["coords"] = {x: Math.floor(player.location.x), y: Math.floor(player.location.y), z: Math.floor(player.location.z), r: player.getRotation().y}
     })
 }, 200)
-
-
-world.afterEvents.itemUse.subscribe(data => {
-    const player = data.source
-    const item = data.itemStack
-    if (item.typeId === "minecraft:candle") {
-        for (let i = 0; i < 12; i++) {
-            system.runTimeout(() => {
-                player.playSound("fire.ignite", {volume: 1, pitch: .8})
-            }, i*2)
-        }
-    }
-})
 
