@@ -8,6 +8,7 @@ import { getPlayerDynamicProperty, setPlayerDynamicProperty, getGlobalDynamicPro
 import * as Menus from './compassGui/mainGui.js'
 import { shopMainMenu } from './compassGui/shopGui.js'
 import * as tables from './myLootTables.js'
+import { showAkuaMenu } from './compassGui/otherGui.js'
 
 const { 
     mainMenu,  
@@ -415,7 +416,7 @@ const achievements = [ // idk why this list is here tbh
 ] // achievement idea: "You actually suck", get this by failing the lava thing like 10 times
 
 export function achieve(player, name) {
-    //if (getPlayerDynamicProperty(player, name)) return
+    if (getPlayerDynamicProperty(player, name)) return
     world.sendMessage(`${player.name} has reached the achievement §a[${name}]`)
     player.playSound("random.levelup")
     setPlayerDynamicProperty(player, name, true)
@@ -430,6 +431,12 @@ export function achieve(player, name) {
             return
         }
     }
+}
+
+export function messageDelayed(player, delay, message) {
+    system.runTimeout(() => {
+        player.sendMessage(message)
+    }, delay)
 }
 
 /*
@@ -447,34 +454,55 @@ world.beforeEvents.playerInteractWithEntity.subscribe(data => {
         switch (entity.nameTag) {
             case "§r§bAkua": {
                 data.cancel = true
-                if (!player["chatDebounce"] || player["chatDebounce"] < Date.now()) {
-                    player["chatDebounce"] = Date.now() + 16000
+                //setPlayerDynamicProperty(player, "akuaQuest1", false)
+                if (getPlayerDynamicProperty(player, "akuaQuest1")) {
 
-                    if (!player["akuaChat"]) {
-                        player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r What are you doing here? How did you find me??")
+                    system.run(() => {
+                        showAkuaMenu(player)
+                    })
 
-                        system.runTimeout(() => {
-                            player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r Wait.. You aren't with them?")
-                        }, 60)
+                } else {
 
-                        system.runTimeout(() => {
-                            player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r I guess I can trust you then..")
-                        }, 100)
+                    if (!player["chatDebounce"] || player["chatDebounce"] < Date.now()) {
+                        player["chatDebounce"] = Date.now() + 16000
 
-                        system.runTimeout(() => {
-                            player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r In that case, I need some stuff from you.")
-                        }, 150)
+                        if (!player["akuaChat"]) {
+                            player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r What are you doing here? How did you find me??")
 
-                        system.runTimeout(() => {
-                            player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r Please bring me: §e64x Raw Cod§r, §e32x Ink Sac§r, §e2x Prismarine Shard§r, §e4x Iron Ingots§r")
-                        }, 210)
+                            messageDelayed(player, 60, "§8[§eNPC§8] §8<§bAkua§8>§r Wait.. You aren't with them?")
+                            messageDelayed(player, 100, "§8[§eNPC§8] §8<§bAkua§8>§r I guess I can trust you then..")
+                            messageDelayed(player, 150, "§8[§eNPC§8] §8<§bAkua§8>§r In that case, I need some stuff from you.")
+                            messageDelayed(player, 210, "§8[§eNPC§8] §8<§bAkua§8>§r Please bring me: §e64x Raw Cod§r, §e32x Ink Sac§r, §e2x Prismarine Shard§r, §e4x Iron Ingots§r")
+                            messageDelayed(player, 290, "§8[§eNPC§8] §8<§bAkua§8>§r Then we can talk.")
 
-                        system.runTimeout(() => {
-                            player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r Then we can talk.")
-                            player["akuaChat"] = true
-                        }, 290)
-                    } else {
-                        player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r Please bring me: §e64x Raw Cod§r, §e32x Ink Sac§r, §e2x Prismarine Shard§r, §e4x Iron Ingots§r")
+                            system.runTimeout(() => {
+                                player["akuaChat"] = true
+                            }, 290)
+
+                        } else {
+                            system.run(() => {
+
+                                let req1 = checkItemAmount(player, "minecraft:cod")
+                                let req2 = checkItemAmount(player, "minecraft:ink_sac")
+                                let req3 = checkItemAmount(player, "minecraft:prismarine_shard", false, items.prismarineShard.nameTag)
+                                let req4 = checkItemAmount(player, "minecraft:iron_ingot")
+
+                                if (req1 >= 64 && req2 >= 32 && req3 >= 2 && req4 >= 4) {
+                                    clearItem(player, "minecraft:cod", 64)
+                                    clearItem(player, "minecraft:ink_sac", 32)
+                                    clearItem(player, "minecraft:prismarine_shard", 2, items.prismarineShard.nameTag)
+                                    clearItem(player, "minecraft:iron_ingot", 4)
+                                    
+                                    setPlayerDynamicProperty(player, "akuaQuest1", true)
+                                    player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r That took you long enough. Most other people find all of that stuff easy.")
+                                    messageDelayed(player, 80, "§8[§eNPC§8] §8<§bAkua§8>§r Well, I guess I do owe you something.")
+                                    messageDelayed(player, 150, "§8[§eNPC§8] §8<§bAkua§8>§r Talk to me again to see what I can offer you.")
+
+                                } else return player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r Please bring me: §e64x Raw Cod§r, §e32x Ink Sac§r, §e2x Prismarine Shard§r, §e4x Iron Ingots§r")
+
+                            })
+                            player["chatDebounce"] = Date.now() + 2000
+                        }
                     }
                 }
                 return

@@ -386,7 +386,7 @@ function hybridPickaxeMenu(player) {
     let req1
     let req2
     let req3
-    if (checkItemAmount(player, items.blubber.typeId, false, items.blubber.nameTag) >= 24) { req1 = "§a" } else { req1 = "§c" }
+    if (checkItemAmount(player, items.blubber.typeId, false, items.blubber.nameTag) >= 12) { req1 = "§a" } else { req1 = "§c" }
     if (checkItemAmount(player, items.coalPickaxe.typeId, false, items.coalPickaxe.nameTag) >= 1) { req2 = "§a" } else { req2 = "§c" }
     if (checkItemAmount(player, items.densePickaxe.typeId, false, items.densePickaxe.nameTag) >= 1) { req3 = "§a" } else { req3 = "§c" }
     new ChestFormData("45")
@@ -398,19 +398,19 @@ function hybridPickaxeMenu(player) {
         "xx___xxxx",
         "xxxxxxxxx",
     ], {x: {itemName: "", texture: "minecraft:copper_bars"}}) // make sure to change these from coal and stick
-    .button(23, "§eCraft this item!", ["", "§r§7Required materials:",'', `§r${req1}x24 Blubber`, `§r${req2}x1 Coal Pickaxe`, `§r${req3}x1 Dense Pickaxe`], "minecraft:crafting_table")
+    .button(23, "§eCraft this item!", ["", "§r§7Required materials:",'', `§r${req1}x12 Blubber`, `§r${req2}x1 Coal Pickaxe`, `§r${req3}x1 Dense Pickaxe`], "minecraft:crafting_table")
 
     // here are your grid square indexes
     // 11, 12, 13
     // 20, 21, 22
     // 29, 30, 31
 
-    .button(11, "Blubber", [], "minecraft:slime_ball", 4)
-    .button(12, "Blubber", [], "minecraft:slime_ball", 4)
-    .button(13, "Blubber", [], "minecraft:slime_ball", 4)
-    .button(29, "Blubber", [], "minecraft:slime_ball", 4)
-    .button(30, "Blubber", [], "minecraft:slime_ball", 4)
-    .button(31, "Blubber", [], "minecraft:slime_ball", 4)
+    .button(11, "Blubber", [], "minecraft:slime_ball", 2)
+    .button(12, "Blubber", [], "minecraft:slime_ball", 2)
+    .button(13, "Blubber", [], "minecraft:slime_ball", 2)
+    .button(29, "Blubber", [], "minecraft:slime_ball", 2)
+    .button(30, "Blubber", [], "minecraft:slime_ball", 2)
+    .button(31, "Blubber", [], "minecraft:slime_ball", 2)
 
     .button(20, "Coal Pickaxe", ['', '§r§l§e*'], "minecraft:stone_pickaxe")
 
@@ -427,7 +427,7 @@ function hybridPickaxeMenu(player) {
                 return player.sendMessage("§cYou do not have the required materials to craft this item!")
             } else {
 
-                clearItem(player, items.blubber.typeId, 24, items.blubber.nameTag)
+                clearItem(player, items.blubber.typeId, 12, items.blubber.nameTag)
                 clearItem(player, items.coalPickaxe.typeId, 1, items.coalPickaxe.nameTag)
                 clearItem(player, items.densePickaxe.typeId, 1, items.densePickaxe.nameTag)
 
