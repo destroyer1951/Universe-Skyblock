@@ -3,19 +3,19 @@ import { items } from './items.js'
 // Fishing loot tables
 
 export const basicRodLootTable = [
-    { item: () => items.rawCod, weight: 50 },
-    { item: () => items.rawSalmon, weight: 30 },
-    { item: () => items.tropicalFish, weight: 15 },
+    { item: () => items.rawCod, weight: 40 },
+    { item: () => items.rawSalmon, weight: 25 },
+    { item: () => items.tropicalFish, weight: 12 },
     { item: () => items.cherryLog, weight: 9 },
-    { item: () => items.inkSac, weight: 5 },
-    { item: () => items.copperIngot, weight: 1 },
-    { item: () => items.prismarineShard, weight: 0.2 },
+    { item: () => items.inkSac, weight: 8 },
+    { item: () => items.copperIngot, weight: 2 },
+    { item: () => items.prismarineShard, weight: .8 },
 ]
 
 export const inkRodLootTable = [
-    { item: () => items.inkSac, weight: 95 },
+    { item: () => items.inkSac, weight: 85 },
     { item: () => items.coal, weight: 5 },
-    { item: () => items.prismarineShard, weight: 0.3 },
+    { item: () => items.prismarineShard, weight: 1 },
 ]
 
 export const whaleRodLootTable = [
