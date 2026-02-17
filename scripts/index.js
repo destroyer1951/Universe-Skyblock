@@ -892,4 +892,51 @@ system.runInterval(() => {
     })
 }, 8)
 
+system.runInterval(() => {
+    const players = world.getPlayers({excludeGameModes: ["Creative", "Spectator"]})
+    players.forEach(player => {
+        
+        if (!(player["afkTimer"])) {
+            player["afkTimer"] = Date.now() + 100000
+        }
+
+        if (player["afkTimer"] < Date.now()) {
+            const coords = player["coords"]
+            if (Math.floor(player.location.x) === coords.x && Math.floor(player.location.y) === coords.y && Math.floor(player.location.z) === coords.z && player.getRotation().y === coords.r) {
+
+                if (player["afk"]) {
+                    world.sendMessage(`§c${player.name} was kicked for being AFK!`)
+                    player.runCommand(`kick ${player.name} §r§l§cYou were kicked for being AFK!`)
+                    return
+                }
+
+                player.sendMessage("§cYou are about to be kicked for AFK!")
+                for (let i = 0; i < 12; i++) {
+                    system.runTimeout(() => {
+                        player.playSound("fire.ignite", {volume: 1, pitch: .8})
+                    }, i*2)
+                }
+                
+                player["afk"] = true
+            } else {
+                player["afkTimer"] = Date.now() + 100000
+            }
+        }
+
+        player["coords"] = {x: Math.floor(player.location.x), y: Math.floor(player.location.y), z: Math.floor(player.location.z), r: player.getRotation().y}
+    })
+}, 200)
+
+
+world.afterEvents.itemUse.subscribe(data => {
+    const player = data.source
+    const item = data.itemStack
+    if (item.typeId === "minecraft:candle") {
+        for (let i = 0; i < 12; i++) {
+            system.runTimeout(() => {
+                player.playSound("fire.ignite", {volume: 1, pitch: .8})
+            }, i*2)
+        }
+    }
+})
 
