@@ -9,6 +9,7 @@ import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, rollWeightedIt
 import { buyPreviewMenu, buyUnstackablePreviewMenu } from './shopGui.js';
 
 export function showAkuaMenu(player) {
+    player["afkTimer"] = Date.now() + 200000
     new ChestFormData("27")
         .title('Akua\'s Shop')
         

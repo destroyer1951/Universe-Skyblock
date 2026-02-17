@@ -5,13 +5,14 @@ import { ChestFormData } from '../extensions/forms.js';
 import { items, makeItem, rollStars } from '../items.js'
 import { prices } from '../prices.js'
 import { getPlayerDynamicProperty, setPlayerDynamicProperty, getGlobalDynamicProperty, setGlobalDynamicProperty, getScore, setScore, setStat } from '../stats.js'
-import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, rollWeightedItem, xpRequirements } from '../index.js'
+import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, rollWeightedItem, xpRequirements, achieve } from '../index.js'
 
 import { shopMainMenu } from './shopGui.js';
 import { craftingMenu } from './craftingGui.js';
 
 /** @param {Player} player  */
 export function mainMenu(player) {
+    player["afkTimer"] = Date.now() + 200000
     new ChestFormData("27")
         .title('Skyblock Menu')
         .button(4, 'Levels', ['', '§7Check your Skill Levels!'], 'minecraft:turtle_scute', 1)
@@ -46,6 +47,7 @@ export function mainMenu(player) {
 
 /** @param {Player} player  */
 export function warpsMenu(player) {
+    player["afkTimer"] = Date.now() + 200000
     new ChestFormData("27")
         .title('Warps Menu')
         .button(13, 'Your Island', ['', '§7Warp to your Island!'], 'minecraft:grass_block', 1)
@@ -71,6 +73,7 @@ export function warpsMenu(player) {
 
 /** @param {Player} player  */
 export function levelsMenu(player) {
+    player["afkTimer"] = Date.now() + 200000
     const miningLevel = getPlayerDynamicProperty(player, "miningLevel")
     //const farmingLevel = getPlayerDynamicProperty(player, "farmingLevel")
     const fishingLevel = getPlayerDynamicProperty(player, "fishingLevel")
@@ -108,6 +111,7 @@ export function levelsMenu(player) {
 
 /** @param {Player} player  */
 export function codesMenu(player) {
+    player["afkTimer"] = Date.now() + 200000
     new ModalFormData()
     .title('Codes')
     .label("Join §9discord.gg/HRGNN3pzQN§r to redeem the discord kit, as well as information on the latest codes and updates!!\n\n")
@@ -129,6 +133,7 @@ export function codesMenu(player) {
             case 'NAISHO': { // you can only get this code from looking at this code file hahahahahaha open source
                 if (getPlayerDynamicProperty(player, 'NAISHO')) return player.sendMessage('§cYou already redeemed this code!')
                 setPlayerDynamicProperty(player, "coins", 15000, true)
+                achieve(player, "That's a secret!")
 
                 setPlayerDynamicProperty(player, 'NAISHO', 1)
                 player.sendMessage("§aSuccessfully redeemed code §eNAISHO§a!\n§r§a+§615000 coins")
@@ -136,7 +141,7 @@ export function codesMenu(player) {
             }
             case 'RELEASE': { // remember to remove this after like 2 weeks or something
                 if (getPlayerDynamicProperty(player, 'RELEASE')) return player.sendMessage('§cYou already redeemed this code!')
-                setPlayerDynamicProperty(player, "coins", 15000, true)
+                setPlayerDynamicProperty(player, "coins", 7500, true)
 
                 setPlayerDynamicProperty(player, 'RELEASE', 1)
                 player.sendMessage("§aSuccessfully redeemed code §eRELEASE§a!\n§r§a+§67500 coins")

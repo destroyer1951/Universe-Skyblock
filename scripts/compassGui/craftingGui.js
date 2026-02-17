@@ -9,6 +9,7 @@ import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, rollWeightedIt
 
 
 export function craftingMenu(player) {
+    player["afkTimer"] = Date.now() + 200000
     const fishingLevel = getPlayerDynamicProperty(player, "fishingLevel")
     const miningLevel = getPlayerDynamicProperty(player, "miningLevel")
 
@@ -95,6 +96,7 @@ export function craftingMenu(player) {
  * @param {Player} player
 */
 function inkRodMenu(player) { // bum outdated function dont copy me
+    player["afkTimer"] = Date.now() + 200000
     const itemLore = items.inkRod.getLore()
     if (itemLore.length !== 0 && itemLore[itemLore.length-1].includes("*")) {
         itemLore.push(...["","§r§8Star count is randomized", "§r§8upon craft!","§r§8Stars may affect stats!"])
@@ -143,6 +145,7 @@ function inkRodMenu(player) { // bum outdated function dont copy me
 }
 
 function coalPickaxeMenu(player) {
+    player["afkTimer"] = Date.now() + 200000
     const item = items.coalPickaxe
     const itemLore = item.getLore()
     if (itemLore.length !== 0 && itemLore[itemLore.length-1].includes("*")) {
@@ -199,6 +202,7 @@ function coalPickaxeMenu(player) {
 }
 
 function whaleRodMenu(player) {
+    player["afkTimer"] = Date.now() + 200000
     const item = items.whaleRod
     const itemLore = item.getLore()
     if (itemLore.length !== 0 && itemLore[itemLore.length-1].includes("*")) {
@@ -263,6 +267,7 @@ function whaleRodMenu(player) {
 }
 
 function denseStoneMenu(player) {
+    player["afkTimer"] = Date.now() + 200000
     const item = items.denseStone
     const itemLore = item.getLore()
     if (itemLore.length !== 0 && itemLore[itemLore.length-1].includes("*")) {
@@ -319,6 +324,7 @@ function denseStoneMenu(player) {
 }
 
 function densePickaxeMenu(player) {
+    player["afkTimer"] = Date.now() + 200000
     const item = items.densePickaxe
     const itemLore = item.getLore()
     if (itemLore.length !== 0 && itemLore[itemLore.length-1].includes("*")) {
@@ -377,6 +383,7 @@ function densePickaxeMenu(player) {
 }
 
 function hybridPickaxeMenu(player) {
+    player["afkTimer"] = Date.now() + 200000
     const item = items.hybridPickaxe
     const itemLore = item.getLore()
     if (itemLore.length !== 0 && itemLore[itemLore.length-1].includes("*")) {
@@ -442,6 +449,7 @@ function hybridPickaxeMenu(player) {
 }
 
 function ironPickaxeMenu(player) {
+    player["afkTimer"] = Date.now() + 200000
     const item = items.ironPickaxe
     const itemLore = item.getLore()
     if (itemLore.length !== 0 && itemLore[itemLore.length-1].includes("*")) {

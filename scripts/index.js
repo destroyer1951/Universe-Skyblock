@@ -897,12 +897,12 @@ system.runInterval(() => {
     players.forEach(player => {
         
         if (!(player["afkTimer"])) {
-            player["afkTimer"] = Date.now() + 100000
+            player["afkTimer"] = Date.now() + 200000
         }
 
         if (player["afkTimer"] < Date.now()) {
             const coords = player["coords"]
-            if (Math.floor(player.location.x) === coords.x && Math.floor(player.location.y) === coords.y && Math.floor(player.location.z) === coords.z && player.getRotation().y === coords.r) {
+            if ((Math.floor(player.location.x) === coords.x && Math.floor(player.location.y) === coords.y && Math.floor(player.location.z) === coords.z) || (player.getRotation().y === coords.r)) {
 
                 if (player["afk"]) {
                     world.sendMessage(`§c${player.name} was kicked for being AFK!`)
@@ -919,7 +919,8 @@ system.runInterval(() => {
                 
                 player["afk"] = true
             } else {
-                player["afkTimer"] = Date.now() + 100000
+                player["afk"] = false
+                player["afkTimer"] = Date.now() + 200000
             }
         }
 
