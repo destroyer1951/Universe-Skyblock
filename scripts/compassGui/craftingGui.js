@@ -33,7 +33,7 @@ export function craftingMenu(player) {
         } else menu.button(13, "Dense Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
 
         if (fishingLevel < 6)  { 
-            menu.button(14, "Whale Rod", ["", "§r§cRequires Fishing Level 6!"], "minecraft:fishing_rod", 1)
+            menu.button(14, "Whale Rod", ["", "§r§cRequires Fishing Level 5!"], "minecraft:fishing_rod", 1)
         } else menu.button(14, "Whale Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
 
         if (miningLevel < 6)  { 
@@ -73,8 +73,8 @@ export function craftingMenu(player) {
                     } else return densePickaxeMenu(player)
                 }
                 case 14: {
-                    if (fishingLevel < 6)  { 
-                        return player.sendMessage("§cYou need Fishing Level 6 to craft this item!")
+                    if (fishingLevel < 5)  { 
+                        return player.sendMessage("§cYou need Fishing Level 5 to craft this item!")
                     } else return whaleRodMenu(player)
                 }
                 case 15: {
