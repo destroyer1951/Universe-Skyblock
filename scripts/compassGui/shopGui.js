@@ -8,7 +8,7 @@ import { getPlayerDynamicProperty, setPlayerDynamicProperty, getGlobalDynamicPro
 import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, rollWeightedItem, xpRequirements } from '../index.js'
 
 export function shopMainMenu(player) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
 
     const fishingLevel = getPlayerDynamicProperty(player, "fishingLevel")
     const miningLevel = getPlayerDynamicProperty(player, "miningLevel")
@@ -52,7 +52,7 @@ export function shopMainMenu(player) {
 
 /** @param {Player} player  */
 export function generalShopMenu(player) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
     new ChestFormData("54")
     .title('General Shop Menu')
 
@@ -163,7 +163,7 @@ export function generalShopMenu(player) {
 
 /** @param {Player} player  */
 export function farmShopMenu(player) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
     new ChestFormData("54")
     .title('Farming Shop Menu')
 
@@ -209,7 +209,7 @@ export function farmShopMenu(player) {
 }
 
 export function fishingShopMenu(player) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
     new ChestFormData("54")
     .title('Fishing Shop Menu')
 
@@ -256,7 +256,7 @@ export function fishingShopMenu(player) {
 }
 
 export function buildingShopMenu(player) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
     new ChestFormData("54")
     .title('Building Shop Menu')
     
@@ -307,7 +307,7 @@ export function buildingShopMenu(player) {
 }
 
 function buyConcretePowderMenu(player) { // horbbile programming practices
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
     new ChestFormData("45")
     .title('Concrete Powder Colors')
 
@@ -354,7 +354,7 @@ function buyConcretePowderMenu(player) { // horbbile programming practices
 }
 
 function buyWoolMenu(player) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
     new ChestFormData("45")
     .title('Wool Colors')
 
@@ -401,7 +401,7 @@ function buyWoolMenu(player) {
 }
 
 function buyStainedGlassMenu(player) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
     new ChestFormData("45")
     .title('Stained Glass Colors')
 
@@ -448,7 +448,7 @@ function buyStainedGlassMenu(player) {
 }
 
 function buyCoralMenu(player) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
     new ChestFormData("45")
     .title('Coral Colors')
 
@@ -508,7 +508,7 @@ function buyCoralMenu(player) {
  * @param {ItemStack} item
  */
 export function buyPreviewMenu(player, buyPrice, sellPrice, itemOrFactory) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
 
     const freeSlots = getFreeSlots(player)
     if (freeSlots == 0) return player.sendMessage("§cYou need free inventory space for this!")
@@ -574,7 +574,7 @@ export function buyPreviewMenu(player, buyPrice, sellPrice, itemOrFactory) {
 }
 
 export function buyUnavailablePreviewMenu(player, sellPrice, itemOrFactory) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
 
     const itemFactory = typeof itemOrFactory === "function" ? itemOrFactory : () => itemOrFactory.clone()
     const item = itemFactory()
@@ -629,7 +629,7 @@ export function buyUnavailablePreviewMenu(player, sellPrice, itemOrFactory) {
 }
 
 export function buyNamedUnavailablePreviewMenu(player, sellPrice, itemOrFactory) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
 
     const itemFactory = typeof itemOrFactory === "function" ? itemOrFactory : () => itemOrFactory.clone()
     const item = itemFactory()
@@ -685,7 +685,7 @@ export function buyNamedUnavailablePreviewMenu(player, sellPrice, itemOrFactory)
 
 
 export function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, itemOrFactory) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
 
     const freeSlots = getFreeSlots(player)
     if (freeSlots == 0) return player.sendMessage("§cYou need free inventory space for this!")
@@ -750,7 +750,7 @@ export function buyUnstackablePreviewMenu(player, buyPrice, sellPrice, itemOrFac
 }
 
 export function buySellUnavailablePreviewMenu(player, buyPrice, itemOrFactory) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
 
     const freeSlots = getFreeSlots(player)
     if (freeSlots == 0) return player.sendMessage("§cYou need free inventory space for this!")
@@ -810,7 +810,7 @@ export function buySellUnavailablePreviewMenu(player, buyPrice, itemOrFactory) {
 }     
 
 export function buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, itemOrFactory) { // copy this item factory thing to the rest of the shop functions to fix the most evil bug in history
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
 
     const freeSlots = getFreeSlots(player)
     if (freeSlots == 0) return player.sendMessage("§cYou need free inventory space for this!")
@@ -876,7 +876,7 @@ export function buyUnstackableSellUnavailablePreviewMenu(player, buyPrice, itemO
  * @param {ItemStack} item
  */
 export function buyCustomMenu(player, buyPrice, item) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
 
     let cleanName 
     if (item.nameTag) { 
@@ -930,7 +930,7 @@ export function buyCustomMenu(player, buyPrice, item) {
  * @param {ItemStack} item
  */
 export function sellCustomMenu(player, sellPrice, item) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
 
     let cleanName 
     if (item.nameTag) { 
@@ -958,7 +958,7 @@ export function sellCustomMenu(player, sellPrice, item) {
 }
 
 export function sellNamedCustomMenu(player, sellPrice, item) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
 
     let cleanName 
     if (item.nameTag) { 

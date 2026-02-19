@@ -904,13 +904,17 @@ system.runInterval(() => {
             player["afkTimer"] = Date.now() + 250000
         }
 
-        if (player["afkTimer"] < Date.now()) {
-            const rotation = player["rotation"]
-            if (player.getRotation().y === rotation) {
+        
 
+
+        const rotation = player["rotation"]
+        if (player.getRotation().y === rotation) {
+
+            if (player["afkTimer"] < Date.now()) {
+                
                 if (player["afk"] > 4) {
                     world.sendMessage(`§c${player.name} was kicked for being AFK!`)
-                    player.runCommand(`kick ${player.name} §r§l§cYou were kicked for being AFK!`)
+                    player.runCommand(`kick ${player.name} You were kicked for being AFK!`)
                     return
                 }
 
@@ -920,12 +924,12 @@ system.runInterval(() => {
                         player.playSound("fire.ignite", {volume: 1, pitch: .8})
                     }, i*2)
                 }
-                
-                player["afk"] = (player["afk"] || 0) + 1
-            } else {
-                player["afk"] = false
-                player["afkTimer"] = Date.now() + 250000
             }
+
+
+        } else {
+            player["afk"] = false
+            player["afkTimer"] = Date.now() + 250000
         }
 
         player["rotation"] = player.getRotation().y

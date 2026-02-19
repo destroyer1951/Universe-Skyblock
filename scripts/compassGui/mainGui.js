@@ -12,7 +12,7 @@ import { craftingMenu } from './craftingGui.js';
 
 /** @param {Player} player  */
 export function mainMenu(player) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
     new ChestFormData("27")
         .title('Skyblock Menu')
         .button(4, 'Levels', ['', '§7Check your Skill Levels!'], 'minecraft:turtle_scute', 1)
@@ -47,7 +47,7 @@ export function mainMenu(player) {
 
 /** @param {Player} player  */
 export function warpsMenu(player) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
     new ChestFormData("27")
         .title('Warps Menu')
         .button(13, 'Your Island', ['', '§7Warp to your Island!'], 'minecraft:grass_block', 1)
@@ -73,7 +73,7 @@ export function warpsMenu(player) {
 
 /** @param {Player} player  */
 export function levelsMenu(player) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
     const miningLevel = getPlayerDynamicProperty(player, "miningLevel")
     //const farmingLevel = getPlayerDynamicProperty(player, "farmingLevel")
     const fishingLevel = getPlayerDynamicProperty(player, "fishingLevel")
@@ -111,7 +111,7 @@ export function levelsMenu(player) {
 
 /** @param {Player} player  */
 export function codesMenu(player) {
-    player["afkTimer"] = Date.now() + 200000
+    player["afkTimer"] = Date.now() + 350000
     new ModalFormData()
     .title('Codes')
     .label("Join §9discord.gg/HRGNN3pzQN§r to redeem the discord kit, as well as information on the latest codes and updates!!\n\n")
