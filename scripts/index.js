@@ -642,7 +642,7 @@ world.afterEvents.itemUse.subscribe(data => {
     }
 
     if (item.typeId === "minecraft:candle") {
-        player.sendMessage("version 1.1")
+        player.sendMessage("version 1.2")
     }
 })
 
@@ -901,14 +901,14 @@ system.runInterval(() => {
     players.forEach(player => {
         
         if (!(player["afkTimer"])) {
-            player["afkTimer"] = Date.now() + 200000
+            player["afkTimer"] = Date.now() + 250000
         }
 
         if (player["afkTimer"] < Date.now()) {
-            const coords = player["coords"]
-            if ((Math.floor(player.location.x) === coords.x && Math.floor(player.location.y) === coords.y && Math.floor(player.location.z) === coords.z) || (player.getRotation().y === coords.r)) {
+            const rotation = player["rotation"]
+            if (player.getRotation().y === rotation) {
 
-                if (player["afk"]) {
+                if (player["afk"] > 4) {
                     world.sendMessage(`§c${player.name} was kicked for being AFK!`)
                     player.runCommand(`kick ${player.name} §r§l§cYou were kicked for being AFK!`)
                     return
@@ -921,14 +921,14 @@ system.runInterval(() => {
                     }, i*2)
                 }
                 
-                player["afk"] = true
+                player["afk"] = (player["afk"] || 0) + 1
             } else {
                 player["afk"] = false
-                player["afkTimer"] = Date.now() + 200000
+                player["afkTimer"] = Date.now() + 250000
             }
         }
 
-        player["coords"] = {x: Math.floor(player.location.x), y: Math.floor(player.location.y), z: Math.floor(player.location.z), r: player.getRotation().y}
+        player["rotation"] = player.getRotation().y
     })
-}, 200)
+}, 35)
 
