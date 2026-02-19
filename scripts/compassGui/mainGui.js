@@ -9,6 +9,8 @@ import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, rollWeightedIt
 
 import { shopMainMenu } from './shopGui.js';
 import { craftingMenu } from './craftingGui.js';
+import { infoMenus } from './infoGui.js'
+
 
 /** @param {Player} player  */
 export function mainMenu(player) {
@@ -20,6 +22,7 @@ export function mainMenu(player) {
         .button(13, 'Warps', ['', '§7Warp to other locations!'], 'minecraft:compass', 1)
         .button(14, 'Shop', ['', '§7Buy and Sell some Items!'], 'minecraft:gold_ingot', 1)
         .button(22, 'Crafting', ['', '§7Craft custom items!'], 'minecraft:crafting_table', 1)
+        .button(23, "Item Directory", ["", "§7View info on items!"], 'minecraft:book', 1)
 
         .show(player).then(a => {
             if (a.canceled) return;
@@ -40,6 +43,9 @@ export function mainMenu(player) {
                 case 22: {
                     if (getFreeSlots(player) == 0) return player.sendMessage("§cYou need free inventory space for this!")
                     return craftingMenu(player)
+                }
+                case 23: {
+                    return infoMenus.prismarineShard.show(player)
                 }
             }
         })

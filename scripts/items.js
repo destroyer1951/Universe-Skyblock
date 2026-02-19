@@ -157,7 +157,7 @@ system.run(() => {
         get() {
             return makeItem("minecraft:prismarine_shard", item => {
                 item.nameTag = "§r§fPrismarine Shard"
-                item.setLore([`§r§e${rollStars()}`])
+                item.setLore(["", `§r§e${rollStars()}`])
             })
         }
     })
