@@ -904,8 +904,6 @@ system.runInterval(() => {
             player["afkTimer"] = Date.now() + 250000
         }
 
-        
-
 
         const rotation = player["rotation"]
         if (player.getRotation().y === rotation) {
@@ -928,7 +926,7 @@ system.runInterval(() => {
 
 
         } else {
-            player["afk"] = false
+            player["afk"] = 0
             player["afkTimer"] = Date.now() + 250000
         }
 
