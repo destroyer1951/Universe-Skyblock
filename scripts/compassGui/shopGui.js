@@ -17,16 +17,22 @@ export function shopMainMenu(player) {
     const menu = new ChestFormData("27")
     menu.title('Shop Menu')
     menu.button(11, "Cooking Shop", ["", "§l§5COMING SOON"], 'minecraft:painting')
+    
     if (fishingLevel < 3) {
         menu.button(12, 'Fishing Shop', ['', '§cRequires Fishing Level 3!'], 'minecraft:fishing_rod', 1)
     } else menu.button(12, 'Fishing Shop', ['', '§7Someone has to throw the rod'], 'minecraft:fishing_rod', 1)
+
     menu.button(13, 'General Shop', ['', '§7Basic Skyblock Necessities'], 'minecraft:lava_bucket', 1)
     menu.button(14, 'Farming Shop', ['', '§7Put on your Straw Hats'], 'minecraft:wheat', 1)
+
     if (miningLevel < 5) {
         menu.button(15, 'Building Shop', ['', '§cRequires Mining Level 5!'], 'minecraft:brick_block', 1)
     } else menu.button(15, 'Building Shop', ['', '§7Brick by Brick'], 'minecraft:brick_block', 1)
+
     menu.show(player).then(a => {
+
         if (a.canceled) return;
+
         switch (a.selection) {
             case 11: {
                 return

@@ -9,7 +9,7 @@ import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, rollWeightedIt
 
 import { shopMainMenu } from './shopGui.js';
 import { craftingMenu } from './craftingGui.js';
-import { infoMenus } from './infoGui.js'
+import { itemDirectyoryMenu } from './infoGui.js'
 
 
 /** @param {Player} player  */
@@ -45,7 +45,7 @@ export function mainMenu(player) {
                     return craftingMenu(player)
                 }
                 case 23: {
-                    return infoMenus.prismarineShard.show(player)
+                    return itemDirectyoryMenu(player)
                 }
             }
         })

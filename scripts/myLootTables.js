@@ -24,8 +24,9 @@ export const whaleRodLootTable = [
     { item: () => {const item = items.rawCod.clone(); item.amount = 3; return item}, weight: 8 },
     { item: () => items.rawSalmon, weight: 20 },
     { item: () => {const item = items.rawSalmon.clone(); item.amount = 2; return item}, weight: 15 },
-    { item: () => items.inkSac, weight: 20 },
-    { item: () => items.blubber, weight: 20 },
+    { item: () => items.inkSac, weight: 12 },
+    { item: () => items.blubber, weight: 25 },
+    { item: () => items.prismarineShard, weight: 2 },
 ] // remember to add cherry saplings into the next fishing rod loot table brotha
 
 
@@ -34,13 +35,13 @@ export const whaleRodLootTable = [
 export const defaultPickaxeLootTable = [
     { item: () => "minecraft:air", weight: 93 },
     { item: () => "minecraft:coal_ore", weight: 7 },
-    { item: () => "minecraft:iron_ore", weight: 0.1 },
+    { item: () => "minecraft:iron_ore", weight: 0.18 },
 ]
 
 export const coalPickaxeLootTable = [
     { item: () => "minecraft:air", weight: 85 },
     { item: () => "minecraft:coal_ore", weight: 10 },
-    { item: () => "minecraft:iron_ore", weight: 0.15 },
+    { item: () => "minecraft:iron_ore", weight: 0.23 },
 ]
 
 export const densePickaxeLootTable = [
@@ -53,7 +54,7 @@ export const densePickaxeLootTable = [
 export const hybridPickaxeLootTable = [
     { item: () => "minecraft:air", weight: 35 },
     { item: () => "minecraft:coal_ore", weight: 5 },
-    { item: () => "minecraft:iron_ore", weight: 0.15 },
+    { item: () => "minecraft:iron_ore", weight: 0.27 },
     { item: () => "minecraft:granite", weight: 10 },
     { item: () => "minecraft:andesite", weight: 10 },
     { item: () => "minecraft:diorite", weight: 10 },
@@ -63,6 +64,6 @@ export const ironPickaxeLootTable = [
     { item: () => "minecraft:air", weight: 50 },
     { item: () => "minecraft:coal_ore", weight: 15 },
     { item: () => "minecraft:copper_ore", weight: 3 },
-    { item: () => "minecraft:iron_ore", weight: 1.5 },
+    { item: () => "minecraft:iron_ore", weight: 1 },
     { item: () => "minecraft:gold_ore", weight: 0.1 },
 ]

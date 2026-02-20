@@ -642,7 +642,7 @@ world.afterEvents.itemUse.subscribe(data => {
     }
 
     if (item.typeId === "minecraft:candle") {
-        player.sendMessage("version 1.2")
+        player.sendMessage("version 1.3")
     }
 })
 

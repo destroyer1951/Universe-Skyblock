@@ -89,19 +89,7 @@ system.run(() => {
     items.diamond = makeItem("minecraft:diamond", item => {
         //item.nameTag = "§r§fDiamond"
     })
-    items.quartzCrystal = makeItem("minecraft:quartz", item => {
-        item.nameTag = "§r§fQuartz Crystal"
-        item.setLore(["", "§r§8Both exceptionally shiny", "§r§8and exceptionally sharp", "", `§r§e${rollStars()}`])
-    })
 
-    Object.defineProperty(items, "padparadscha", {
-        get() {
-            return makeItem("minecraft:resin_brick", item => {
-                item.nameTag = "§r§fPadparadscha"
-                item.setLore(["", "§r§8A powerful gemstone,", "§r§8in difficulty and durability", "", `§r§e${rollStars()}`])
-            })
-        }
-    })
 
     // Farm shop items
 
@@ -118,18 +106,8 @@ system.run(() => {
         //item.nameTag = "§r§fSugar Cane"
     })
 
-    // Fishing shop items
 
-    Object.defineProperty(items, "basicRod", {
-        get() {
-            return makeItem("minecraft:fishing_rod", item => {
-                const stars = rollStars()
-                const starCount = (stars.match(/\*/g) || []).length
-                item.nameTag = "§r§fBasic Fishing Rod"
-                item.setLore(["", `§r§7Luck: §a${(starCount*0.2).toFixed(1)}`, "", "§r§8It's not much but", "§r§8it gets the job done", '', `§r§e${stars}`])
-            })
-        }
-    })
+    // Fishing shop items
 
     items.rawCod = makeItem("minecraft:cod", item => {
         //item.nameTag = "§r§fRaw Cod"
@@ -151,15 +129,6 @@ system.run(() => {
     })
     items.blubber = makeItem("minecraft:slime_ball", item => {
         item.nameTag = "§r§fBlubber"
-    })
-
-    Object.defineProperty(items, "prismarineShard", {
-        get() {
-            return makeItem("minecraft:prismarine_shard", item => {
-                item.nameTag = "§r§fPrismarine Shard"
-                item.setLore(["", `§r§e${rollStars()}`])
-            })
-        }
     })
 
     // Building shop items
@@ -249,7 +218,46 @@ system.run(() => {
 
 
 
-    // Custom Crafting items
+    // Info Menu Items
+
+
+    Object.defineProperty(items, "quartzCrystal", {
+        get() {
+            return makeItem("minecraft:quartz", item => {
+                item.nameTag = "§r§fQuartz Crystal"
+                item.setLore(["", "§r§8Both exceptionally shiny", "§r§8and exceptionally sharp", "", `§r§e${rollStars()}`])
+            })
+        }
+    })
+
+    Object.defineProperty(items, "padparadscha", {
+        get() {
+            return makeItem("minecraft:resin_brick", item => {
+                item.nameTag = "§r§6Padparadscha"
+                item.setLore(["", "§r§8A powerful gemstone,", "§r§8in difficulty and durability", "", `§r§e${rollStars()}`])
+            })
+        }
+    })
+
+    Object.defineProperty(items, "basicRod", {
+        get() {
+            return makeItem("minecraft:fishing_rod", item => {
+                const stars = rollStars()
+                const starCount = (stars.match(/\*/g) || []).length
+                item.nameTag = "§r§fBasic Fishing Rod"
+                item.setLore(["", `§r§7Luck: §a${(starCount*0.2).toFixed(1)}`, "", "§r§8It's not much but", "§r§8it gets the job done", '', `§r§e${stars}`])
+            })
+        }
+    })
+
+    Object.defineProperty(items, "prismarineShard", {
+        get() {
+            return makeItem("minecraft:prismarine_shard", item => {
+                item.nameTag = "§r§fPrismarine Shard"
+                item.setLore(["", `§r§e${rollStars()}`])
+            })
+        }
+    })
 
     Object.defineProperty(items, "inkRod", {
             get() {
@@ -317,6 +325,14 @@ system.run(() => {
                 const starCount = (stars.match(/\*/g) || []).length
                 item.nameTag = "§r§7Iron Pickaxe"
                 item.setLore(["", `§r§7Luck: §a${(starCount*0.3).toFixed(1)}`, '', `§r§e${stars}`])
+            })
+        }
+    })
+
+    Object.defineProperty(items, "ironAxe", {
+        get() {
+            return makeItem("minecraft:iron_axe", item => {
+                item.nameTag = "§r§fIron Axe"
             })
         }
     })
