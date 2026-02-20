@@ -180,26 +180,35 @@ export const xpRequirements = [
     65000,
     80000,
     100000, // 14 - 15
-    //125000, // 15 - 16
+    125000, // 15 - 16
+    150000,
+    180000,
+    220000,
+    300000, // 19 - 20
     999999999999999
 ]
 
 export const levelCoins = [
     100,
     200,
-    350,
-    700,
-    1350,
+    300,
+    500,
+    750,
+    1500,
     2500,
-    4000,
-    7000,
-    10000,
-    15000,
-    25000,
-    35000,
+    5000,
+    8500,
+    12000,
+    17000,
+    22500,
+    27500,
+    32500,
+    40000, // 14 - 15
     50000,
-    75000,
-    90000, // 14 - 15
+    60000,
+    70000,
+    85000,
+    100000, // 19 - 20
     1
 ]
 
@@ -642,7 +651,7 @@ world.afterEvents.itemUse.subscribe(data => {
     }
 
     if (item.typeId === "minecraft:candle") {
-        player.sendMessage("version 1.3")
+        player.sendMessage("version 1.4")
     }
 })
 
@@ -704,39 +713,39 @@ world.afterEvents.entitySpawn.subscribe(data => {
 
             switch (item.typeId) {
                 case "minecraft:cod": {
-                    setStat(player, "fishingXP", 25, true)
-                    break
-                }
-                case "minecraft:salmon": {
                     setStat(player, "fishingXP", 40, true)
                     break
                 }
+                case "minecraft:salmon": {
+                    setStat(player, "fishingXP", 65, true)
+                    break
+                }
                 case "minecraft:tropical_fish": {
-                    setStat(player, "fishingXP", 125, true)
+                    setStat(player, "fishingXP", 175, true)
                     break
                 }
                 case "minecraft:cherry_log": {
-                    setStat(player, "fishingXP", 150, true)
-                    break
-                }
-                case "minecraft:ink_sac": {
-                    setStat(player, "fishingXP", 60, true)
-                    break
-                }
-                case "minecraft:copper_ingot": {
-                    setStat(player, "fishingXP", 400, true)
-                    break
-                }
-                case "minecraft:prismarine_shard": {
-                    setStat(player, "fishingXP", 1250, true)
-                    break
-                }
-                case "minecraft:coal": {
                     setStat(player, "fishingXP", 250, true)
                     break
                 }
+                case "minecraft:ink_sac": {
+                    setStat(player, "fishingXP", 75, true)
+                    break
+                }
+                case "minecraft:copper_ingot": {
+                    setStat(player, "fishingXP", 500, true)
+                    break
+                }
+                case "minecraft:prismarine_shard": {
+                    setStat(player, "fishingXP", 1750, true)
+                    break
+                }
+                case "minecraft:coal": {
+                    setStat(player, "fishingXP", 450, true)
+                    break
+                }
                 case "minecraft:slime_ball": {
-                    setStat(player, "fishingXP", 90, true)
+                    setStat(player, "fishingXP", 150, true)
                     break
                 }
             }
@@ -801,25 +810,25 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
 
     switch (brokenBlock.type.id) {
         case 'minecraft:granite': {
-            setStat(player, "miningXP", 30, true)
+            setStat(player, "miningXP", 25, true)
             break
         }
         case 'minecraft:diorite': {
-            setStat(player, "miningXP", 30, true)
+            setStat(player, "miningXP", 25, true)
             break
         }
         case 'minecraft:andesite': {
-            setStat(player, "miningXP", 30, true)
+            setStat(player, "miningXP", 25, true)
             break
         }
         case 'minecraft:coal_ore': {
-            setStat(player, "miningXP", 90, true)
+            setStat(player, "miningXP", 70, true)
             break
         }
         case 'minecraft:iron_ore': {
-            setStat(player, "miningXP", 1100, true)
+            setStat(player, "miningXP", 600, true)
             if (Math.random() < .12) {
-                setStat(player, "miningXP", 1100, true)
+                setStat(player, "miningXP", 600, true)
                 player.getComponent('inventory').container.addItem(items.ironChunk)
                 player.sendMessage("§9§lRARE! §6>> §r§aYou found a §7Iron Chunk§a!")
                 player.playSound("armor.equip_gold", {volume: 1, pitch: 1.5})
@@ -827,9 +836,9 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
             break
         }
         case 'minecraft:copper_ore': {
-            setStat(player, "miningXP", 450, true)
+            setStat(player, "miningXP", 300, true)
             if (Math.random() < .12) {
-                setStat(player, "miningXP", 450, true)
+                setStat(player, "miningXP", 300, true)
                 player.getComponent('inventory').container.addItem(items.copperChunk)
                 player.sendMessage("§9§lRARE! §6>> §r§aYou found a §nCopper Chunk§a!")
                 player.playSound("armor.equip_gold", {volume: 1, pitch: 1.5})
@@ -837,9 +846,9 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
             break
         }
         case 'minecraft:gold_ore': {
-            setStat(player, "miningXP", 4500, true)
+            setStat(player, "miningXP", 1400, true)
             if (Math.random() < .12) {
-                setStat(player, "miningXP", 4500, true)
+                setStat(player, "miningXP", 1400, true)
                 const goldChunk = items.goldChunk
                 player.getComponent('inventory').container.addItem(goldChunk)
 

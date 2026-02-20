@@ -94,7 +94,6 @@ export function levelsMenu(player) {
 
     const miningLevelProgress = xpRequirements[miningLevel + 1] ? xpRequirements[miningLevel] : "MAX"
     const fishingLevelProgress = xpRequirements[fishingLevel + 1] ? xpRequirements[fishingLevel] : "MAX"
-    const skyblockLevelProgress = xpRequirements[skyblockLevel + 1] ? xpRequirements[skyblockLevel] : "MAX"
         //const farmingLevelProgress = xpRequirements[farmingLevel + 1] ? xpRequirements[farmingLevel] : "MAX"
         //const cookingLevelProgress = xpRequirements[cookingLevel + 1] ? xpRequirements[cookingLevel] : "MAX"
 
