@@ -159,6 +159,7 @@ player.sendMessage(`§aInformation for the player property §e${property}
         const level = getPlayerDynamicProperty(data.sender, 'skyblockLevel')
         if (level >= 5) levelColor = "§f"
         if (level >= 10) levelColor = "§a"
+        if (level >= 15) levelColor = "§q"
         if (data.message.includes("§")) return data.sender.sendMessage("§cYou cannot use formatting codes in chat messages!")
         world.sendMessage(`§8[${levelColor}${level}§8] §8<§7${data.sender.name}§8> §f${data.message}`)
     }
