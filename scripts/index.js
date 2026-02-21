@@ -333,7 +333,7 @@ export function rollWeightedItem(table, luck = 0) { // god bless gpt
     const adjusted = table.map(e => ({
         item: e.item,
         // rare items (low weight) scale much harder with luck
-        weight: e.weight * (1 + luck * 0.15 / e.weight)
+        weight: e.weight * (1 + luck * 0.06 / e.weight)
     }))
 
     const totalWeight = adjusted.reduce((sum, e) => sum + e.weight, 0)
@@ -347,7 +347,7 @@ export function rollWeightedItem(table, luck = 0) { // god bless gpt
     }
 
     // safety fallback
-    return adjusted[adjusted.length - 1].item()
+    return adjusted[0].item()
 }
 
 /** @param {ItemStack} item */
@@ -811,15 +811,15 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
 
     switch (brokenBlock.type.id) {
         case 'minecraft:granite': {
-            setStat(player, "miningXP", 25, true)
+            setStat(player, "miningXP", 35, true)
             break
         }
         case 'minecraft:diorite': {
-            setStat(player, "miningXP", 25, true)
+            setStat(player, "miningXP", 35, true)
             break
         }
         case 'minecraft:andesite': {
-            setStat(player, "miningXP", 25, true)
+            setStat(player, "miningXP", 35, true)
             break
         }
         case 'minecraft:coal_ore': {
@@ -860,6 +860,10 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
                 player.sendMessage("§9§lRARE! §6>> §r§aYou found a §eGold Chunk§a!")
                 player.playSound("armor.equip_gold", {volume: 1, pitch: 1.5})
             }
+            break
+        }
+        case 'minecraft:diamond_ore': {
+            setStat(player, "miningXP", 2500, true)
             break
         }
     }

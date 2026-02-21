@@ -42,10 +42,14 @@ export function craftingMenu(player) {
         } else menu.button(15, "Hybrid Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
 
         if (miningLevel < 7)  { 
-            menu.button(16, "Iron Pickaxe", ["", "§r§cRequires Mining Level 7!"], "minecraft:iron_pickaxe", 1)
-        } else menu.button(16, "Iron Pickaxe", ["", "§r§7View Recipe"], "minecraft:iron_pickaxe", 1)
+            menu.button(16, "§7Iron Pickaxe", ["", "§r§cRequires Mining Level 7!"], "minecraft:iron_pickaxe", 1)
+        } else menu.button(16, "§7Iron Pickaxe", ["", "§r§7View Recipe"], "minecraft:iron_pickaxe", 1)
 
         menu.button(19, "Iron Axe", ["", "§r§7View Recipe"], "minecraft:iron_axe", 1)
+
+        if (miningLevel < 9)  { 
+            menu.button(20, "§8Unstable Pickaxe", ["", "§r§cRequires Mining Level 9!"], "minecraft:stone_pickaxe", 1)
+        } else menu.button(20, "§8Unstable Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
 
 
         menu.show(player).then(a => {
@@ -92,6 +96,11 @@ export function craftingMenu(player) {
                 }
                 case 19: {
                     return ironAxeMenu(player)
+                }
+                case 20: {
+                    if (miningLevel < 9)  { 
+                        return player.sendMessage("§cYou need Mining Level 9 to craft this item!")
+                    } else return unstablePickaxeMenu(player)
                 }
             }
         })
@@ -527,7 +536,7 @@ function ironAxeMenu(player) {
 
     let req1
     let req2
-    let req3
+
     if (checkItemAmount(player, "minecraft:iron_ingot") >= 3) { req1 = "§a" } else { req1 = "§c" }
     if (checkItemAmount(player, "minecraft:iron_bars") >= 2) { req2 = "§a" } else { req2 = "§c" }
 
@@ -575,5 +584,67 @@ function ironAxeMenu(player) {
                 return ironAxeMenu(player)
             }
         } else return ironAxeMenu(player)
+    })
+}
+
+
+function unstablePickaxeMenu(player) {
+    player["afkTimer"] = Date.now() + 350000
+    const item = items.unstablePickaxe
+    const itemLore = item.getLore()
+    if (itemLore.length !== 0 && itemLore[itemLore.length-1].includes("*")) {
+        itemLore.push(...["","§r§8Star count is randomized", "§r§8upon craft!","§r§8Stars may affect stats!"])
+    }
+
+    let req1
+    let req2
+
+    if (checkItemAmount(player, items.denseStone.typeId, false, items.denseStone.nameTag) >= 192) { req1 = "§a" } else { req1 = "§c" }
+    if (checkItemAmount(player, "minecraft:iron_ingot") >= 4) { req2 = "§a" } else { req2 = "§c" }
+
+    new ChestFormData("45")
+    .title(item.nameTag.replace(/§./g, ""))
+    .pattern([
+        "xxxxxxxxx",
+        "xx___xxxx",
+        "xx_____xx",
+        "xx___xxxx",
+        "xxxxxxxxx",
+    ], {x: {itemName: "", texture: "minecraft:copper_bars"}}) // make sure to change these from coal and stick
+    .button(23, "§eCraft this item!", ["", "§r§7Required materials:",'', `§r${req1}x192 Dense Stone`, `§r${req2}x2 Iron Ingot`], "minecraft:crafting_table")
+
+    // here are your grid square indexes
+    // 11, 12, 13
+    // 20, 21, 22
+    // 29, 30, 31
+
+    .button(11, "Dense Stone", [], "minecraft:iron_ingot", 64)
+    .button(12, "Dense Stone", [], "minecraft:iron_ingot", 64)
+    .button(13, "Dense Stone", [], "minecraft:iron_ingot", 64)
+
+    .button(21, "Iron Ingot", [], "minecraft:iron_bars", 2)
+    .button(30, "Iron Ingot", [], "minecraft:iron_bars", 2)
+
+
+    .button(24, item.nameTag, itemLore, item.typeId)
+
+    .show(player).then(a => {
+        if (a.canceled) return
+
+        if (a.selection === 23) {
+            if (req1 == "§c" || req2 == "§c") { // ABSOLUTELY REMEMBER TO CHANGE THIS IS REALLY BAD
+                return player.sendMessage("§cYou do not have the required materials to craft this item!")
+            } else {
+
+                clearItem(player, "minecraft:iron_ingot", 4)
+                clearItem(player, items.denseStone.typeId, 192, items.denseStone.nameTag)
+
+                player.getComponent("inventory").container.addItem(items.unstablePickaxe) // CHANGE THIS EVERY TIME MOST IMPORTANT
+
+                player.sendMessage(`§aSuccessfully crafted ${item.nameTag}§a!`)
+                player.playSound("random.levelup")
+                return unstablePickaxeMenu(player)
+            }
+        } else return unstablePickaxeMenu(player)
     })
 }

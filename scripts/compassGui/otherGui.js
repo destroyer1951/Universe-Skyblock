@@ -24,7 +24,7 @@ export function showAkuaMenu(player) {
                     return buyUnstackablePreviewMenu(player, 2000, 350, items.copperChunk)
                 }
                 case 13: {
-                    return buyPreviewMenu(player, 200, 15, items.cherryLog)
+                    return buyPreviewMenu(player, 200, 22, items.cherryLog)
                 }
                 case 14: {
                     player.sendMessage("§8[§eNPC§8] §8<§bAkua§8>§r §o§7Uhh..")

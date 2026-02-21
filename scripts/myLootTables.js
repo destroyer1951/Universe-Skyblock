@@ -67,3 +67,12 @@ export const ironPickaxeLootTable = [
     { item: () => "minecraft:iron_ore", weight: 1 },
     { item: () => "minecraft:gold_ore", weight: 0.1 },
 ]
+
+export const unstablePickaxeLootTable = [
+    { item: () => "minecraft:air", weight: 99 },
+    { item: () => "minecraft:coal_ore", weight: 0.08 },
+    { item: () => "minecraft:copper_ore", weight: 0.08 },
+    { item: () => "minecraft:iron_ore", weight: 0.08 },
+    { item: () => "minecraft:gold_ore", weight: 0.08 },
+    { item: () => "minecraft:diamond_ore", weight: 0.08 },
+]

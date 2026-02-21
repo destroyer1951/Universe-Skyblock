@@ -370,6 +370,17 @@ system.run(() => {
         }
     })
 
+    Object.defineProperty(items, "unstablePickaxe", {
+        get() {
+            return makeItem("minecraft:stone_pickaxe", item => {
+                const stars = rollStars()
+                const starCount = (stars.match(/\*/g) || []).length
+                item.nameTag = "§r§8Unstable Pickaxe"
+                item.setLore(["", `§r§7Luck: §a${(starCount*0.4).toFixed(1)}`, '', `§r§e${stars}`])
+            })
+        }
+    })
+
     
 
 })
