@@ -190,26 +190,26 @@ export const xpRequirements = [
 ]
 
 export const levelCoins = [
+    25,
     50,
-    100,
-    150,
-    250,
+    75,
+    125,
+    187.5,
     375,
-    750,
-    1000,
-    1300,
-    1800,
-    2500,
+    500,
+    650,
+    900,
+    1250,
+    2000,
+    3000,
     4000,
-    6000,
-    8000,
-    11000,
-    15000, // 14 - 15
-    20000,
-    25000,
-    30000,
-    35000,
-    40000, // 19 - 20
+    5500,
+    7500, // 14 - 15
+    10000,
+    12500,
+    15000,
+    17500,
+    20000, // 19 - 20
     1
 ]
 
@@ -714,23 +714,23 @@ world.afterEvents.entitySpawn.subscribe(data => {
 
             switch (item.typeId) {
                 case "minecraft:cod": {
-                    setStat(player, "fishingXP", 40, true)
+                    setStat(player, "fishingXP", 60, true)
                     break
                 }
                 case "minecraft:salmon": {
-                    setStat(player, "fishingXP", 65, true)
+                    setStat(player, "fishingXP", 85, true)
                     break
                 }
                 case "minecraft:tropical_fish": {
-                    setStat(player, "fishingXP", 175, true)
+                    setStat(player, "fishingXP", 210, true)
                     break
                 }
                 case "minecraft:cherry_log": {
-                    setStat(player, "fishingXP", 250, true)
+                    setStat(player, "fishingXP", 350, true)
                     break
                 }
                 case "minecraft:ink_sac": {
-                    setStat(player, "fishingXP", 75, true)
+                    setStat(player, "fishingXP", 90, true)
                     break
                 }
                 case "minecraft:copper_ingot": {
@@ -738,7 +738,7 @@ world.afterEvents.entitySpawn.subscribe(data => {
                     break
                 }
                 case "minecraft:prismarine_shard": {
-                    setStat(player, "fishingXP", 1750, true)
+                    setStat(player, "fishingXP", 2000, true)
                     break
                 }
                 case "minecraft:coal": {
@@ -746,7 +746,7 @@ world.afterEvents.entitySpawn.subscribe(data => {
                     break
                 }
                 case "minecraft:slime_ball": {
-                    setStat(player, "fishingXP", 150, true)
+                    setStat(player, "fishingXP", 320, true)
                     break
                 }
             }
@@ -823,13 +823,13 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
             break
         }
         case 'minecraft:coal_ore': {
-            setStat(player, "miningXP", 70, true)
+            setStat(player, "miningXP", 60, true)
             break
         }
         case 'minecraft:iron_ore': {
-            setStat(player, "miningXP", 600, true)
+            setStat(player, "miningXP", 400, true)
             if (Math.random() < .12) {
-                setStat(player, "miningXP", 600, true)
+                setStat(player, "miningXP", 400, true)
                 player.getComponent('inventory').container.addItem(items.ironChunk)
                 player.sendMessage("§9§lRARE! §6>> §r§aYou found a §7Iron Chunk§a!")
                 player.playSound("armor.equip_gold", {volume: 1, pitch: 1.5})
@@ -837,9 +837,9 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
             break
         }
         case 'minecraft:copper_ore': {
-            setStat(player, "miningXP", 300, true)
+            setStat(player, "miningXP", 250, true)
             if (Math.random() < .12) {
-                setStat(player, "miningXP", 300, true)
+                setStat(player, "miningXP", 250, true)
                 player.getComponent('inventory').container.addItem(items.copperChunk)
                 player.sendMessage("§9§lRARE! §6>> §r§aYou found a §nCopper Chunk§a!")
                 player.playSound("armor.equip_gold", {volume: 1, pitch: 1.5})
@@ -847,9 +847,9 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
             break
         }
         case 'minecraft:gold_ore': {
-            setStat(player, "miningXP", 1400, true)
+            setStat(player, "miningXP", 850, true)
             if (Math.random() < .12) {
-                setStat(player, "miningXP", 1400, true)
+                setStat(player, "miningXP", 850, true)
                 const goldChunk = items.goldChunk
                 player.getComponent('inventory').container.addItem(goldChunk)
 
