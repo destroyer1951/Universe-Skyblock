@@ -26,40 +26,40 @@ prices.buy.boneMeal = 100
 prices.sell.boneMeal = 10
 
 prices.buy.charcoal = 100
-prices.sell.charcoal = 12
+prices.sell.charcoal = 20
 
 prices.buy.oakSapling = 1000
-prices.sell.oakSapling = 5
+prices.sell.oakSapling = 8
 
 prices.buy.oakLog = 200
-prices.sell.oakLog = 10
+prices.sell.oakLog = 15
 
 prices.buy.darkOakSapling = 2500
 prices.sell.darkOakSapling = 5
 
 prices.buy.darkOakLog = 200
-prices.sell.darkOakLog = 8
+prices.sell.darkOakLog = 12
 
 prices.buy.birchSapling = 1750
 prices.sell.birchSapling = 10
 
 prices.buy.birchLog = 200
-prices.sell.birchLog = 10
+prices.sell.birchLog = 15
 
 prices.buy.coal = 100
 prices.sell.coal = 15
 
 prices.buy.copperIngot = 2000
-prices.sell.copperIngot = 50
+prices.sell.copperIngot = 30
 
 prices.buy.ironIngot = 4000
-prices.sell.ironIngot = 100
+prices.sell.ironIngot = 70
 
 prices.buy.goldIngot = 15000
-prices.sell.goldIngot = 150
+prices.sell.goldIngot = 100
 
 prices.buy.diamond = "§cN/A"
-prices.sell.diamond = 1
+prices.sell.diamond = 250
 
 prices.buy.quartzCrystal = "§cN/A"
 prices.sell.quartzCrystal = 1
