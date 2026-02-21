@@ -126,7 +126,7 @@ system.run(() => {
 
     infoMenus.push(new InfoMenu(items.goldChunk, "No Level Requirement", ["", "Mining Gold Ore"], ["", "Currently Useless"]))
 
-    
+    infoMenus.push(new InfoMenu(items.unstablePickaxe, "Mining Level 9", ["", "Custom Crafting"], ["", "Coal Ore", "Copper Ore", "Iron Ore", "Gold Ore", "Diamond Ore"], true))
 
 
 })
