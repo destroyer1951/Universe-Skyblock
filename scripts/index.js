@@ -423,7 +423,7 @@ const achievements = [ // idk why this list is here tbh
     "That's a secret!", // use code NAISHO
     "Pristine", // somehow get a 5 star gold chunk
     "Real Steel" // craft your first iron pickaxe
-] // achievement idea: "You actually suck", get this by failing the lava thing like 10 times
+] 
 
 export function achieve(player, name) {
     if (getPlayerDynamicProperty(player, name)) return
@@ -431,7 +431,7 @@ export function achieve(player, name) {
     player.playSound("random.levelup")
     setPlayerDynamicProperty(player, name, true)
 
-    switch (name) { // implement this if you want achievement specific rewards (you prolly do at some point)
+    switch (name) { 
         case "Real Steel":  {
             setStat(player, "coins", 2000, true)
             return
