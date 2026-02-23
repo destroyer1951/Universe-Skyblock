@@ -69,17 +69,17 @@ prices.sell.padparadscha = 1
 
 // Farm shop items
 
-prices.buy.wheat = 50
-prices.sell.wheat = 60
+prices.buy.wheat = 250
+prices.sell.wheat = 5
 
 prices.buy.wheatSeeds = 500
 prices.sell.wheatSeeds = 20
 
 prices.buy.potato = 1000
-prices.sell.potato = 30
+prices.sell.potato = 20
 
 prices.buy.sugarCane = 5000
-prices.sell.sugarCane = 40
+prices.sell.sugarCane = 30
 
 // Fishing shop items
 
@@ -121,7 +121,7 @@ prices.sell.gravel = "§cN/A"
 prices.buy.scaffolding = 250
 prices.sell.scaffolding = "§cN/A"
 
-prices.buy.moss = 300
+prices.buy.moss = 800
 prices.sell.moss = "§cN/A"
 
 prices.buy.glass = 100

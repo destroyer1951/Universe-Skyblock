@@ -936,6 +936,7 @@ system.runInterval(() => {
                         player.playSound("fire.ignite", {volume: 1, pitch: .8})
                     }, i*2)
                 }
+                player["afk"] = (player["afk"] || 0) + 1
             }
 
 

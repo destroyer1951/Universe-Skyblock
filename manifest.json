@@ -4,21 +4,21 @@
 		"name": "Universe Skyblock REALM VERSION",
 		"description": "Utilizing Chest UI (realm version)",
 		"uuid": "bab76941-4584-47c4-b257-e5ca85c3d534",
-		"version": [ 6, 0, 1 ],
+		"version": [ 7, 0, 1 ],
 		"min_engine_version": [ 1, 21, 2 ]
 	},
 	"modules": [
 		{
 			"type": "data",
 			"uuid": "84d5a89b-8dcc-0308-a7d7-fd5f8123bba7",
-			"version": [ 7, 0, 1 ]
+			"version": [ 8, 0, 1 ]
 		},
 		{
 			"type": "script",
 			"language": "javascript",
 			"entry": "scripts/index.js",
 			"uuid": "2fa09013-80e6-c43a-e1c7-73dafb30fdd0",
-			"version": [ 8, 0, 1 ]
+			"version": [ 9, 0, 1 ]
 		}
 	],
 	"metadata": {
