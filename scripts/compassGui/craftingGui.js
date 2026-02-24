@@ -611,19 +611,19 @@ function unstablePickaxeMenu(player) {
         "xx___xxxx",
         "xxxxxxxxx",
     ], {x: {itemName: "", texture: "minecraft:copper_bars"}}) // make sure to change these from coal and stick
-    .button(23, "§eCraft this item!", ["", "§r§7Required materials:",'', `§r${req1}x192 Dense Stone`, `§r${req2}x2 Iron Ingot`], "minecraft:crafting_table")
+    .button(23, "§eCraft this item!", ["", "§r§7Required materials:",'', `§r${req1}x192 Dense Stone`, `§r${req2}x4 Iron Ingot`], "minecraft:crafting_table")
 
     // here are your grid square indexes
     // 11, 12, 13
     // 20, 21, 22
     // 29, 30, 31
 
-    .button(11, "Dense Stone", [], "minecraft:iron_ingot", 64)
-    .button(12, "Dense Stone", [], "minecraft:iron_ingot", 64)
-    .button(13, "Dense Stone", [], "minecraft:iron_ingot", 64)
+    .button(11, "Dense Stone", [], "minecraft:stone_bricks", 64)
+    .button(12, "Dense Stone", [], "minecraft:stone_bricks", 64)
+    .button(13, "Dense Stone", [], "minecraft:stone_bricks", 64)
 
-    .button(21, "Iron Ingot", [], "minecraft:iron_bars", 2)
-    .button(30, "Iron Ingot", [], "minecraft:iron_bars", 2)
+    .button(21, "Iron Ingot", [], "minecraft:iron_ingot", 2)
+    .button(30, "Iron Ingot", [], "minecraft:iron_ingot", 2)
 
 
     .button(24, item.nameTag, itemLore, item.typeId)
