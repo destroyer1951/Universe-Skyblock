@@ -712,7 +712,7 @@ function craftTemplateMenu(player, item, pattern, key) {
         if (thisItem.nameTag) { 
             cleanName = thisItem.nameTag.replace(/§./g, "")
         } else {
-            cleanName = thisItem.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+            cleanName = thisItem.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
         }
 
         craftLore.push(`§r${requirements[i][0]}x${requirements[i][2]} ${cleanName}`)
@@ -736,7 +736,7 @@ function craftTemplateMenu(player, item, pattern, key) {
         if (thisItem.nameTag) { 
             cleanName = thisItem.nameTag.replace(/§./g, "")
         } else {
-            cleanName = thisItem.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+            cleanName = thisItem.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
         }
 
         pattern.forEach((element, index) => {
