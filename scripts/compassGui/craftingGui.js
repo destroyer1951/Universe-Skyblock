@@ -648,7 +648,7 @@ function unstablePickaxeMenu(player) {
                 clearItem(player, "minecraft:iron_ingot", 4)
                 clearItem(player, items.denseStone.typeId, 192, items.denseStone.nameTag)
 
-                player.getComponent("inventory").container.addItem(items.unstablePickaxe) // CHANGE THIS EVERY TIME MOST IMPORTANT
+                player.getComponent("inventory").container.addItem(items.unstablePickaxe)
 
                 player.sendMessage(`§aSuccessfully crafted ${item.nameTag}§a!`)
                 player.playSound("random.levelup")
@@ -669,6 +669,7 @@ function craftTemplateMenu(player, item, pattern, key) {
 
 
     const requirements = []
+    let hasAllMaterials = false
     for (let i = 0; i < key.length; i++) {
         const letter = key[i][0]
         const thisItem = key[i][1]
@@ -682,16 +683,22 @@ function craftTemplateMenu(player, item, pattern, key) {
         if (typeof thisItem === "string") {
             if (checkItemAmount(player, thisItem) >= totalAmount) {
                 requirements.push(["§a", thisItem, totalAmount])
-            } else requirements.push(["§c", thisItem, totalAmount])
+            } else {
+                requirements.push(["§c", thisItem, totalAmount])
+            }
 
         } else {
             if (checkItemAmount(player, thisItem.typeId, false, thisItem.nameTag) >= totalAmount) {
                 requirements.push(["§a", thisItem, totalAmount])
-            } else requirements.push(["§c", thisItem, totalAmount])
+            } else {
+                requirements.push(["§c", thisItem, totalAmount])
+            }
         }
-
     }
 
+    if (requirements.every(req => req[0] === "§a")) {
+        hasAllMaterials = true
+    }
 
     const menu = new ChestFormData("45")
     menu.title(item.nameTag.replace(/§./g, ""))
@@ -753,6 +760,28 @@ function craftTemplateMenu(player, item, pattern, key) {
 
     menu.show(player).then(a => {
         if (a.canceled) return
+
+        if (a.selection === 23) {
+            if (!hasAllMaterials) {
+                return player.sendMessage("§cYou do not have the required materials to craft this item!")
+            } else {
+                // clear items
+                for (let i = 0; i < key.length; i++) {
+                    const thisItem = key[i][1]
+                    const totalAmount = requirements[i][2]
+                    if (typeof thisItem === "string") {
+                        clearItem(player, thisItem, totalAmount)
+                    } else {
+                        clearItem(player, thisItem.typeId, totalAmount, thisItem.nameTag)
+                    }
+                }
+
+                player.getComponent("inventory").container.addItem(item)
+                player.sendMessage(`§aSuccessfully crafted ${item.nameTag}§a!`)
+                player.playSound("random.levelup")
+
+            }
+        }
     })
 }
 
