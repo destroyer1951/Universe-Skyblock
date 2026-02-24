@@ -527,7 +527,6 @@ export function buyPreviewMenu(player, buyPrice, sellPrice, itemOrFactory) {
         cleanName = item.nameTag.replace(/§./g, "")
     } else {
         cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
-        
     }
 
     let lore = item.getLore()

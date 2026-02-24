@@ -51,6 +51,8 @@ export function craftingMenu(player) {
             menu.button(20, "§8Unstable Pickaxe", ["", "§r§cRequires Mining Level 9!"], "minecraft:stone_pickaxe", 1)
         } else menu.button(20, "§8Unstable Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
 
+        menu.button(21, "super cool", [], "minecraft:stone", 1)
+
 
         menu.show(player).then(a => {
             if (a.canceled) return
@@ -101,6 +103,13 @@ export function craftingMenu(player) {
                     if (miningLevel < 9)  { 
                         return player.sendMessage("§cYou need Mining Level 9 to craft this item!")
                     } else return unstablePickaxeMenu(player)
+                }
+                case 21: {
+                    return craftTemplateMenu(player, items.unstablePickaxe, [
+                        "aaa",
+                        " b ",
+                        " b "
+                    ], [["a", items.denseStone, 3], ["b", "minecraft:stick", 2]])
                 }
             }
         })
@@ -647,4 +656,117 @@ function unstablePickaxeMenu(player) {
             }
         } else return unstablePickaxeMenu(player)
     })
+}
+
+
+function craftTemplateMenu(player, item, pattern, key) {
+    player["afkTimer"] = Date.now() + 350000
+
+    const itemLore = item.getLore()
+    if (itemLore.length !== 0 && itemLore[itemLore.length-1].includes("*")) {
+        itemLore.push(...["","§r§8Star count is randomized", "§r§8upon craft!","§r§8Stars may affect stats!"])
+    }
+
+
+    const requirements = []
+    for (let i = 0; i < key.length; i++) {
+        const letter = key[i][0]
+        const thisItem = key[i][1]
+        const amountPer = key[i][2]
+        let count = 0
+        pattern.forEach((element, index) => {
+            count += element.split(letter).length - 1
+        })
+        const totalAmount = count * amountPer
+
+        if (typeof thisItem === "string") {
+            if (checkItemAmount(player, thisItem) >= totalAmount) {
+                requirements.push(["§a", thisItem, totalAmount])
+            } else requirements.push(["§c", thisItem, totalAmount])
+
+        } else {
+            if (checkItemAmount(player, thisItem.typeId, false, thisItem.nameTag) >= totalAmount) {
+                requirements.push(["§a", thisItem, totalAmount])
+            } else requirements.push(["§c", thisItem, totalAmount])
+        }
+
+    }
+
+
+    const menu = new ChestFormData("45")
+    menu.title(item.nameTag.replace(/§./g, ""))
+    menu.pattern([
+        "xxxxxxxxx",
+        "xx___xxxx",
+        "xx_____xx",
+        "xx___xxxx",
+        "xxxxxxxxx",
+    ], {x: {itemName: "", texture: "minecraft:copper_bars"}})
+
+
+    let craftLore = ["", "§r§7Required materials:"]
+    for (let i = 0; i < requirements.length; i++) {
+
+        const thisItem = requirements[i][1]
+        let cleanName 
+        if (thisItem.nameTag) { 
+            cleanName = thisItem.nameTag.replace(/§./g, "")
+        } else {
+            cleanName = thisItem.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+        }
+
+        craftLore.push(`§r${requirements[i][0]}x${requirements[i][2]} ${cleanName}`)
+    }
+
+
+    menu.button(23, "§eCraft this item!", craftLore, "minecraft:crafting_table")
+
+    // here are your grid square indexes
+    // 11, 12, 13
+    // 20, 21, 22
+    // 29, 30, 31
+
+    for (let i = 0; i < key.length; i++) {
+        const letter = key[i][0]
+        const thisItem = key[i][1]
+        const amountPer = key[i][2]
+        const texture = typeof thisItem === "string" ? thisItem : thisItem.typeId
+
+        let cleanName 
+        if (thisItem.nameTag) { 
+            cleanName = thisItem.nameTag.replace(/§./g, "")
+        } else {
+            cleanName = thisItem.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+        }
+
+        pattern.forEach((element, index) => {
+            for (let j = 0; j < element.length; j++) {
+                if (element[j] === letter) {
+                    const slot = (index+1) * 9 + (j+2)
+                    menu.button(slot, cleanName, [], texture, amountPer)
+                }
+            }
+        })
+    }
+
+    menu.button(24, item.nameTag, itemLore, item.typeId)
+
+    menu.show(player).then(a => {
+        if (a.canceled) return
+    })
+}
+
+
+
+function testMenu(player) {
+
+    
+    const item = items.unstablePickaxe
+    const pattern = [
+        "aaa",
+        " b ",
+        " b ",]
+    const key = [["a", items.denseStone, 3], ["b", "minecraft:stick", 2]]
+
+
 }
