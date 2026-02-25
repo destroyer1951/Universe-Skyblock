@@ -714,39 +714,39 @@ world.afterEvents.entitySpawn.subscribe(data => {
 
             switch (item.typeId) {
                 case "minecraft:cod": {
-                    setStat(player, "fishingXP", 60, true)
+                    setStat(player, "fishingXP", 150, true)
                     break
                 }
                 case "minecraft:salmon": {
-                    setStat(player, "fishingXP", 85, true)
+                    setStat(player, "fishingXP", 185, true)
                     break
                 }
                 case "minecraft:tropical_fish": {
-                    setStat(player, "fishingXP", 210, true)
+                    setStat(player, "fishingXP", 320, true)
                     break
                 }
                 case "minecraft:cherry_log": {
-                    setStat(player, "fishingXP", 350, true)
+                    setStat(player, "fishingXP", 550, true)
                     break
                 }
                 case "minecraft:ink_sac": {
-                    setStat(player, "fishingXP", 90, true)
+                    setStat(player, "fishingXP", 170, true)
                     break
                 }
                 case "minecraft:copper_ingot": {
-                    setStat(player, "fishingXP", 500, true)
+                    setStat(player, "fishingXP", 1000, true)
                     break
                 }
                 case "minecraft:prismarine_shard": {
-                    setStat(player, "fishingXP", 2000, true)
+                    setStat(player, "fishingXP", 4500, true)
                     break
                 }
                 case "minecraft:coal": {
-                    setStat(player, "fishingXP", 450, true)
+                    setStat(player, "fishingXP", 850, true)
                     break
                 }
                 case "minecraft:slime_ball": {
-                    setStat(player, "fishingXP", 320, true)
+                    setStat(player, "fishingXP", 400, true)
                     break
                 }
             }
