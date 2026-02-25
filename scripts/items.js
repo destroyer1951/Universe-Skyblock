@@ -265,7 +265,7 @@ system.run(() => {
                     const stars = rollStars()
                     const starCount = (stars.match(/\*/g) || []).length
                     item.nameTag = "§r§fInk Rod"
-                    item.setLore(["", `§r§7Luck: §a${(starCount*0.4).toFixed(1)}`, '', `§r§e${stars}`])
+                    item.setLore(["", `§r§7Luck: §a${(starCount*0.3).toFixed(1)}`, '', `§r§e${stars}`])
                 })
             }
         })
@@ -287,7 +287,7 @@ system.run(() => {
                 const stars = rollStars()
                 const starCount = (stars.match(/\*/g) || []).length
                 item.nameTag = "§r§fWhale Rod"
-                item.setLore(["", `§r§7Luck: §a${(starCount*0.5).toFixed(1)}`, '', `§r§e${stars}`])
+                item.setLore(["", `§r§7Luck: §a${(starCount*0.4).toFixed(1)}`, '', `§r§e${stars}`])
             })
         }
     })
@@ -377,6 +377,17 @@ system.run(() => {
                 const starCount = (stars.match(/\*/g) || []).length
                 item.nameTag = "§r§8Unstable Pickaxe"
                 item.setLore(["", `§r§7Luck: §a${(starCount*0.4).toFixed(1)}`, '', `§r§e${stars}`])
+            })
+        }
+    })
+
+    Object.defineProperty(items, "prismarineRod", {
+        get() {
+            return makeItem("minecraft:fishing_rod", item => {
+                const stars = rollStars()
+                const starCount = (stars.match(/\*/g) || []).length
+                item.nameTag = "§r§fWhale Rod"
+                item.setLore(["", `§r§7Luck: §a${(starCount*0.6).toFixed(1)}`, '', `§r§e${stars}`])
             })
         }
     })

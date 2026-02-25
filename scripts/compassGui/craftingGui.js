@@ -17,41 +17,43 @@ export function craftingMenu(player) {
         menu.title("Crafting Menu")
         menu.button(4, "§aCustom Crafting", ["", "§r§7This is a list of all", "§r§7custom crafting recipes", "§r§7currently in the game.","","§r§7Custom crafting items","§r§7may only be crafted","§r§7through this menu!"], "minecraft:emerald")
 
-        if (fishingLevel < 3)  { 
+        if (fishingLevel < 3) { 
             menu.button(10, "Ink Rod", ["", "§r§cRequires Fishing Level 3!"], "minecraft:fishing_rod", 1) 
         } else menu.button(10, "Ink Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
 
-        if (miningLevel < 3)  { 
+        if (miningLevel < 3) { 
             menu.button(11, "Coal Pickaxe", ["", "§r§cRequires Mining Level 3!"], "minecraft:stone_pickaxe", 1)
         } else menu.button(11, "Coal Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
 
-        if (miningLevel < 4)  { 
+        if (miningLevel < 4) { 
             menu.button(12, "Dense Stone", ["", "§r§cRequires Mining Level 4!"], "minecraft:stone_bricks", 1)
         } else menu.button(12, "Dense Stone", ["", "§r§7View Recipe"], "minecraft:stone_bricks", 1)
 
-        if (miningLevel < 5)  { 
+        if (miningLevel < 5) { 
             menu.button(13, "Dense Pickaxe", ["", "§r§cRequires Mining Level 5!"], "minecraft:stone_pickaxe", 1)
         } else menu.button(13, "Dense Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
 
-        if (fishingLevel < 6)  { 
+        if (fishingLevel < 5) { 
             menu.button(14, "Whale Rod", ["", "§r§cRequires Fishing Level 5!"], "minecraft:fishing_rod", 1)
         } else menu.button(14, "Whale Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
 
-        if (miningLevel < 6)  { 
+        if (miningLevel < 6) { 
             menu.button(15, "Hybrid Pickaxe", ["", "§r§cRequires Mining Level 6!"], "minecraft:stone_pickaxe", 1)
         } else menu.button(15, "Hybrid Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
 
-        if (miningLevel < 7)  { 
+        if (miningLevel < 7) { 
             menu.button(16, "§7Iron Pickaxe", ["", "§r§cRequires Mining Level 7!"], "minecraft:iron_pickaxe", 1)
         } else menu.button(16, "§7Iron Pickaxe", ["", "§r§7View Recipe"], "minecraft:iron_pickaxe", 1)
 
         menu.button(19, "Iron Axe", ["", "§r§7View Recipe"], "minecraft:iron_axe", 1)
 
-        if (miningLevel < 9)  { 
+        if (miningLevel < 9) { 
             menu.button(20, "§8Unstable Pickaxe", ["", "§r§cRequires Mining Level 9!"], "minecraft:stone_pickaxe", 1)
         } else menu.button(20, "§8Unstable Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
 
-        menu.button(21, "super cool", [], "minecraft:stone", 1)
+        if (fishingLevel < 7) {
+            menu.button(14, "Whale Rod", ["", "§r§cRequires Fishing Level 5!"], "minecraft:fishing_rod", 1)
+        }
 
 
         menu.show(player).then(a => {
