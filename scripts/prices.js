@@ -86,29 +86,29 @@ prices.sell.sugarCane = 30
 prices.buy.basicRod = 250
 prices.sell.basicRod = "§cN/A"
 
-prices.buy.rawCod = 50
-prices.sell.rawCod = 10
+prices.buy.rawCod = 70
+prices.sell.rawCod = 40
 
-prices.buy.rawSalmon = 50
-prices.sell.rawSalmon = 12
+prices.buy.rawSalmon = 75
+prices.sell.rawSalmon = 60
 
-prices.buy.tropicalFish = 100
-prices.sell.tropicalFish = 20
+prices.buy.tropicalFish = 150
+prices.sell.tropicalFish = 120
 
 prices.buy.inkSac = 250
-prices.sell.inkSac = 12
+prices.sell.inkSac = 60
 
 prices.buy.cherrySapling = "§cN/A"
-prices.sell.cherrySapling = 10
+prices.sell.cherrySapling = 12
 
 prices.buy.cherryLog = "§cN/A"
-prices.sell.cherryLog = 12
+prices.sell.cherryLog = 16
 
 prices.buy.prismarineShard = "§cN/A"
-prices.sell.prismarineShard = 1750
+prices.sell.prismarineShard = 3500
 
 prices.buy.blubber = 500
-prices.sell.blubber = 40 // some kind of item like "reinforced blubber" thats a slimeblock made of this stuff and used for future crafting recipes like armor or diving armor idk
+prices.sell.blubber = 125 // some kind of item like "reinforced blubber" thats a slimeblock made of this stuff and used for future crafting recipes like armor or diving armor idk
 
 // Building shop items
 

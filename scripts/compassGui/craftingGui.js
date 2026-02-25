@@ -785,17 +785,11 @@ function craftTemplateMenu(player, item, pattern, key) {
     })
 }
 
-
-
-function testMenu(player) {
-
-    
-    const item = items.unstablePickaxe
-    const pattern = [
-        "aaa",
-        " b ",
-        " b ",]
-    const key = [["a", items.denseStone, 3], ["b", "minecraft:stick", 2]]
-
-
-}
+/*
+const item = items.unstablePickaxe
+const pattern = [
+    "aaa",
+    " b ",
+    " b ",]
+const key = [["a", items.denseStone, 3], ["b", "minecraft:stick", 2]]
+*/
