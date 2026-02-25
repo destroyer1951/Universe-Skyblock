@@ -683,6 +683,10 @@ function rollFishingTable(rod, luck) {
             const item = rollWeightedItem(tables.whaleRodLootTable, luck)
             return item
         }
+        case items.prismarineRod.nameTag: {
+            const item = rollWeightedItem(tables.prismarineRodLootTable, luck)
+            return item
+        }
     }
 }
 
@@ -815,19 +819,19 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
 
     switch (brokenBlock.type.id) {
         case 'minecraft:granite': {
-            setStat(player, "miningXP", 25, true)
+            setStat(player, "miningXP", 20, true)
             break
         }
         case 'minecraft:diorite': {
-            setStat(player, "miningXP", 25, true)
+            setStat(player, "miningXP", 20, true)
             break
         }
         case 'minecraft:andesite': {
-            setStat(player, "miningXP", 25, true)
+            setStat(player, "miningXP", 20, true)
             break
         }
         case 'minecraft:coal_ore': {
-            setStat(player, "miningXP", 55, true)
+            setStat(player, "miningXP", 45, true)
             break
         }
         case 'minecraft:iron_ore': {
@@ -890,7 +894,7 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
         oldBlock.south(1).isWaterlogged))
     )) return
 
-    setStat(player, "miningXP", 15, true)
+    setStat(player, "miningXP", 10, true)
     checkLevelUp(player, "mining")
 
     let luck = 0

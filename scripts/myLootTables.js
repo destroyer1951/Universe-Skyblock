@@ -26,8 +26,8 @@ export const whaleRodLootTable = [
     { item: () => {const item = items.rawSalmon.clone(); item.amount = 2; return item}, weight: 15 },
     { item: () => items.inkSac, weight: 12 },
     { item: () => items.blubber, weight: 25 },
-    { item: () => items.prismarineShard, weight: 2 },
-] // remember to add cherry saplings into the next fishing rod loot table brotha
+    { item: () => items.prismarineShard, weight: 2 }
+] 
 
 export const prismarineRodLootTable = [
     { item: () => {const item = items.rawCod.clone(); item.amount = 4; return item}, weight: 15 },
@@ -37,10 +37,11 @@ export const prismarineRodLootTable = [
     { item: () => {const item = items.tropicalFish.clone(); item.amount = 2; return item}, weight: 10 },
     { item: () => items.inkSac, weight: 4 },
     { item: () => items.blubber, weight: 15 },
-    { item: () => items.prismarineShard, weight: 5 },
+    { item: () => items.prismarineShard, weight: 4 },
     { item: () => items.cherrySapling, weight: 1 },
-    { item: () => items.cherrySapling, weight: 1 },
-] // remember to add cherry saplings into the next fishing rod loot table brotha
+    { item: () => items.prismarineCrystals, weight: 0.5 }
+]
+
 
 // Pickaxe loot tables
 

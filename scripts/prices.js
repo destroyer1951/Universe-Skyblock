@@ -23,7 +23,7 @@ prices.buy.sand = 500
 prices.sell.sand = 10
 
 prices.buy.boneMeal = 125
-prices.sell.boneMeal = 10
+prices.sell.boneMeal = 5
 
 prices.buy.charcoal = 35
 prices.sell.charcoal = 20
@@ -109,6 +109,9 @@ prices.sell.prismarineShard = 3500
 
 prices.buy.blubber = 500
 prices.sell.blubber = 125 // some kind of item like "reinforced blubber" thats a slimeblock made of this stuff and used for future crafting recipes like armor or diving armor idk
+
+prices.buy.prismarineCrystals = "§cN/A"
+prices.sell.prismarineCrystals = 7000
 
 // Building shop items
 

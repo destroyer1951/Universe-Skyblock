@@ -102,13 +102,19 @@ system.run(() => {
 
     infoMenus.push(new InfoMenu(items.padparadscha, "No Level Requirement", ["", "Currently Unobtainable"], ["", "Currently Useless"]))
     
-    infoMenus.push(new InfoMenu(items.prismarineShard, "No Level Requirement", ["", "Fishing"], ["", "Custom crafting recipes", "Sell for 1750 coins"]))
+    infoMenus.push(new InfoMenu(items.prismarineShard, "No Level Requirement", ["", "Fishing"], ["", "Custom crafting recipes", `Sell in shop`]))
+
+    infoMenus.push(new InfoMenu(items.blubber, "No Level Requirement", ["", "Buy from shop", "Fishing"], ["", "Custom crafting recipes", `Sell in shop`]))
+
+    infoMenus.push(new InfoMenu(items.prismarineCrystals, "No Level Requirement", ["", "Fishing"], ["", "Custom crafting recipes", `Sell in shop`]))
 
     infoMenus.push(new InfoMenu(items.basicRod, "No Level Requirement", ["", "Buy from General Shop"], ["", "Raw Cod", "Raw Salmon", "Tropical Fish", "Cherry Log", "Ink Sac", "Copper Ingot", "Prismarine Shard"], true))
     
     infoMenus.push(new InfoMenu(items.inkRod, "Fishing Level 3", ["", "Custom Crafting"], ["", "Ink Sac", "Coal", "Prismarine Shard"], true))
 
     infoMenus.push(new InfoMenu(items.whaleRod, "Fishing Level 5", ["", "Custom Crafting"], ["", "Raw Cod", "Raw Salmon", "Blubber", "Ink Sac", "Prismarine Shard"], true))
+
+    infoMenus.push(new InfoMenu(items.prismarineRod, "Fishing Level 9", ["", "Custom Crafting"], ["", "Raw Cod", "Raw Salmon", "Tropical Fish", "Blubber", "Ink Sac", "Prismarine Shard", "Prismarine Crystals"], true))
 
     infoMenus.push(new InfoMenu(items.denseStone, "Mining Level 4", ["", "Custom Crafting"], ["", "Custom Crafting"]))
 

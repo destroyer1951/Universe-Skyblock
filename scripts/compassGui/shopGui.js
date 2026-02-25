@@ -228,6 +228,7 @@ export function fishingShopMenu(player) {
     .button(16, 'Prismarine Shard', ["", `§7Buy Price:§6 ${prices.buy.prismarineShard}`, `§7Sell Price:§6 ${prices.sell.prismarineShard}`], 'minecraft:prismarine_shard', 1)
 
     .button(19, 'Blubber', ["", `§7Buy Price:§6 ${prices.buy.blubber}`, `§7Sell Price:§6 ${prices.sell.blubber}`], 'minecraft:slime_ball', 1)
+    .button(20, 'Prismarine Crystals', ["", `§7Buy Price:§6 ${prices.buy.prismarineCrystals}`, `§7Sell Price:§6 ${prices.sell.prismarineCrystals}`], 'minecraft:prismarine_crystals', 1)
 
 
     .show(player).then(a => {
@@ -256,6 +257,9 @@ export function fishingShopMenu(player) {
             }
             case 19: {
                 return buyPreviewMenu(player, prices.buy.blubber, prices.sell.blubber, items.blubber)
+            }
+            case 20: {
+                return buyUnavailablePreviewMenu(player, prices.sell.prismarineCrystals, items.prismarineCrystals)
             }
         }
     })
