@@ -738,7 +738,7 @@ world.afterEvents.entitySpawn.subscribe(data => {
                     break
                 }
                 case "minecraft:prismarine_shard": {
-                    setStat(player, "fishingXP", 4500, true)
+                    setStat(player, "fishingXP", 4000, true)
                     break
                 }
                 case "minecraft:coal": {
@@ -750,7 +750,7 @@ world.afterEvents.entitySpawn.subscribe(data => {
                     break
                 }
                 case "minecraft:prismarine_crystals": {
-                    setStat(player, "fishingXP", 10000, true)
+                    setStat(player, "fishingXP", 9000, true)
                     break
                 }
             }

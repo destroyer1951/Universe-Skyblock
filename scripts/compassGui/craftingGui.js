@@ -51,9 +51,9 @@ export function craftingMenu(player) {
             menu.button(20, "§8Unstable Pickaxe", ["", "§r§cRequires Mining Level 9!"], "minecraft:stone_pickaxe", 1)
         } else menu.button(20, "§8Unstable Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
 
-        if (fishingLevel < 7) {
-            menu.button(14, "Whale Rod", ["", "§r§cRequires Fishing Level 5!"], "minecraft:fishing_rod", 1)
-        }
+        if (fishingLevel < 9) {
+            menu.button(14, "§r§sP§br§si§bs§sm§ba§sr§bi§sn§be §sR§bo§sd", ["", "§r§cRequires Fishing Level 9!"], "minecraft:fishing_rod", 1)
+        } menu.button(21, "§r§sP§br§si§bs§sm§ba§sr§bi§sn§be §sR§bo§sd", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
 
 
         menu.show(player).then(a => {
@@ -64,7 +64,7 @@ export function craftingMenu(player) {
                     return craftingMenu(player)
                 }
                 case 10: {
-                    if (fishingLevel < 3)  { 
+                    if (fishingLevel < 3)  {
                         return player.sendMessage("§cYou need Fishing Level 3 to craft this item!")
                     } else return craftTemplateMenu(player, items.inkRod, [
                         "  b",
@@ -141,6 +141,15 @@ export function craftingMenu(player) {
                         " b ",
                         " b "
                     ], [["a", items.denseStone, 64], ["b", "minecraft:iron_ingot", 2]])
+                }
+                case 21: {
+                    if (fishingLevel < 9)  { 
+                        return player.sendMessage("§cYou need Fishing Level 9 to craft this item!")
+                    } else return craftTemplateMenu(player, items.prismarineRod, [
+                        "  c",
+                        " bc",
+                        "a d"
+                    ], [["a", items.prismarineShard, 10], ["b", "minecraft:ice", 64], ["c", "minecraft:tropical_fish", 32], ["d", items.blubber, 64]])
                 }
             }
         })
