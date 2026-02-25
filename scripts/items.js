@@ -386,7 +386,7 @@ system.run(() => {
             return makeItem("minecraft:fishing_rod", item => {
                 const stars = rollStars()
                 const starCount = (stars.match(/\*/g) || []).length
-                item.nameTag = "§r§fWhale Rod"
+                item.nameTag = "§r§sP§br§si§bs§sm§ba§sr§bi§sn§be §sR§bo§sd"
                 item.setLore(["", `§r§7Luck: §a${(starCount*0.6).toFixed(1)}`, '', `§r§e${stars}`])
             })
         }

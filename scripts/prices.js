@@ -76,10 +76,10 @@ prices.buy.wheatSeeds = 500
 prices.sell.wheatSeeds = 20
 
 prices.buy.potato = 1000
-prices.sell.potato = 20
+prices.sell.potato = 30
 
 prices.buy.sugarCane = 4000
-prices.sell.sugarCane = 30
+prices.sell.sugarCane = 40
 
 // Fishing shop items
 
@@ -92,8 +92,8 @@ prices.sell.rawCod = 40
 prices.buy.rawSalmon = 75
 prices.sell.rawSalmon = 60
 
-prices.buy.tropicalFish = 150
-prices.sell.tropicalFish = 120
+prices.buy.tropicalFish = 200
+prices.sell.tropicalFish = 150
 
 prices.buy.inkSac = 250
 prices.sell.inkSac = 60
