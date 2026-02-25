@@ -749,6 +749,10 @@ world.afterEvents.entitySpawn.subscribe(data => {
                     setStat(player, "fishingXP", 400, true)
                     break
                 }
+                case "minecraft:prismarine_crystals": {
+                    setStat(player, "fishingXP", 10000, true)
+                    break
+                }
             }
             checkLevelUp(player, "fishing")
 

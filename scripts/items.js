@@ -392,6 +392,14 @@ system.run(() => {
         }
     })
 
+    Object.defineProperty(items, "prismarineCrystals", {
+        get() {
+            return makeItem("minecraft:prismarine_crystals", item => {
+                item.nameTag = "§r§bPrismarine Crystals"
+                item.setLore(["", `§r§e${rollStars()}`])
+            })
+        }
+    })
     
 
 })
