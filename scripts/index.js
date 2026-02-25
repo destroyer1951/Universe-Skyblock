@@ -811,25 +811,25 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
 
     switch (brokenBlock.type.id) {
         case 'minecraft:granite': {
-            setStat(player, "miningXP", 35, true)
+            setStat(player, "miningXP", 25, true)
             break
         }
         case 'minecraft:diorite': {
-            setStat(player, "miningXP", 35, true)
+            setStat(player, "miningXP", 25, true)
             break
         }
         case 'minecraft:andesite': {
-            setStat(player, "miningXP", 35, true)
+            setStat(player, "miningXP", 25, true)
             break
         }
         case 'minecraft:coal_ore': {
-            setStat(player, "miningXP", 60, true)
+            setStat(player, "miningXP", 55, true)
             break
         }
         case 'minecraft:iron_ore': {
-            setStat(player, "miningXP", 400, true)
+            setStat(player, "miningXP", 200, true)
             if (Math.random() < .12) {
-                setStat(player, "miningXP", 400, true)
+                setStat(player, "miningXP", 200, true)
                 player.getComponent('inventory').container.addItem(items.ironChunk)
                 player.sendMessage("§9§lRARE! §6>> §r§aYou found a §7Iron Chunk§a!")
                 player.playSound("armor.equip_gold", {volume: 1, pitch: 1.5})
@@ -837,9 +837,9 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
             break
         }
         case 'minecraft:copper_ore': {
-            setStat(player, "miningXP", 250, true)
+            setStat(player, "miningXP", 140, true)
             if (Math.random() < .12) {
-                setStat(player, "miningXP", 250, true)
+                setStat(player, "miningXP", 140, true)
                 player.getComponent('inventory').container.addItem(items.copperChunk)
                 player.sendMessage("§9§lRARE! §6>> §r§aYou found a §nCopper Chunk§a!")
                 player.playSound("armor.equip_gold", {volume: 1, pitch: 1.5})
@@ -847,9 +847,9 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
             break
         }
         case 'minecraft:gold_ore': {
-            setStat(player, "miningXP", 850, true)
+            setStat(player, "miningXP", 400, true)
             if (Math.random() < .12) {
-                setStat(player, "miningXP", 850, true)
+                setStat(player, "miningXP", 400, true)
                 const goldChunk = items.goldChunk
                 player.getComponent('inventory').container.addItem(goldChunk)
 
