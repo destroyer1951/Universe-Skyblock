@@ -52,8 +52,8 @@ export function craftingMenu(player) {
         } else menu.button(20, "§8Unstable Pickaxe", ["", "§r§7View Recipe"], "minecraft:stone_pickaxe", 1)
 
         if (fishingLevel < 9) {
-            menu.button(14, "§r§sP§br§si§bs§sm§ba§sr§bi§sn§be §sR§bo§sd", ["", "§r§cRequires Fishing Level 9!"], "minecraft:fishing_rod", 1)
-        } menu.button(21, "§r§sP§br§si§bs§sm§ba§sr§bi§sn§be §sR§bo§sd", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
+            menu.button(21, "§r§sP§br§si§bs§sm§ba§sr§bi§sn§be §sR§bo§sd", ["", "§r§cRequires Fishing Level 9!"], "minecraft:fishing_rod", 1)
+        } else menu.button(21, "§r§sP§br§si§bs§sm§ba§sr§bi§sn§be §sR§bo§sd", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)
 
 
         menu.show(player).then(a => {
