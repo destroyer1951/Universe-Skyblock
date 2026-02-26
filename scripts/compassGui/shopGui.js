@@ -293,21 +293,18 @@ export function buildingShopMenu(player) {
                 return buySellUnavailablePreviewMenu(player, prices.buy.scaffolding, items.scaffolding)
             }
             case 13: {
-                return buySellUnavailablePreviewMenu(player, prices.buy.moss, items.moss)
-            }
-            case 14: {
                 return buyConcretePowderMenu(player)
             }
-            case 15: {
+            case 14: {
                 return buyWoolMenu(player)
             }
-            case 16: {
+            case 15: {
                 return buyCoralMenu(player)
             }
-            case 19: {
+            case 16: {
                 return buySellUnavailablePreviewMenu(player, prices.buy.glass, items.glass)
             }
-            case 20: {
+            case 19: {
                 return buyStainedGlassMenu(player)
             }
         }

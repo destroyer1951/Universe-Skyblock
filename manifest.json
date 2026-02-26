@@ -4,7 +4,7 @@
 		"name": "Universe Skyblock REALM VERSION",
 		"description": "Utilizing Chest UI (realm version)",
 		"uuid": "bab76941-4584-47c4-b257-e5ca85c3d534",
-		"version": [ 9, 0, 1 ],
+		"version": [ 12, 0, 1 ],
 		"min_engine_version": [ 1, 21, 2 ]
 	},
 	"modules": [
