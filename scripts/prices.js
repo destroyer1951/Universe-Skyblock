@@ -124,7 +124,7 @@ prices.sell.gravel = "§cN/A"
 prices.buy.scaffolding = 70
 prices.sell.scaffolding = "§cN/A"
 
-prices.buy.moss = 800
+prices.buy.moss = 200000
 prices.sell.moss = "§cN/A"
 
 prices.buy.glass = 50
