@@ -957,3 +957,10 @@ system.runInterval(() => {
     })
 }, 35)
 
+system.runInterval(() => {
+    const players = world.getPlayers({excludeGameModes: ["Creative", "Spectator", "Adventure"]})
+    players.forEach(player => {
+        clearItem(player, "minecraft:moss_block", 0)
+    })
+        
+}, 20)

@@ -273,13 +273,12 @@ export function buildingShopMenu(player) {
     .button(10, "Bricks", ["", `§7Buy Price:§6 ${prices.buy.bricks}`, `§7Sell Price:§6 ${prices.sell.bricks}`], 'minecraft:brick_block', 1)
     .button(11, "Gravel", ["", `§7Buy Price:§6 ${prices.buy.gravel}`, `§7Sell Price:§6 ${prices.sell.gravel}`], 'minecraft:gravel', 1)
     .button(12, "Scaffolding", ["", `§7Buy Price:§6 ${prices.buy.scaffolding}`, `§7Sell Price:§6 ${prices.sell.scaffolding}`], 'minecraft:scaffolding', 1)
-    .button(13, "Moss Block", ["", `§7Buy Price:§6 ${prices.buy.moss}`, `§7Sell Price:§6 ${prices.sell.moss}`], 'minecraft:moss_block', 1)
-    .button(14, "Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:white_concrete_powder', 1)
-    .button(15, "Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:white_wool', 1)
-    .button(16, "Coral", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:tube_coral_block', 1)
-
-    .button(19, "Glass", ["", `§7Buy Price:§6 ${prices.buy.glass}`, `§7Sell Price:§6 ${prices.sell.glass}`], 'minecraft:glass', 1)
-    .button(20, "Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:white_stained_glass', 1)
+    .button(13, "Concrete Powder", ["", `§7Buy Price:§6 ${prices.buy.concretePowder}`, `§7Sell Price:§6 ${prices.sell.concretePowder}`], 'minecraft:white_concrete_powder', 1)
+    .button(14, "Wool", ["", `§7Buy Price:§6 ${prices.buy.wool}`, `§7Sell Price:§6 ${prices.sell.wool}`], 'minecraft:white_wool', 1)
+    .button(15, "Coral", ["", `§7Buy Price:§6 ${prices.buy.coral}`, `§7Sell Price:§6 ${prices.sell.coral}`], 'minecraft:tube_coral_block', 1)
+    .button(16, "Glass", ["", `§7Buy Price:§6 ${prices.buy.glass}`, `§7Sell Price:§6 ${prices.sell.glass}`], 'minecraft:glass', 1)
+    
+    .button(19, "Stained Glass", ["", `§7Buy Price:§6 ${prices.buy.stainedGlass}`, `§7Sell Price:§6 ${prices.sell.stainedGlass}`], 'minecraft:white_stained_glass', 1)
 
     .show(player).then(a => {
         if (a.canceled) return;
