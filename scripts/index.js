@@ -9,6 +9,7 @@ import * as Menus from './compassGui/mainGui.js'
 import { shopMainMenu } from './compassGui/shopGui.js'
 import * as tables from './myLootTables.js'
 import { showAkuaMenu } from './compassGui/otherGui.js'
+import { campfireCookingMenu } from './compassGui/cookingGui.js';
 
 const { 
     mainMenu,  
@@ -382,10 +383,6 @@ function itemStatReader(item) {
 // im banning boats and minecarts in a function because i have no idea what im doing
 
 
-world.beforeEvents.playerInteractWithBlock.subscribe(data => {
-    if (data.block.typeId === "minecraft:anvil" || data.block.typeId === "minecraft:enchanting_table") return data.cancel = true
-})
-
 world.beforeEvents.playerPlaceBlock.subscribe(data => {
     const block = data.block
     const player = data.player
@@ -400,7 +397,8 @@ world.beforeEvents.playerPlaceBlock.subscribe(data => {
  ██  ██           ██ ██      ██   ██  ██  ██  ██      ██   ██      ██  ██  
   ████       ███████ ███████ ██   ██   ████   ███████ ██   ██       ████   
 */                                                               
-                                                                           
+
+
 world.afterEvents.worldLoad.subscribe(() => {
     world.gameRules.keepInventory = true
     world.gameRules.doFireTick = false
@@ -449,12 +447,18 @@ export function messageDelayed(player, delay, message) {
     }, delay)
 }
 
-/*
-system.run(() => {
-    setGlobalDynamicProperty("islandPos", {x: 1100, y: 100, z: 1000})
-    setGlobalDynamicProperty("playerIDIndex", 1)
+world.beforeEvents.playerInteractWithBlock.subscribe(data => {
+    // banned items evil
+    if (data.block.typeId === "minecraft:anvil" || data.block.typeId === "minecraft:enchanting_table") return data.cancel = true
+
+    if (data.block.typeId === "minecraft:campfire") {
+        data.cancel = true
+        campfireCookingMenu(player)
+
+        return 
+    }
+
 })
-*/
 
 world.beforeEvents.playerInteractWithEntity.subscribe(data => {
     const player = data.player

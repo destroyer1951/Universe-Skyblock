@@ -6,3 +6,13 @@ import { items, makeItem, rollStars } from '../items.js'
 import { prices } from '../prices.js'
 import { getPlayerDynamicProperty, setPlayerDynamicProperty, getGlobalDynamicProperty, setGlobalDynamicProperty, getScore, setScore, setStat } from '../stats.js'
 import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, rollWeightedItem, xpRequirements, achieve } from '../index.js'
+
+
+export function campfireCookingMenu(player) {
+    player["afkTimer"] = Date.now() + 350000
+
+
+    const menu = new ChestFormData("54")
+        .title("Campfire Cooking")
+
+}
