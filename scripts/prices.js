@@ -70,16 +70,16 @@ prices.sell.padparadscha = 1
 // Farm shop items
 
 prices.buy.wheat = 80
-prices.sell.wheat = 50
+prices.sell.wheat = 45
 
 prices.buy.wheatSeeds = 500
-prices.sell.wheatSeeds = 20
+prices.sell.wheatSeeds = 15
 
 prices.buy.potato = 1000
-prices.sell.potato = 30
+prices.sell.potato = 18
 
 prices.buy.sugarCane = 4000
-prices.sell.sugarCane = 40
+prices.sell.sugarCane = 30
 
 // Fishing shop items
 
