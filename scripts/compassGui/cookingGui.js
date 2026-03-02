@@ -8,6 +8,9 @@ import { getPlayerDynamicProperty, setPlayerDynamicProperty, getGlobalDynamicPro
 import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, rollWeightedItem, xpRequirements, achieve } from '../index.js'
 
 function cookingInfoMenu(player, item, recipe, minutes, usage) {
+    player["afkTimer"] = Date.now() + 350000
+
+
     let cleanName 
     if (item.nameTag) { 
         cleanName = item.nameTag.replace(/§./g, "")
@@ -38,33 +41,32 @@ function cookingInfoMenu(player, item, recipe, minutes, usage) {
         menu.button(20, `${item.nameTag || item.typeId}`, lore, item.typeId)
         menu.button(22, "§6Start Cooking!", ["", `§fCooking Time: §a${minutes}m`, `§fFuel Usage: §6${usage}`], 'minecraft:campfire')
 
-        menu.button(15, 'Recipe:', recipe, 'minecraft:redstone')
+        menu.button(15, 'Recipe:', recipe, 'minecraft:paper')
         menu.button(24, "§6Add Fuel", [], "minecraft:lava_bucket")
-        menu.button(33, `§fFuel: §6${getPlayerDynamicProperty(player, "campfireFuel") || 0}§e/§6500`, [], "minecraft:coal")
+        menu.button(33, `§fFuel: §6${getPlayerDynamicProperty(player, "campfireFuel")}§e/§6500`, [], "minecraft:coal")
 
 
         menu.show(player).then(a => {
             if (a.canceled) return
+
+            switch (a.selection) {
+                case 24: {
+                    if (getPlayerDynamicProperty(player, "campfireFuel") >= 500) {
+                        return player.sendMessage("§cYour campfire fuel is already full!")
+                    } else return campfireFuelMenu(player)
+                }
+            }
         })
 }
 
-function getPlanks(player) {
-    let planks = 0
-    planks += checkItemAmount(player, "minecraft:oak_planks")
-    planks += checkItemAmount(player, "minecraft:dark_oak_planks")
-    planks += checkItemAmount(player, "minecraft:birch_planks")
-    planks += checkItemAmount(player, "minecraft:jungle_planks")
-    planks += checkItemAmount(player, "minecraft:spruce_planks")
-    planks += checkItemAmount(player, "minecraft:acacia_planks")
-    planks += checkItemAmount(player, "minecraft:warped_planks")
-    planks += checkItemAmount(player, "minecraft:crimson_planks")
-    planks += checkItemAmount(player, "minecraft:cherry_planks")
-    planks += checkItemAmount(player, "minecraft:pale_oak_planks")
-    planks += checkItemAmount(player, "minecraft:mangrove_planks")
-    return planks
+const fuelTable = {
+    "minecraft:oak_planks": 1,
+    "minecraft:charcoal": 5,
+    "minecraft:coal": 5
 }
 
 function campfireFuelMenu(player) {
+    player["afkTimer"] = Date.now() + 350000
     const menu = new ChestFormData("45")
         .title("Add Campfire Fuel")
         .pattern(["xxxxxxxxx", 
@@ -82,39 +84,44 @@ function campfireFuelMenu(player) {
             if (a.canceled) return
             switch (a.selection) {
                 case 21: {
-                    if (getPlanks(player) >= 1) {
-                        return addFuelMenu(player, "minecraft:oak_planks", "Campfire")
+                    if (checkItemAmount(player, "minecraft:oak_planks") >= 1) {
+                        return addCampfireFuelMenu(player, "minecraft:oak_planks", "Campfire")
                     } else return player.sendMessage("§cYou don't have any Oak Planks to add!")
                 }
             }
         })
 }
 
-function addFuelMenu(player, item, station) {
+function addCampfireFuelMenu(player, item, station) {
+    player["afkTimer"] = Date.now() + 350000
 
+    let cleanName
+    if (typeof item === "string") {
+        cleanName = item.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+    } else {
+        cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+    }
 
-        if (item.nameTag) { 
-            cleanName = item.nameTag.replace(/§./g, "")
-        } else if (typeof item === "string") {
-            cleanName = item.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
-        } else {
-            cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
-        }
-
-    let maxPlanks = getPlanks(player)
-    if (maxPlanks > getPlayerDynamicProperty(player, "campfireFuel")) maxPlanks = getPlayerDynamicProperty(player, "campfireFuel")
+    let maxItem = checkItemAmount(player, item.typeId || item)
+    const currentFuel = getPlayerDynamicProperty(player, "campfireFuel")
+    const maxFuel = maxItem*fuelTable[item.typeId || item]
+    if (maxFuel+currentFuel > 500) maxItem = Math.floor((500-currentFuel)/fuelTable[item.typeId || item])
 
     const menu = new ModalFormData()
         .title(`Add ${cleanName} as ${station} Fuel`)
-        .slider(`\nAmount of ${cleanName} to add`, 1, maxPlanks, {defaultValue: 1, valueStep: 1})
+        .slider(`\nAmount of ${cleanName} to add`, 1, maxItem, {defaultValue: 1, valueStep: 1})
         .show(player).then(a => {
             if (a.canceled) return
+            clearItem(player, item.typeId || item, a.formValues[0])
+            setPlayerDynamicProperty(player, "campfireFuel", a.formValues[0]*fuelTable[item.typeId || item], true)
+
         })
 }
 
 export function campfireCookingMenu(player) {
     player["afkTimer"] = Date.now() + 350000
 
+    if (!(getPlayerDynamicProperty(player, "campfireFuel"))) setPlayerDynamicProperty(player, "campfireFuel", 0)
 
     const menu = new ChestFormData("54")
         .title("Campfire Cooking")
@@ -132,7 +139,7 @@ export function campfireCookingMenu(player) {
 
 
         .button(25, "§6Add Fuel", [], "minecraft:lava_bucket")
-        .button(34, `§fFuel: §6${getPlayerDynamicProperty(player, "campfireFuel") || 0}§e/§6500`, [], "minecraft:coal")
+        .button(34, `§fFuel: §6${getPlayerDynamicProperty(player, "campfireFuel")}§e/§6500`, [], "minecraft:coal")
 
         .show(player).then(a => {
             if (a.canceled) return
@@ -142,7 +149,9 @@ export function campfireCookingMenu(player) {
                     return cookingInfoMenu(player, items.candiedApple, ["4x Apple", "16x Sugar"], 20, 20)
                 }
                 case 25: {
-                    return campfireFuelMenu(player)
+                    if (getPlayerDynamicProperty(player, "campfireFuel") >= 500) {
+                        return player.sendMessage("§cYour campfire fuel is already full!")
+                    } else return campfireFuelMenu(player)
                 }
             }
         })
