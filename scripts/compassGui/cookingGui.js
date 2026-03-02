@@ -57,7 +57,14 @@ export function fuelMenu(player) {
                  ".........",
                  "xxxxxxxxx"], {x: {itemName: '', itemDesc: [], texture: "textures/blocks/glass_gray"}})
 
-        .button()
+        .button(21, "Add Planks", ["", "§7Adds§6 1 fuel"], "minecraft:oak_planks")
+        .button(22, "Add Charcoal", ["", "§7Adds§6 5 fuel"], "minecraft:charcoal")
+        .button(23, "Add Coal", ["", "§7Adds§6 5 fuel"], "minecraft:coal")
+        
+        
+        .show(player).then(a => {
+            if (a.canceled) return
+        })
 }
 
 export function campfireCookingMenu(player) {
@@ -88,6 +95,9 @@ export function campfireCookingMenu(player) {
             switch (a.selection) {
                 case 10: {
                     return cookingInfoMenu(player, items.candiedApple, ["4x Apple", "16x Sugar"], 20, 20)
+                }
+                case 25: {
+                    return fuelMenu(player)
                 }
             }
         })

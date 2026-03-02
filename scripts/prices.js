@@ -31,19 +31,19 @@ prices.sell.charcoal = 20
 prices.buy.oakSapling = 700
 prices.sell.oakSapling = 8
 
-prices.buy.oakLog = 55
+prices.buy.oakLog = 85
 prices.sell.oakLog = 15
 
 prices.buy.darkOakSapling = 2500
 prices.sell.darkOakSapling = 5
 
-prices.buy.darkOakLog = 65
+prices.buy.darkOakLog = 85
 prices.sell.darkOakLog = 12
 
 prices.buy.birchSapling = 1750
 prices.sell.birchSapling = 10
 
-prices.buy.birchLog = 75
+prices.buy.birchLog = 85
 prices.sell.birchLog = 15
 
 prices.buy.coal = 100
