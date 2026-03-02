@@ -95,6 +95,8 @@ function addFuelMenu(player, item, station) {
 
         if (item.nameTag) { 
             cleanName = item.nameTag.replace(/§./g, "")
+        } else if (typeof item === "string") {
+            cleanName = item.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
         } else {
             cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
         }
