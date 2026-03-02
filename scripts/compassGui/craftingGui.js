@@ -15,6 +15,13 @@ export function craftingMenu(player) {
         menu.title("Crafting Menu")
         menu.button(4, "§aCustom Crafting", ["", "§r§7This is a list of all", "§r§7custom crafting recipes", "§r§7currently in the game.","","§r§7Custom crafting items","§r§7may only be crafted","§r§7through this menu!"], "minecraft:emerald")
 
+        menu.pattern(["xxxx.xxxx",
+                     ".........",
+                     ".........",
+                     ".........",
+                     ".........",
+                     "xxxxxxxxx"], {x: {itemName: '', itemDesc: [], texture: "textures/blocks/glass_gray"}})
+
         if (fishingLevel < 3) { 
             menu.button(10, "Ink Rod", ["", "§r§cRequires Fishing Level 3!"], "minecraft:fishing_rod", 1) 
         } else menu.button(10, "Ink Rod", ["", "§r§7View Recipe"], "minecraft:fishing_rod", 1)

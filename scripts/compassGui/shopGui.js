@@ -62,6 +62,13 @@ export function generalShopMenu(player) {
     new ChestFormData("54")
     .title('General Shop Menu')
 
+    .pattern(["xxxxxxxxx",
+                ".........",
+                ".........",
+                ".........",
+                ".........",
+                "xxxxxxxxx"], {x: {itemName: '', itemDesc: [], texture: "textures/blocks/glass_gray"}})
+
     .button(10, 'Lava Bucket', ["", `§7Buy Price:§6 ${prices.buy.lavaBucket}`, `§7Sell Price:§6 ${prices.sell.lavaBucket}`], 'minecraft:lava_bucket', 1)
     .button(11, 'Ice', ["", `§7Buy Price:§6 ${prices.buy.ice}`, `§7Sell Price:§6 ${prices.sell.ice}`], 'minecraft:ice', 1)
     .button(12, 'Grass Block', ["", `§7Buy Price:§6 ${prices.buy.grassBlock}`, `§7Sell Price:§6 ${prices.sell.grassBlock}`], 'minecraft:grass_block', 1)
@@ -173,6 +180,13 @@ export function farmShopMenu(player) {
     new ChestFormData("54")
     .title('Farming Shop Menu')
 
+    .pattern(["xxxxxxxxx",
+                ".........",
+                ".........",
+                ".........",
+                ".........",
+                "xxxxxxxxx"], {x: {itemName: '', itemDesc: [], texture: "textures/blocks/glass_gray"}})
+
     .button(10, 'Bone Meal', ["", `§7Buy Price:§6 ${prices.buy.boneMeal}`, `§7Sell Price:§6 ${prices.sell.boneMeal}`], 'minecraft:bone_meal', 1)
     .button(11, 'Wheat', ["", `§7Buy Price:§6 ${prices.buy.wheat}`, `§7Sell Price:§6 ${prices.sell.wheat}`], 'minecraft:wheat', 1)
     .button(12, 'Wheat Seeds', ["", `§7Buy Price:§6 ${prices.buy.wheatSeeds}`, `§7Sell Price:§6 ${prices.sell.wheatSeeds}`], 'minecraft:wheat_seeds', 1)
@@ -218,6 +232,13 @@ export function fishingShopMenu(player) {
     player["afkTimer"] = Date.now() + 350000
     new ChestFormData("54")
     .title('Fishing Shop Menu')
+
+    .pattern(["xxxxxxxxx",
+                ".........",
+                ".........",
+                ".........",
+                ".........",
+                "xxxxxxxxx"], {x: {itemName: '', itemDesc: [], texture: "textures/blocks/glass_gray"}})
 
     .button(10, 'Raw Cod', ["", `§7Buy Price:§6 ${prices.buy.rawCod}`, `§7Sell Price:§6 ${prices.sell.rawCod}`], 'minecraft:cod', 1)
     .button(11, 'Raw Salmon', ["", `§7Buy Price:§6 ${prices.buy.rawSalmon}`, `§7Sell Price:§6 ${prices.sell.rawSalmon}`], 'minecraft:salmon', 1)
@@ -269,6 +290,13 @@ export function buildingShopMenu(player) {
     player["afkTimer"] = Date.now() + 350000
     new ChestFormData("54")
     .title('Building Shop Menu')
+
+    .pattern(["xxxxxxxxx",
+                ".........",
+                ".........",
+                ".........",
+                ".........",
+                "xxxxxxxxx"], {x: {itemName: '', itemDesc: [], texture: "textures/blocks/glass_gray"}})
     
     .button(10, "Bricks", ["", `§7Buy Price:§6 ${prices.buy.bricks}`, `§7Sell Price:§6 ${prices.sell.bricks}`], 'minecraft:brick_block', 1)
     .button(11, "Gravel", ["", `§7Buy Price:§6 ${prices.buy.gravel}`, `§7Sell Price:§6 ${prices.sell.gravel}`], 'minecraft:gravel', 1)

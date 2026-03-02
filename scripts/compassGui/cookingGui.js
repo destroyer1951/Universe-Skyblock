@@ -51,6 +51,13 @@ export function campfireCookingMenu(player) {
     const menu = new ChestFormData("54")
         .title("Campfire Cooking")
 
+        .pattern(["xxxxxxxxx",
+                ".........",
+                ".........",
+                ".........",
+                ".........",
+                "xxxxxxxxx"], {x: {itemName: '', itemDesc: [], texture: "textures/blocks/glass_gray"}})
+        
         .button(10, "Candied Apple", ["", "§r§7View Recipe"], "minecraft:apple")
 
         .show(player).then(a => {

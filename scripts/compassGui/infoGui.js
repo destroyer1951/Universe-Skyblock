@@ -41,6 +41,11 @@ class InfoMenu {
         if (tool) {
             this.menu.button(33, 'Drops:', usage, 'minecraft:lapis_lazuli')
         } else this.menu.button(33, 'Usage:', usage, 'minecraft:lapis_lazuli')
+        this.menu.pattern(["xxxxxxxxx",
+                     ".........",
+                     ".........",
+                     ".........",
+                     "xxxxxxxxx"], {x: {itemName: '', itemDesc: [], texture: "textures/blocks/glass_gray"}})
     }
 
     show(player) {
@@ -76,6 +81,12 @@ export function itemDirectyoryMenu(player) {
                 slot++
             }
         }
+        menu.pattern(["xxxxxxxxx",
+                     ".........",
+                     ".........",
+                     ".........",
+                     ".........",
+                     "xxxxxxxxx"], {x: {itemName: '', itemDesc: [], texture: "textures/blocks/glass_gray"}})
 
         // work on this later
 
