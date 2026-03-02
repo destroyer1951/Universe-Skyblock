@@ -804,8 +804,12 @@ function rollPickaxeTable(tool, luck) {
             const newBlock = rollWeightedItem(tables.hybridPickaxeLootTable, luck)
             return newBlock
         }
-        case items.ironPickaxe.nameTag:{
+        case items.ironPickaxe.nameTag: {
             const newBlock = rollWeightedItem(tables.ironPickaxeLootTable, luck)
+            return newBlock
+        }
+        case items.unstablePickaxe.nameTag: {
+            const newBlock = rollWeightedItem(tables.unstablePickaxeLootTable, luck)
             return newBlock
         }
     }

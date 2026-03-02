@@ -275,7 +275,7 @@ system.run(() => {
                 const stars = rollStars()
                 const starCount = (stars.match(/\*/g) || []).length
                 item.nameTag = "§r§8Unstable Pickaxe"
-                item.setLore(["", `§r§7Luck: §a${(starCount*0.4).toFixed(1)}`, '', `§r§e${stars}`])
+                item.setLore(["", `§r§7Luck: §a${(starCount*0.3).toFixed(1)}`, '', `§r§e${stars}`])
             })
         }
     })
@@ -404,6 +404,21 @@ system.run(() => {
             })
         }
     })
+
+
+
+    // Cooking Stations
+
+
+
+    // Cooking Items
+
+    items.candiedApple = makeItem("minecraft:apple", item => {
+        item.nameTag = "§r§fCandied Apple"
+        item.setLore(["", "§r§uConsume: §e§lRIGHT CLICK/LT", "§r§7Grants something or other"])
+    })
+
+
 
 
 

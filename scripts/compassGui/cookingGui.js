@@ -26,9 +26,8 @@ function cookingInfoMenu(player, item, recipe) {
         menu.title(cleanName)
         
         menu.button(13, `${item.nameTag || item.typeId}`, lore, item.typeId)
-        menu.button(29, 'Recipe:', recipe, 'minecraft:emerald')
-        menu.button(31, 'Level Requirement:', [""], 'minecraft:redstone')
-        menu.button(33, 'Drops:', [""], 'minecraft:lapis_lazuli')
+        menu.button(30, 'Recipe:', recipe, 'minecraft:emerald')
+        menu.button(32, 'Drops:', [""], 'minecraft:lapis_lazuli')
 
         menu.show(player).then(a => {
             if (a.canceled) return
@@ -43,7 +42,7 @@ export function campfireCookingMenu(player) {
     const menu = new ChestFormData("54")
         .title("Campfire Cooking")
 
-        .button(10, "test item", ["", "§r§7View Recipe"], "minecraft:apple")
+        .button(10, "Candied Apple", ["", "§r§7View Recipe"], "minecraft:apple")
 
         .show(player).then(a => {
             if (a.canceled) return
