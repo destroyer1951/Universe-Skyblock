@@ -15,4 +15,11 @@ export function campfireCookingMenu(player) {
     const menu = new ChestFormData("54")
         .title("Campfire Cooking")
 
+        .show(player).then(a => {
+            if (a.canceled) return
+
+            
+
+        })
+
 }

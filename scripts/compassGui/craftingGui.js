@@ -64,7 +64,7 @@ export function craftingMenu(player) {
                 case 10: {
                     if (fishingLevel < 3)  {
                         return player.sendMessage("§cYou need Fishing Level 3 to craft this item!")
-                    } else return craftTemplateMenu(player, items.inkRod, [
+                    } else return craftTemplateMenu(player, items.inkRod, items.inkRod, [
                         "  b",
                         " ba",
                         "b a"
@@ -73,7 +73,7 @@ export function craftingMenu(player) {
                 case 11: {
                     if (miningLevel < 3)  { 
                         return player.sendMessage("§cYou need Mining Level 3 to craft this item!")
-                    } else return craftTemplateMenu(player, items.coalPickaxe, [
+                    } else return craftTemplateMenu(player, items.coalPickaxe, items.coalPickaxe, [
                         "aaa",
                         " b ",
                         " b "
@@ -82,7 +82,7 @@ export function craftingMenu(player) {
                 case 12: {
                     if (miningLevel < 4)  { 
                         return player.sendMessage("§cYou need Mining Level 4 to craft this item!")
-                    } else return craftTemplateMenu(player, items.denseStone, [
+                    } else return craftTemplateMenu(player, items.denseStone, items.denseStone, [
                         "aaa",
                         "aaa",
                         "aaa"
@@ -91,7 +91,7 @@ export function craftingMenu(player) {
                 case 13: {
                     if (miningLevel < 5)  { 
                         return player.sendMessage("§cYou need Mining Level 5 to craft this item!")
-                    } else return craftTemplateMenu(player, items.densePickaxe, [
+                    } else return craftTemplateMenu(player, items.densePickaxe, items.densePickaxe, [
                         "aaa",
                         " b ",
                         " b "
@@ -100,7 +100,7 @@ export function craftingMenu(player) {
                 case 14: {
                     if (fishingLevel < 5)  { 
                         return player.sendMessage("§cYou need Fishing Level 5 to craft this item!")
-                    } else return craftTemplateMenu(player, items.whaleRod, [
+                    } else return craftTemplateMenu(player, items.whaleRod, items.whaleRod, [
                         "  a",
                         " ba",
                         "c d"
@@ -109,7 +109,7 @@ export function craftingMenu(player) {
                 case 15: {
                     if (miningLevel < 6)  { 
                         return player.sendMessage("§cYou need Mining Level 6 to craft this item!")
-                    } else return craftTemplateMenu(player, items.hybridPickaxe, [
+                    } else return craftTemplateMenu(player, items.hybridPickaxe, items.hybridPickaxe, [
                         "bbb",
                         "a c",
                         "bbb"
@@ -118,14 +118,14 @@ export function craftingMenu(player) {
                 case 16: {
                     if (miningLevel < 7)  { 
                         return player.sendMessage("§cYou need Mining Level 7 to craft this item!")
-                    } else return craftTemplateMenu(player, items.ironPickaxe, [
+                    } else return craftTemplateMenu(player, items.ironPickaxe, items.ironPickaxe, [
                         "aca",
                         " b ",
                         " b "
                     ], [["a", "minecraft:iron_ingot", 1], ["b", "minecraft:iron_bars", 1], ["c", "minecraft:iron_block", 1]])
                 }
                 case 19: {
-                    return craftTemplateMenu(player, items.ironAxe, [
+                    return craftTemplateMenu(player, items.ironAxe, items.ironAxe, [
                         " aa",
                         " ba",
                         " b "
@@ -134,7 +134,7 @@ export function craftingMenu(player) {
                 case 20: {
                     if (miningLevel < 9)  { 
                         return player.sendMessage("§cYou need Mining Level 9 to craft this item!")
-                    } else return craftTemplateMenu(player, items.unstablePickaxe, [
+                    } else return craftTemplateMenu(player, items.unstablePickaxe, items.unstablePickaxe, [
                         "aaa",
                         " b ",
                         " b "
@@ -143,7 +143,7 @@ export function craftingMenu(player) {
                 case 21: {
                     if (fishingLevel < 9)  { 
                         return player.sendMessage("§cYou need Fishing Level 9 to craft this item!")
-                    } else return craftTemplateMenu(player, items.prismarineRod, [
+                    } else return craftTemplateMenu(player, items.prismarineRod, items.prismarineRod, [
                         "  c",
                         " bc",
                         "a d"
@@ -154,10 +154,12 @@ export function craftingMenu(player) {
 }
 
 
-function craftTemplateMenu(player, item, pattern, key) {
+function craftTemplateMenu(player, item, displayItem, pattern, key) {
     player["afkTimer"] = Date.now() + 350000
 
-    const itemLore = item.getLore()
+
+    
+    const itemLore = displayItem.getLore()
     if (itemLore.length !== 0 && itemLore[itemLore.length-1].includes("*")) {
         itemLore.push(...["","§r§8Star count is randomized", "§r§8upon craft!","§r§8Stars may affect stats!"])
     }

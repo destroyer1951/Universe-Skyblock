@@ -451,9 +451,12 @@ world.beforeEvents.playerInteractWithBlock.subscribe(data => {
     // banned items evil
     if (data.block.typeId === "minecraft:anvil" || data.block.typeId === "minecraft:enchanting_table") return data.cancel = true
 
-    if (data.block.typeId === "minecraft:campfire") {
+    if (data.block.typeId === "minecraft:campfire" && (data.player["cookMenuOpenCD"] < Date.now() || !data.player["cookMenuOpenCD"])) {
         data.cancel = true
-        campfireCookingMenu(player)
+        system.run(() => {
+            campfireCookingMenu(data.player)
+        })
+        data.player["cookMenuOpenCD"] = Date.now()+1000
 
         return 
     }
@@ -967,4 +970,4 @@ system.runInterval(() => {
         clearItem(player, "minecraft:moss_block", 0)
     })
         
-}, 20)
+}, 40)
