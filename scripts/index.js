@@ -334,7 +334,7 @@ export function rollWeightedItem(table, luck = 0) { // god bless gpt
     const adjusted = table.map(e => ({
         item: e.item,
         // rare items (low weight) scale much harder with luck
-        weight: e.weight * (1 + luck * 0.06 / e.weight)
+        weight: e.weight * (1 + luck * 0.05 / e.weight)
     }))
 
     const totalWeight = adjusted.reduce((sum, e) => sum + e.weight, 0)
