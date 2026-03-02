@@ -7,6 +7,34 @@ import { prices } from '../prices.js'
 import { getPlayerDynamicProperty, setPlayerDynamicProperty, getGlobalDynamicProperty, setGlobalDynamicProperty, getScore, setScore, setStat } from '../stats.js'
 import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, rollWeightedItem, xpRequirements, achieve } from '../index.js'
 
+function cookingInfoMenu(player, item, recipe) {
+    let cleanName 
+        if (item.nameTag) { 
+            cleanName = item.nameTag.replace(/§./g, "")
+        } else {
+            cleanName = item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+        }
+
+        let lore = item.getLore()
+        if (lore.length !== 0 && lore[lore.length-1].includes("*")) {
+
+
+            lore.push(...["","§r§8Star count is randomized!"])
+        }
+
+    const menu = new ChestFormData("45")
+        menu.title(cleanName)
+        
+        menu.button(13, `${item.nameTag || item.typeId}`, lore, item.typeId)
+        menu.button(29, 'Recipe:', recipe, 'minecraft:emerald')
+        menu.button(31, 'Level Requirement:', [""], 'minecraft:redstone')
+        menu.button(33, 'Drops:', [""], 'minecraft:lapis_lazuli')
+
+        menu.show(player).then(a => {
+            if (a.canceled) return
+        })
+}
+
 
 export function campfireCookingMenu(player) {
     player["afkTimer"] = Date.now() + 350000
@@ -15,11 +43,15 @@ export function campfireCookingMenu(player) {
     const menu = new ChestFormData("54")
         .title("Campfire Cooking")
 
+        .button(10, "test item", ["", "§r§7View Recipe"], "minecraft:apple")
+
         .show(player).then(a => {
             if (a.canceled) return
 
-            
-
+            switch (a.selection) {
+                case 10: {
+                    return cookingInfoMenu(player, items.candiedApple, ["not telling"])
+                }
+            }
         })
-
 }

@@ -215,60 +215,15 @@ system.run(() => {
     items.hornCoralFan = makeItem("minecraft:horn_coral_fan", item => {});
 
 
+    // General Crafting Items
 
-
-
-    // Info Menu Items
-
-
-    Object.defineProperty(items, "quartzCrystal", {
-        get() {
-            return makeItem("minecraft:quartz", item => {
-                item.nameTag = "§r§fQuartz Crystal"
-                item.setLore(["", "§r§8Both exceptionally shiny", "§r§8and exceptionally sharp", "", `§r§e${rollStars()}`])
-            })
-        }
+    items.denseStone = makeItem("minecraft:stone_bricks", item => {
+        item.nameTag = "§r§fDense Stone"
     })
 
-    Object.defineProperty(items, "padparadscha", {
-        get() {
-            return makeItem("minecraft:resin_brick", item => {
-                item.nameTag = "§r§6Padparadscha"
-                item.setLore(["", "§r§8A powerful gemstone,", "§r§8in difficulty and durability", "", `§r§e${rollStars()}`])
-            })
-        }
-    })
 
-    Object.defineProperty(items, "basicRod", {
-        get() {
-            return makeItem("minecraft:fishing_rod", item => {
-                const stars = rollStars()
-                const starCount = (stars.match(/\*/g) || []).length
-                item.nameTag = "§r§fBasic Fishing Rod"
-                item.setLore(["", `§r§7Luck: §a${(starCount*0.2).toFixed(1)}`, "", "§r§8It's not much but", "§r§8it gets the job done", '', `§r§e${stars}`])
-            })
-        }
-    })
 
-    Object.defineProperty(items, "prismarineShard", {
-        get() {
-            return makeItem("minecraft:prismarine_shard", item => {
-                item.nameTag = "§r§fPrismarine Shard"
-                item.setLore(["", `§r§e${rollStars()}`])
-            })
-        }
-    })
-
-    Object.defineProperty(items, "inkRod", {
-            get() {
-                return makeItem("minecraft:fishing_rod", item => {
-                    const stars = rollStars()
-                    const starCount = (stars.match(/\*/g) || []).length
-                    item.nameTag = "§r§fInk Rod"
-                    item.setLore(["", `§r§7Luck: §a${(starCount*0.3).toFixed(1)}`, '', `§r§e${stars}`])
-                })
-            }
-        })
+    // Mining Pickaxes
 
     Object.defineProperty(items, "coalPickaxe", {
         get() {
@@ -279,21 +234,6 @@ system.run(() => {
                 item.setLore(["", `§r§7Luck: §a${(starCount*0.2).toFixed(1)}`, '', `§r§e${stars}`])
             })
         }
-    })
-
-    Object.defineProperty(items, "whaleRod", { // credit to my goat Enzo for this item and recipe
-        get() {
-            return makeItem("minecraft:fishing_rod", item => {
-                const stars = rollStars()
-                const starCount = (stars.match(/\*/g) || []).length
-                item.nameTag = "§r§fWhale Rod"
-                item.setLore(["", `§r§7Luck: §a${(starCount*0.4).toFixed(1)}`, '', `§r§e${stars}`])
-            })
-        }
-    })
-
-    items.denseStone = makeItem("minecraft:stone_bricks", item => {
-        item.nameTag = "§r§fDense Stone"
     })
 
     Object.defineProperty(items, "densePickaxe", {
@@ -329,13 +269,20 @@ system.run(() => {
         }
     })
 
-    Object.defineProperty(items, "ironAxe", {
+    Object.defineProperty(items, "unstablePickaxe", {
         get() {
-            return makeItem("minecraft:iron_axe", item => {
-                item.nameTag = "§r§fIron Axe"
+            return makeItem("minecraft:stone_pickaxe", item => {
+                const stars = rollStars()
+                const starCount = (stars.match(/\*/g) || []).length
+                item.nameTag = "§r§8Unstable Pickaxe"
+                item.setLore(["", `§r§7Luck: §a${(starCount*0.4).toFixed(1)}`, '', `§r§e${stars}`])
             })
         }
     })
+
+
+
+    // Mining Items
 
     Object.defineProperty(items, "copperChunk", {
         get() {
@@ -370,12 +317,56 @@ system.run(() => {
         }
     })
 
-    Object.defineProperty(items, "unstablePickaxe", {
+    Object.defineProperty(items, "quartzCrystal", {
         get() {
-            return makeItem("minecraft:stone_pickaxe", item => {
+            return makeItem("minecraft:quartz", item => {
+                item.nameTag = "§r§fQuartz Crystal"
+                item.setLore(["", "§r§8Both exceptionally shiny", "§r§8and exceptionally sharp", "", `§r§e${rollStars()}`])
+            })
+        }
+    })
+
+    Object.defineProperty(items, "padparadscha", {
+        get() {
+            return makeItem("minecraft:resin_brick", item => {
+                item.nameTag = "§r§6Padparadscha"
+                item.setLore(["", "§r§8A powerful gemstone,", "§r§8in difficulty and durability", "", `§r§e${rollStars()}`])
+            })
+        }
+    })
+
+
+
+    // Fishing Rods
+
+    Object.defineProperty(items, "basicRod", {
+        get() {
+            return makeItem("minecraft:fishing_rod", item => {
                 const stars = rollStars()
                 const starCount = (stars.match(/\*/g) || []).length
-                item.nameTag = "§r§8Unstable Pickaxe"
+                item.nameTag = "§r§fBasic Fishing Rod"
+                item.setLore(["", `§r§7Luck: §a${(starCount*0.2).toFixed(1)}`, "", "§r§8It's not much but", "§r§8it gets the job done", '', `§r§e${stars}`])
+            })
+        }
+    })
+
+    Object.defineProperty(items, "inkRod", {
+        get() {
+            return makeItem("minecraft:fishing_rod", item => {
+                const stars = rollStars()
+                const starCount = (stars.match(/\*/g) || []).length
+                item.nameTag = "§r§fInk Rod"
+                item.setLore(["", `§r§7Luck: §a${(starCount*0.3).toFixed(1)}`, '', `§r§e${stars}`])
+            })
+        }
+    })
+
+    Object.defineProperty(items, "whaleRod", { // credit to my goat Enzo for this item and recipe
+        get() {
+            return makeItem("minecraft:fishing_rod", item => {
+                const stars = rollStars()
+                const starCount = (stars.match(/\*/g) || []).length
+                item.nameTag = "§r§fWhale Rod"
                 item.setLore(["", `§r§7Luck: §a${(starCount*0.4).toFixed(1)}`, '', `§r§e${stars}`])
             })
         }
@@ -392,6 +383,19 @@ system.run(() => {
         }
     })
 
+
+
+    // Fishing Items
+
+    Object.defineProperty(items, "prismarineShard", {
+        get() {
+            return makeItem("minecraft:prismarine_shard", item => {
+                item.nameTag = "§r§fPrismarine Shard"
+                item.setLore(["", `§r§e${rollStars()}`])
+            })
+        }
+    })
+
     Object.defineProperty(items, "prismarineCrystals", {
         get() {
             return makeItem("minecraft:prismarine_crystals", item => {
@@ -400,6 +404,23 @@ system.run(() => {
             })
         }
     })
-    
+
+
+
+    // Farming Tools
+
+    Object.defineProperty(items, "ironAxe", {
+        get() {
+            return makeItem("minecraft:iron_axe", item => {
+                item.nameTag = "§r§fIron Axe"
+            })
+        }
+    })
+
+
+
+
+
+
 
 })
