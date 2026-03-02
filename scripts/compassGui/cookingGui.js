@@ -25,9 +25,18 @@ function cookingInfoMenu(player, item, recipe) {
     const menu = new ChestFormData("45")
         menu.title(cleanName)
         
-        menu.button(13, `${item.nameTag || item.typeId}`, lore, item.typeId)
-        menu.button(30, 'Recipe:', recipe, 'minecraft:emerald')
-        menu.button(32, 'Drops:', [""], 'minecraft:lapis_lazuli')
+        menu.button(20, `${item.nameTag || item.typeId}`, lore, item.typeId)
+        menu.button(22, "§6Cook This Item!", [], 'minecraft:campfire')
+
+        menu.button(15, 'Recipe:', recipe, 'minecraft:redstone')
+        menu.button(24, '', [], 'minecraft:lava_bucket')
+        menu.button(33, "Fuel", [], 'minecraft:coal')
+
+        menu.pattern(["xxxxxxxxx", // "glass_orange.png"
+                     ".........",
+                     ".........",
+                     ".........",
+                     "xxxxxxxxx"], {x: {itemName: '', itemDesc: [], texture: "textures/blocks/glass_orange"}})
 
         menu.show(player).then(a => {
             if (a.canceled) return

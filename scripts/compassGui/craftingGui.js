@@ -205,7 +205,7 @@ function craftTemplateMenu(player, item, displayItem, pattern, key) {
         "xx_____xx",
         "xx___xxxx",
         "xxxxxxxxx",
-    ], {x: {itemName: "", texture: "minecraft:copper_bars"}})
+    ], {x: {itemName: "", texture: "textures/blocks/glass_brown"}})
 
 
     let craftLore = ["", "§r§7Required materials:"]
