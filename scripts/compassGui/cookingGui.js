@@ -48,6 +48,17 @@ function cookingInfoMenu(player, item, recipe, minutes, usage) {
         })
 }
 
+export function fuelMenu(player) {
+    const menu = new ChestFormData("45")
+        .title("Add Campfire Fuel")
+        .pattern(["xxxxxxxxx", 
+                 ".........",
+                 ".........",
+                 ".........",
+                 "xxxxxxxxx"], {x: {itemName: '', itemDesc: [], texture: "textures/blocks/glass_gray"}})
+
+        .button()
+}
 
 export function campfireCookingMenu(player) {
     player["afkTimer"] = Date.now() + 350000

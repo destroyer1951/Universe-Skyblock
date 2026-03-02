@@ -25,7 +25,7 @@ prices.sell.sand = 10
 prices.buy.boneMeal = 125
 prices.sell.boneMeal = 5
 
-prices.buy.charcoal = 35
+prices.buy.charcoal = 100
 prices.sell.charcoal = 20
 
 prices.buy.oakSapling = 700
