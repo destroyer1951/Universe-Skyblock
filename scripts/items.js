@@ -415,7 +415,7 @@ system.run(() => {
 
     items.candiedApple = makeItem("minecraft:apple", item => {
         item.nameTag = "§r§fCandied Apple"
-        item.setLore(["", "§r§uConsume: §e§lRIGHT CLICK/LT", "§r§7Grants something or other"])
+        item.setLore(["", "§r§uConsume: §e§lRIGHT CLICK/LT", "§r§7Consume to gain §fSpeed 1", "§r§7for §a20 minutes"])
     })
 
 

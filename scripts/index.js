@@ -624,8 +624,11 @@ system.runInterval(() => {
     })
 }, 10)
 
-let fishQueue
 
+/** 
+ * @param {Player} player
+ * @param {ItemStack} item
+ */
 world.afterEvents.itemUse.subscribe(data => {
     const player = data.source
     const item = data.itemStack
@@ -653,8 +656,11 @@ world.afterEvents.itemUse.subscribe(data => {
         } case "minecraft:compass": {
             mainMenu(player)
             return
-        } case "minecraft:fishing_rod": {
-            fishQueue = player.name
+        } case "minecraft:apple": {
+            if (item.nameTag === items.candiedApple.nameTag) {
+                player.addEffect("speed", 20*60*20, { amplifier: 0, showParticles: false })
+                
+            }
         }
     }
 
