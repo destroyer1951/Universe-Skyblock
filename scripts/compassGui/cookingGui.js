@@ -166,7 +166,7 @@ function cookingInfoMenu(player, item, itemId, recipe, minutes, usage) {
 
                     setPlayerDynamicProperty(player, "campfireCookingItem", JSON.stringify({name: item.nameTag, typeId: item.typeId, itemId: itemId}))
                     setPlayerDynamicProperty(player, "campfireCookingTime", Date.now() + minutes*60000)
-                    player.playSound("mob.blaze.shoot", {volume: 1, pitch: 1.1})
+                    player.playSound("random.fizz", {volume: 1, pitch: 1.1})
                     return player.sendMessage(`§aStarted cooking ${item.nameTag}!`)
                 }
 
@@ -301,6 +301,7 @@ export function campfireCookingMenu(player) {
                     setPlayerDynamicProperty(player, "campfireCookingItem", undefined)
                     setPlayerDynamicProperty(player, "campfireCookingTime", undefined)
                     player.sendMessage(`§aFinished cooking ${cookingItem.name}!`)
+                    player.playSound("random.fizz", {volume: 1, pitch: 1.1})
                     return player.getComponent("minecraft:inventory").container.addItem(items[cookingItem.itemId])
                     
                 }
