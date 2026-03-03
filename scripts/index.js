@@ -924,7 +924,7 @@ system.runInterval(() => {
     const players = world.getPlayers()
     players.forEach(player => {
         player.onScreenDisplay.setActionBar(
-            `Coins: §6${getPlayerDynamicProperty(player, "coins")}
+            `Coins: §6${Math.floor(getPlayerDynamicProperty(player, "coins"))}
 §9discord.gg/HRGNN3pzQN`)
     })
 }, 8)

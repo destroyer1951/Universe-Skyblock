@@ -7,7 +7,7 @@ import { prices } from '../prices.js'
 import { getPlayerDynamicProperty, setPlayerDynamicProperty, getGlobalDynamicProperty, setGlobalDynamicProperty, getScore, setScore, setStat } from '../stats.js'
 import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, rollWeightedItem, xpRequirements, achieve } from '../index.js'
 
-function cookingInfoMenu(player, item, recipe, minutes, usage) {
+function cookingInfoMenu(player, item, itemId, recipe, minutes, usage) {
     player["afkTimer"] = Date.now() + 350000
 
 
@@ -25,8 +25,21 @@ function cookingInfoMenu(player, item, recipe, minutes, usage) {
         lore.push(...["","§r§8Star count is randomized!"])
     }
 
+    let recipeDisplay = []
     recipe.forEach((line, i, arr) => {
-        if (arr[i] !== "") arr[i] = "§a - §7" + line
+
+        let cleanItemName
+        if (typeof line.item === "string") {
+            cleanItemName = line.item.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+        } else {
+            if (line.item.nameTag) { 
+                cleanItemName = line.item.nameTag.replace(/§./g, "")
+            } else {
+                cleanItemName = line.item.typeId.substring(10).replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())
+            }
+        }
+        recipeDisplay.push(`§a - §7${line.count}x ${cleanItemName}`)
+
     })
 
     const menu = new ChestFormData("45")
@@ -41,7 +54,7 @@ function cookingInfoMenu(player, item, recipe, minutes, usage) {
         menu.button(20, `${item.nameTag || item.typeId}`, lore, item.typeId)
         menu.button(22, "§6Start Cooking!", ["", `§fCooking Time: §a${minutes}m`, `§fFuel Usage: §6${usage}`], 'minecraft:campfire')
 
-        menu.button(15, 'Recipe:', recipe, 'minecraft:paper')
+        menu.button(15, 'Recipe:', recipeDisplay, 'minecraft:paper')
         menu.button(24, "§6Add Fuel", [], "minecraft:lava_bucket")
         menu.button(33, `§fFuel: §6${getPlayerDynamicProperty(player, "campfireFuel")}§e/§6500`, [], "minecraft:coal")
 
@@ -50,6 +63,32 @@ function cookingInfoMenu(player, item, recipe, minutes, usage) {
             if (a.canceled) return
 
             switch (a.selection) {
+
+                case 22: {
+                    if (getPlayerDynamicProperty(player, "campfireFuel") < usage) return player.sendMessage("§cYou don't have enough campfire fuel to cook this item!")
+                    if (getPlayerDynamicProperty(player, "campfireCookingItem")) return player.sendMessage("§cYou are already cooking an item!")
+
+                    recipe.forEach((line, i, arr) => {
+                        if (typeof line.item === "string") {
+                            if (checkItemAmount(player, line.item) < line.count) return player.sendMessage("§cYou don't have the entire recipe to cook this item!")
+                            clearItem(player, line.item, line.count)
+                        } else {
+                            if (line.item.nameTag) { 
+                                if (checkItemAmount(player, line.item.typeId, false, line.item.nameTag) < line.count) return player.sendMessage("§cYou don't have the entire recipe to cook this item!")
+                                clearItem(player, line.item.typeId, line.count, line.item.nameTag)
+                            } else {
+                                if (checkItemAmount(player, line.item.typeId) < line.count) return player.sendMessage("§cYou don't have the entire recipe to cook this item!")
+                                clearItem(player, line.item.typeId, line.count)
+                            }
+                        }
+                    })
+
+
+                    setPlayerDynamicProperty(player, "campfireCookingItem", JSON.stringify({name: item.nameTag, typeId: item.typeId, itemId: itemId}))
+                    setPlayerDynamicProperty(player, "campfireCookingTime", Date.now() + minutes*60000)
+                    player.sendMessage(`§aStarted cooking ${item.nameTag}!`)
+                }
+
                 case 24: {
                     if (getPlayerDynamicProperty(player, "campfireFuel") >= 500) {
                         return player.sendMessage("§cYour campfire fuel is already full!")
@@ -88,6 +127,16 @@ function campfireFuelMenu(player) {
                         return addCampfireFuelMenu(player, "minecraft:oak_planks", "Campfire")
                     } else return player.sendMessage("§cYou don't have any Oak Planks to add!")
                 }
+                case 22: {
+                    if (checkItemAmount(player, "minecraft:charcoal") >= 1) {
+                        return addCampfireFuelMenu(player, "minecraft:charcoal", "Campfire")
+                    } else return player.sendMessage("§cYou don't have any Charcoal to add!")
+                }
+                case 23: {
+                    if (checkItemAmount(player, "minecraft:coal") >= 1) {
+                        return addCampfireFuelMenu(player, "minecraft:coal", "Campfire")
+                    } else return player.sendMessage("§cYou don't have any Coal to add!")
+                }
             }
         })
 }
@@ -114,6 +163,8 @@ function addCampfireFuelMenu(player, item, station) {
             if (a.canceled) return
             clearItem(player, item.typeId || item, a.formValues[0])
             setPlayerDynamicProperty(player, "campfireFuel", a.formValues[0]*fuelTable[item.typeId || item], true)
+            player.playSound("mob.blaze.shoot", {volume: 1, pitch: 1.1})
+            player.sendMessage(`§aAdded §6${a.formValues[0]*fuelTable[item.typeId || item]} fuel§a!`)
 
         })
 }
@@ -123,35 +174,42 @@ export function campfireCookingMenu(player) {
 
     if (!(getPlayerDynamicProperty(player, "campfireFuel"))) setPlayerDynamicProperty(player, "campfireFuel", 0)
 
+    let cookingItem
+    if (getPlayerDynamicProperty(player, "campfireCookingItem")) cookingItem = JSON.parse(getPlayerDynamicProperty(player, "campfireCookingItem"))
+
     const menu = new ChestFormData("54")
-        .title("Campfire Cooking")
+        menu.title("Campfire Cooking")
 
-        .pattern(["xxxx.xxxx",
+        menu.pattern(["xxxx.xxxx",
                 ".........",
                 ".........",
                 ".........",
                 ".........",
-                "xxxxxxxxx"], {x: {itemName: '', itemDesc: [], texture: "textures/blocks/glass_gray"}})
-        .button(4, "§aCampfire Cooking", ["", "§r§7Cook items and consume", "§7them to receive", "temporary stat buffs!", "", "You may only cook one", "item at a time, even", "with multiple campfires!"], "minecraft:emerald")
+                "xxxx.xxxx"], {x: {itemName: '', itemDesc: [], texture: "textures/blocks/glass_gray"}})
+        menu.button(4, "§aCampfire Cooking", ["", "§r§7Cook items and consume", "§7them to receive", "temporary stat buffs!", "", "You may only cook one", "item at a time, even", "with multiple campfires!"], "minecraft:emerald")
         
+        menu.button(25, "§6Add Fuel", [], "minecraft:lava_bucket")
+        menu.button(34, `§fFuel: §6${getPlayerDynamicProperty(player, "campfireFuel")}§e/§6500`, [], "minecraft:coal")
+
+        if (cookingItem) {
+            menu.button(49, cookingItem.name, ["", `§a${getPlayerDynamicProperty(player, "campfireCookingTime")}m §7left`], cookingItem.typeId)
+        } else menu.button(49, "§cNothing Yet!", ["", "§7Start cooking to see", "§7your progress here!"], "minecraft:barrier")
+
         
-        .button(10, "Candied Apple", ["", "§r§7View Recipe"], "minecraft:apple")
+        menu.button(10, "Candied Apple", ["", "§r§7View Recipe"], "minecraft:apple")
 
 
-        .button(25, "§6Add Fuel", [], "minecraft:lava_bucket")
-        .button(34, `§fFuel: §6${getPlayerDynamicProperty(player, "campfireFuel")}§e/§6500`, [], "minecraft:coal")
-
-        .show(player).then(a => {
+        menu.show(player).then(a => {
             if (a.canceled) return
 
             switch (a.selection) {
-                case 10: {
-                    return cookingInfoMenu(player, items.candiedApple, ["4x Apple", "16x Sugar"], 20, 20)
-                }
                 case 25: {
                     if (getPlayerDynamicProperty(player, "campfireFuel") >= 500) {
                         return player.sendMessage("§cYour campfire fuel is already full!")
                     } else return campfireFuelMenu(player)
+                }
+                case 10: {
+                    return cookingInfoMenu(player, items.candiedApple, "candiedApple", [{item: "minecraft:apple", count: 4}, {item: "minecraft:sugar", count: 8}], 20, 20)
                 }
             }
         })
