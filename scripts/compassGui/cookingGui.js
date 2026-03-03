@@ -3,9 +3,59 @@ import { ModalFormData } from '@minecraft/server-ui';
 import { ChestFormData } from '../extensions/forms.js';
 
 import { items, makeItem, rollStars } from '../items.js'
-import { prices } from '../prices.js'
 import { getPlayerDynamicProperty, setPlayerDynamicProperty, getGlobalDynamicProperty, setGlobalDynamicProperty, getScore, setScore, setStat } from '../stats.js'
-import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, rollWeightedItem, xpRequirements, achieve } from '../index.js'
+import { checkItemAmount, checkInvEmpty, clearItem, getFreeSlots, xpRequirements, achieve } from '../index.js'
+
+
+export const checkUnnamedItemAmount = (player, itemId) => {
+    const inventory = player.getComponent("inventory").container
+    let itemAmount = 0
+    for (let i = 0; i < 36; i++) {
+        let item = inventory.getItem(i)
+        if (item?.typeId !== itemId) continue
+        if (item.nameTag) continue;
+        itemAmount += item.amount
+    }
+    return itemAmount
+}
+
+export function clearUnnamedItem(player, itemId, decrement=0) { // if an item has a nametag it will be skipped
+    const inventory = player.getComponent("inventory").container;
+    if (decrement === 0) {
+        let cleared = false
+        for (let i = 0; i < inventory.size; i++) {
+            let item = inventory.getItem(i);
+            if (item?.typeId === itemId) {
+                if (item.nameTag) continue;
+                inventory.setItem(i);
+                cleared = true
+            }
+        }
+        return cleared;
+    }
+    if (checkUnnamedItemAmount(player, itemId) < decrement) return false;
+
+    for (let i = 0; i < inventory.size; i++) {
+        const item = inventory.getItem(i);
+        if (!item || item.typeId !== itemId) continue;
+        if (item.nameTag) continue;
+
+        if (item.amount <= decrement) {
+            decrement -= item.amount;
+            inventory.setItem(i);
+        } else {
+            item.amount -= decrement;
+            inventory.setItem(i, item);
+            return true;
+        }
+
+        if (decrement === 0) {
+            return true;
+        }
+    }
+    return false;
+};
+
 
 function cookingInfoMenu(player, item, itemId, recipe, minutes, usage) {
     player["afkTimer"] = Date.now() + 350000
@@ -66,7 +116,7 @@ function cookingInfoMenu(player, item, itemId, recipe, minutes, usage) {
 
                 case 22: {
                     if (getPlayerDynamicProperty(player, "campfireFuel") < usage) return player.sendMessage("§cYou don't have enough campfire fuel to cook this item!")
-                    //if (getPlayerDynamicProperty(player, "campfireCookingItem")) return player.sendMessage("§cYou are already cooking an item!")
+                    if (getPlayerDynamicProperty(player, "campfireCookingItem")) return player.sendMessage("§cYou are already cooking an item!")
 
                     let hasReqs = true
 
@@ -103,7 +153,7 @@ function cookingInfoMenu(player, item, itemId, recipe, minutes, usage) {
                     
                     recipe.forEach((line, i, arr) => {
                         if (typeof line.item === "string") {
-                            clearItem(player, line.item, line.count)
+                            clearUnnamedItem(player, line.item, line.count)
                         } else {
 
                             if (line.item.nameTag) { 
@@ -116,6 +166,7 @@ function cookingInfoMenu(player, item, itemId, recipe, minutes, usage) {
 
                     setPlayerDynamicProperty(player, "campfireCookingItem", JSON.stringify({name: item.nameTag, typeId: item.typeId, itemId: itemId}))
                     setPlayerDynamicProperty(player, "campfireCookingTime", Date.now() + minutes*60000)
+                    player.playSound("mob.blaze.shoot", {volume: 1, pitch: 1.1})
                     return player.sendMessage(`§aStarted cooking ${item.nameTag}!`)
                 }
 
@@ -207,7 +258,11 @@ export function campfireCookingMenu(player) {
     let cookingItem
     if (getPlayerDynamicProperty(player, "campfireCookingItem")) cookingItem = JSON.parse(getPlayerDynamicProperty(player, "campfireCookingItem"))
 
-    const menu = new ChestFormData("54")
+    let cookingTime = `§a${((getPlayerDynamicProperty(player, "campfireCookingTime")-Date.now())/60000).toFixed(1)}m§7 left`
+
+    if (getPlayerDynamicProperty(player, "campfireCookingTime") < Date.now()) cookingTime = "§a§lDONE!"
+
+        const menu = new ChestFormData("54")
         menu.title("Campfire Cooking")
 
         menu.pattern(["xxxx.xxxx",
@@ -222,7 +277,7 @@ export function campfireCookingMenu(player) {
         menu.button(34, `§fFuel: §6${getPlayerDynamicProperty(player, "campfireFuel")}§e/§65000`, [], "minecraft:coal")
 
         if (cookingItem) {
-            menu.button(49, cookingItem.name, ["", `§a${((getPlayerDynamicProperty(player, "campfireCookingTime")-Date.now())/60000).toFixed(1)}m §7left`], cookingItem.typeId)
+            menu.button(49, cookingItem.name, ["", cookingTime], cookingItem.typeId)
         } else menu.button(49, "§cNothing Yet!", ["", "§7Start cooking to see", "§7your progress here!"], "minecraft:barrier")
 
         
@@ -231,12 +286,23 @@ export function campfireCookingMenu(player) {
 
         menu.show(player).then(a => {
             if (a.canceled) return
+            setPlayerDynamicProperty(player, "campfireCookingTime", Date.now())
 
             switch (a.selection) {
                 case 25: {
                     if (getPlayerDynamicProperty(player, "campfireFuel") >= 5000) {
                         return player.sendMessage("§cYour campfire fuel is already full!")
                     } else return campfireFuelMenu(player)
+                }
+                case 49: {
+                    if (!cookingItem) return player.sendMessage("§cYou aren't cooking anything yet!")
+                    if (getPlayerDynamicProperty(player, "campfireCookingTime") > Date.now()) return player.sendMessage("§cThis item isn't finished cooking!")
+
+                    setPlayerDynamicProperty(player, "campfireCookingItem", undefined)
+                    setPlayerDynamicProperty(player, "campfireCookingTime", undefined)
+                    player.sendMessage(`§aFinished cooking ${cookingItem.name}!`)
+                    return player.getComponent("minecraft:inventory").container.addItem(items[cookingItem.itemId])
+                    
                 }
                 case 10: {
                     return cookingInfoMenu(player, items.candiedApple, "candiedApple", [{item: "minecraft:apple", count: 4}, {item: "minecraft:sugar", count: 8}], 20, 20)
