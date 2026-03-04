@@ -656,11 +656,22 @@ world.afterEvents.itemUse.subscribe(data => {
         } case "minecraft:compass": {
             mainMenu(player)
             return
-        } case "minecraft:apple": {
-            if (item.nameTag === items.candiedApple.nameTag) {
-                player.addEffect("speed", 20*60*20, { amplifier: 0, showParticles: false })
-                
+        }
+    }
+
+    switch (item.nameTag) {
+        case items.candiedApple.nameTag: {
+            player.addEffect("speed", 20*60*20, { amplifier: 0, showParticles: false })
+            const mainhand = player.getComponent("equippable").getEquipment("Mainhand")
+            if (mainhand.amount > 1) {
+                mainhand.amount -= 1
+                player.getComponent("inventory").container.setItem(player.selectedSlotIndex, mainhand)
+            } else {
+                player.getComponent("inventory").container.setItem(player.selectedSlotIndex, undefined)
             }
+
+            player.sendMessage(`§u§lYum!§r§a Your ${mainhand.nameTag}§r§a gave you §fSpeed 1§a for 20 minutes!`)
+            return player.playSound("random.eat", {volume: 2, pitch: 1})
         }
     }
 
