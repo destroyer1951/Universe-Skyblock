@@ -9,7 +9,7 @@ import * as Menus from './compassGui/mainGui.js'
 import { shopMainMenu } from './compassGui/shopGui.js'
 import * as tables from './myLootTables.js'
 import { showAkuaMenu } from './compassGui/otherGui.js'
-import { campfireCookingMenu } from './compassGui/cookingGui.js';
+import { mainCampfireCookingMenu } from './compassGui/cookingGui.js';
 
 const { 
     mainMenu,  
@@ -454,7 +454,7 @@ world.beforeEvents.playerInteractWithBlock.subscribe(data => {
     if (data.block.typeId === "minecraft:campfire" && (data.player["cookMenuOpenCD"] < Date.now() || !data.player["cookMenuOpenCD"])) {
         data.cancel = true
         system.run(() => {
-            campfireCookingMenu(data.player)
+            mainCampfireCookingMenu(data.player)
         })
         data.player["cookMenuOpenCD"] = Date.now()+1000
 

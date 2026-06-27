@@ -55,7 +55,46 @@ export function clearUnnamedItem(player, itemId, decrement=0) { // if an item ha
     }
     return false;
 };
+/* no thanks
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
+        ;[array[i], array[j]] = [array[j], array[i]]
+    }
+    return array
+}
 
+function countMiningame(player, item, itemId, minutes) {
+    
+    let order = []
+    for (let i = 0; i < 18; i++) {
+        order.push(i)
+    }
+    shuffle(order)
+
+
+
+    
+    const countMenu = new ChestFormData("18")
+        countMenu.title(`Cooking ${item.nameTag}...`)
+
+        for (let i = 0; i < 18; i++) {
+            countMenu.button(order[i], " ", ["", "§r§7Click to count"], "textures/blocks/glass_blue")
+        }
+        countMenu.show(player).then(a => {
+            if (a.canceled) return
+        })
+
+
+
+
+    setPlayerDynamicProperty(player, "campfireCookingItem", JSON.stringify({name: item.nameTag, typeId: item.typeId, itemId: itemId}))
+    setPlayerDynamicProperty(player, "campfireCookingTime", Date.now() + minutes*60000)
+    player.playSound("random.fizz", {volume: 1, pitch: 1.1})
+    return player.sendMessage(`§aStarted cooking ${item.nameTag}!`)
+
+
+}*/
 
 function cookingInfoMenu(player, item, itemId, recipe, minutes, usage) {
     player["afkTimer"] = Date.now() + 350000
@@ -164,10 +203,16 @@ function cookingInfoMenu(player, item, itemId, recipe, minutes, usage) {
                         }
                     })
 
+
+                    player.playSound("random.fizz", {volume: 1, pitch: 1.1})
+                    setPlayerDynamicProperty(player, "campfireFuel", -usage, true)
+
                     setPlayerDynamicProperty(player, "campfireCookingItem", JSON.stringify({name: item.nameTag, typeId: item.typeId, itemId: itemId}))
                     setPlayerDynamicProperty(player, "campfireCookingTime", Date.now() + minutes*60000)
-                    player.playSound("random.fizz", {volume: 1, pitch: 1.1})
                     return player.sendMessage(`§aStarted cooking ${item.nameTag}!`)
+
+                    //return countMiningame(player, item, itemId, minutes) nooo
+
                 }
 
                 case 24: {
@@ -250,7 +295,7 @@ function addCampfireFuelMenu(player, item, station) {
         })
 }
 
-export function campfireCookingMenu(player) {
+export function mainCampfireCookingMenu(player) {
     player["afkTimer"] = Date.now() + 350000
 
     if (!(getPlayerDynamicProperty(player, "campfireFuel"))) setPlayerDynamicProperty(player, "campfireFuel", 0)
@@ -286,7 +331,7 @@ export function campfireCookingMenu(player) {
 
         menu.show(player).then(a => {
             if (a.canceled) return
-            setPlayerDynamicProperty(player, "campfireCookingTime", Date.now())
+            //setPlayerDynamicProperty(player, "campfireCookingTime", Date.now()) //cheat code
 
             switch (a.selection) {
                 case 25: {
