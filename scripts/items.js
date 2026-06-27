@@ -418,6 +418,16 @@ system.run(() => {
         item.setLore(["", "§r§uConsume: §e§lRIGHT CLICK/LT", "§r§7Consume to gain §fSpeed 1", "§r§7for §a20 minutes"])
     })
 
+    items.gumball = makeItem("minecraft:magma_cream", item => {
+        item.nameTag = "§r§fGumball"
+        item.setLore(["", "§r§uConsume: §e§lRIGHT CLICK/LT", "§r§7Consume to gain §fSpeed 1", "§r§7for §a60 minutes"])
+    })
+
+    items.miningTea = makeItem("minecraft:honey_bottle", item => {
+        item.nameTag = "§r§fMining Tea"
+        item.setLore(["", "§r§uConsume: §e§lRIGHT CLICK/LT", "§r§7Consume to gain §fHaste 1", "§r§7for §a15 minutes"])
+    })
+
 
 
 

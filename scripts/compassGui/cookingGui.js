@@ -327,6 +327,10 @@ export function mainCampfireCookingMenu(player) {
 
         
         menu.button(10, "Candied Apple", ["", "§r§7View Recipe"], "minecraft:apple")
+        menu.button(11, "Gumball", ["", "§r§7View Recipe"], "minecraft:magma_cream")
+        menu.button(12, "Mining Tea", ["", "§r§7View Recipe"], "minecraft:honey_bottle")
+        //menu.button(13, "Candied Apple", ["", "§r§7View Recipe"], "minecraft:apple")
+        //menu.button(14, "Candied Apple", ["", "§r§7View Recipe"], "minecraft:apple")
 
 
         menu.show(player).then(a => {
@@ -352,6 +356,12 @@ export function mainCampfireCookingMenu(player) {
                 }
                 case 10: {
                     return cookingInfoMenu(player, items.candiedApple, "candiedApple", [{item: "minecraft:apple", count: 4}, {item: "minecraft:sugar", count: 8}], 20, 20)
+                }
+                case 11: {
+                    return cookingInfoMenu(player, items.gumball, "gumball", [{item: items.blubber, count: 1}, {item: "minecraft:sugar", count: 12}], 35, 50)
+                }
+                case 12: {
+                    return cookingInfoMenu(player, items.miningTea, "miningTea", [{item: "minecraft:iron_ingot", count: 1}, {item: "minecraft:sugar", count: 20}], 25, 70)
                 }
             }
         })

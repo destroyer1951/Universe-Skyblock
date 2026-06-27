@@ -451,14 +451,16 @@ world.beforeEvents.playerInteractWithBlock.subscribe(data => {
     // banned items evil
     if (data.block.typeId === "minecraft:anvil" || data.block.typeId === "minecraft:enchanting_table") return data.cancel = true
 
-    if (data.block.typeId === "minecraft:campfire" && (data.player["cookMenuOpenCD"] < Date.now() || !data.player["cookMenuOpenCD"])) {
+    if (data.block.typeId === "minecraft:campfire") {
         data.cancel = true
-        system.run(() => {
-            mainCampfireCookingMenu(data.player)
-        })
-        data.player["cookMenuOpenCD"] = Date.now()+1000
+        if (data.player["cookMenuOpenCD"] < Date.now() || !data.player["cookMenuOpenCD"]) {
+            system.run(() => {
+                mainCampfireCookingMenu(data.player)
+            })
+            data.player["cookMenuOpenCD"] = Date.now()+1000
 
-        return 
+            return 
+    }
     }
 
 })
@@ -673,12 +675,40 @@ world.afterEvents.itemUse.subscribe(data => {
             player.sendMessage(`§u§lYum!§r§a Your ${mainhand.nameTag}§r§a gave you §fSpeed 1§a for 20 minutes!`)
             return player.playSound("random.eat", {volume: 2, pitch: 1})
         }
+        case items.gumball.nameTag: {
+            player.addEffect("speed", 60*60*20, { amplifier: 0, showParticles: false })
+            const mainhand = player.getComponent("equippable").getEquipment("Mainhand")
+            if (mainhand.amount > 1) {
+                mainhand.amount -= 1
+                player.getComponent("inventory").container.setItem(player.selectedSlotIndex, mainhand)
+            } else {
+                player.getComponent("inventory").container.setItem(player.selectedSlotIndex, undefined)
+            }
+
+            player.sendMessage(`§u§lYum!§r§a Your ${mainhand.nameTag}§r§a gave you §fSpeed 1§a for 60 minutes!`)
+            return player.playSound("random.eat", {volume: 2, pitch: 1})
+        }
+        case items.miningTea.nameTag: {
+            player.addEffect("haste", 15*60*20, { amplifier: 0, showParticles: false })
+            const mainhand = player.getComponent("equippable").getEquipment("Mainhand")
+            if (mainhand.amount > 1) {
+                mainhand.amount -= 1
+                player.getComponent("inventory").container.setItem(player.selectedSlotIndex, mainhand)
+            } else {
+                player.getComponent("inventory").container.setItem(player.selectedSlotIndex, undefined)
+            }
+
+            player.sendMessage(`§u§lYum!§r§a Your ${mainhand.nameTag}§r§a gave you §fHaste 1§a for 15 minutes!`)
+            return player.playSound("random.eat", {volume: 2, pitch: 1})
+        }
     }
 
     if (item.typeId === "minecraft:candle") {
         player.sendMessage("version 1.6")
     }
 })
+
+
 
 
 world.afterEvents.itemCompleteUse.subscribe(data => {
