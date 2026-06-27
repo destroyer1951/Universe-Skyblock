@@ -442,6 +442,17 @@ system.run(() => {
         }
     })
 
+    Object.defineProperty(items, "rookieHoe", {
+        get() {
+            return makeItem("minecraft:stone_hoe", item => {
+                const stars = rollStars()
+                const starCount = (stars.match(/\*/g) || []).length
+                item.nameTag = "§r§fRookie Hoe"
+                item.setLore(["", `§r§7Luck: §a${(starCount*0.2).toFixed(1)}`, `§r§7Wheat Harvesting: §a${(65+starCount*1)}`, '', `§r§e${stars}`])
+            })
+        }
+    })
+
 
 
 
