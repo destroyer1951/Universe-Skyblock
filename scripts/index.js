@@ -282,7 +282,7 @@ export const checkInvEmpty = (player) => {
  * @param {number} decrement The amount of the item to remove.
  * @returns {boolean} If items were cleared or not.
  */
-export function clearItem(player, itemId, decrement=0, itemName="") { // i think herobrine and ai just writes all of my code for me
+export function clearItem(player, itemId, decrement=0, itemName="") {
     const inventory = player.getComponent("inventory").container;
     if (decrement === 0) {
         let cleared = false

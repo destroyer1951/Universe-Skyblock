@@ -1,6 +1,6 @@
 import { world, system, ItemStack } from '@minecraft/server'
 
-export function makeItem(typeId, configure) { // i wrote this code and i dont even understand it anymore am i the best developer of all time
+export function makeItem(typeId, configure) { // note for future: write more descriptive comments
   const item = new ItemStack(typeId)
   configure(item)
   return item

@@ -1,4 +1,4 @@
-// this isnt used anymore (it also wasnt even written by me lmao)
+// this isnt used anymore (credit to the guy who made it though hes awesome)
 
 /*
 import { world, system, EntityComponentTypes, EquipmentSlot } from '@minecraft/server';

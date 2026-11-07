@@ -340,7 +340,7 @@ export function buildingShopMenu(player) {
 
 }
 
-function buyConcretePowderMenu(player) { // horbbile programming practices
+function buyConcretePowderMenu(player) { 
     player["afkTimer"] = Date.now() + 350000
     new ChestFormData("45")
     .title('Concrete Powder Colors')
