@@ -9,7 +9,7 @@ import * as Menus from './compassGui/mainGui.js'
 import { shopMainMenu } from './compassGui/shopGui.js'
 import * as tables from './myLootTables.js'
 import { showAkuaMenu } from './compassGui/otherGui.js'
-import { campfireCookingMenu } from './compassGui/cookingGui.js';
+import { mainCampfireCookingMenu } from './compassGui/cookingGui.js';
 
 const { 
     mainMenu,  
@@ -354,7 +354,8 @@ export function rollWeightedItem(table, luck = 0) { // god bless gpt
 /** @param {ItemStack} item */
 function itemStatReader(item) {
     let stats = {
-        luck: 0
+        luck: 0,
+        wheatHarvesting: 0,
     }
     const lore = item.getLore()
     if (lore.length === 0) return
@@ -363,6 +364,10 @@ function itemStatReader(item) {
             let clean = i.replace(/§./g, '')
             clean = clean.substring(6)
             stats.luck = Number(clean)
+        } else if (i.toLowerCase().includes("wheat harvesting:")) {
+            let clean = i.replace(/§./g, '')
+            clean = clean.substring(17)
+            stats.wheatHarvesting = Number(clean)
         } else continue
     }
     return stats
@@ -451,14 +456,16 @@ world.beforeEvents.playerInteractWithBlock.subscribe(data => {
     // banned items evil
     if (data.block.typeId === "minecraft:anvil" || data.block.typeId === "minecraft:enchanting_table") return data.cancel = true
 
-    if (data.block.typeId === "minecraft:campfire" && (data.player["cookMenuOpenCD"] < Date.now() || !data.player["cookMenuOpenCD"])) {
+    if (data.block.typeId === "minecraft:campfire") {
         data.cancel = true
-        system.run(() => {
-            campfireCookingMenu(data.player)
-        })
-        data.player["cookMenuOpenCD"] = Date.now()+1000
+        if (data.player["cookMenuOpenCD"] < Date.now() || !data.player["cookMenuOpenCD"]) {
+            system.run(() => {
+                mainCampfireCookingMenu(data.player)
+            })
+            data.player["cookMenuOpenCD"] = Date.now()+1000
 
-        return 
+            return 
+    }
     }
 
 })
@@ -656,11 +663,48 @@ world.afterEvents.itemUse.subscribe(data => {
         } case "minecraft:compass": {
             mainMenu(player)
             return
-        } case "minecraft:apple": {
-            if (item.nameTag === items.candiedApple.nameTag) {
-                player.addEffect("speed", 20*60*20, { amplifier: 0, showParticles: false })
-                
+        }
+    }
+
+    switch (item.nameTag) {
+        case items.candiedApple.nameTag: {
+            player.addEffect("speed", 20*60*20, { amplifier: 0, showParticles: false })
+            const mainhand = player.getComponent("equippable").getEquipment("Mainhand")
+            if (mainhand.amount > 1) {
+                mainhand.amount -= 1
+                player.getComponent("inventory").container.setItem(player.selectedSlotIndex, mainhand)
+            } else {
+                player.getComponent("inventory").container.setItem(player.selectedSlotIndex, undefined)
             }
+
+            player.sendMessage(`§u§lYum!§r§a Your ${mainhand.nameTag}§r§a gave you §fSpeed 1§a for 20 minutes!`)
+            return player.playSound("random.eat", {volume: 2, pitch: 1})
+        }
+        case items.gumball.nameTag: {
+            player.addEffect("speed", 60*60*20, { amplifier: 0, showParticles: false })
+            const mainhand = player.getComponent("equippable").getEquipment("Mainhand")
+            if (mainhand.amount > 1) {
+                mainhand.amount -= 1
+                player.getComponent("inventory").container.setItem(player.selectedSlotIndex, mainhand)
+            } else {
+                player.getComponent("inventory").container.setItem(player.selectedSlotIndex, undefined)
+            }
+
+            player.sendMessage(`§u§lYum!§r§a Your ${mainhand.nameTag}§r§a gave you §fSpeed 1§a for 60 minutes!`)
+            return player.playSound("random.eat", {volume: 2, pitch: 1})
+        }
+        case items.miningTea.nameTag: {
+            player.addEffect("haste", 15*60*20, { amplifier: 0, showParticles: false })
+            const mainhand = player.getComponent("equippable").getEquipment("Mainhand")
+            if (mainhand.amount > 1) {
+                mainhand.amount -= 1
+                player.getComponent("inventory").container.setItem(player.selectedSlotIndex, mainhand)
+            } else {
+                player.getComponent("inventory").container.setItem(player.selectedSlotIndex, undefined)
+            }
+
+            player.sendMessage(`§u§lYum!§r§a Your ${mainhand.nameTag}§r§a gave you §fHaste 1§a for 15 minutes!`)
+            return player.playSound("random.eat", {volume: 2, pitch: 1})
         }
     }
 
@@ -668,6 +712,8 @@ world.afterEvents.itemUse.subscribe(data => {
         player.sendMessage("version 1.6")
     }
 })
+
+
 
 
 world.afterEvents.itemCompleteUse.subscribe(data => {
@@ -925,6 +971,80 @@ world.afterEvents.playerBreakBlock.subscribe(data => {
     return player.dimension.setBlockType(oldBlock.location, newBlock)
 
 })
+
+
+world.beforeEvents.playerBreakBlock.subscribe(data => {
+    const player = data.player
+    const block = data.block
+    const tool = player.getComponent("equippable").getEquipment("Mainhand")
+    if (!tool || (block.permutation.getState("growth") == undefined)) return
+
+    data.cancel = true
+    if (player["harvestDebounce"] > Date.now()) return
+    player["harvestDebounce"] = Date.now()+3000
+
+    if (block.permutation.getState("growth") !== 7) {
+        return player.sendMessage("not grown")
+    }
+    if (getFreeSlots(player) < 2) {
+        return player.sendMessage("§cYou need at least 2 free inventory slots to harvest wheat!")
+    }
+    system.run(() => {
+        block.dimension.setBlockType(block.location, "minecraft:air")
+    })
+    const stats = itemStatReader(tool)
+    
+    const chance = stats.wheatHarvesting * 0.10;
+    const guaranteed = Math.floor(chance)
+    const extraChance = chance - guaranteed
+
+    let times = guaranteed
+
+    if (Math.random() < extraChance) {
+        times++;
+    }
+
+    const places = [
+        block.east(1),
+        block.west(1),
+        block.north(1),
+        block.south(1),
+        block.east(1).north(1),
+        block.east(1).south(1),
+        block.west(1).north(1),
+        block.west(1).south(1)
+    ]
+
+    // hi ai
+    let numHarvested = 0
+    while (numHarvested < times && places.length > 0) {
+        const index = Math.floor(Math.random() * places.length)
+        const randomPlace = places[index]
+        if (randomPlace.typeId !== "minecraft:wheat" || randomPlace.permutation.getState("growth") !== 7) {
+            places.splice(index, 1)
+            continue
+        } else {
+            places.splice(index, 1)
+                numHarvested++
+            system.run(() => {
+                randomPlace.dimension.setBlockType(randomPlace.location, "minecraft:air")
+            })
+        }
+    }
+    console.warn(numHarvested)
+    numHarvested++
+    system.run(() => {
+        player.playSound("dig.grass", {volume: 1, pitch: 1})
+        player.getComponent("inventory").container.addItem(new ItemStack("minecraft:wheat", numHarvested))
+        try {
+            player.getComponent("inventory").container.addItem(new ItemStack("minecraft:wheat_seeds", numHarvested*(Math.floor(Math.random()*4))))
+        } catch (e) {}
+        player["harvestDebounce"] = Date.now()
+    })
+
+})
+
+
 
 system.runInterval(() => {
     const players = world.getPlayers()

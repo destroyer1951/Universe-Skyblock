@@ -418,6 +418,16 @@ system.run(() => {
         item.setLore(["", "§r§uConsume: §e§lRIGHT CLICK/LT", "§r§7Consume to gain §fSpeed 1", "§r§7for §a20 minutes"])
     })
 
+    items.gumball = makeItem("minecraft:magma_cream", item => {
+        item.nameTag = "§r§fGumball"
+        item.setLore(["", "§r§uConsume: §e§lRIGHT CLICK/LT", "§r§7Consume to gain §fSpeed 1", "§r§7for §a60 minutes"])
+    })
+
+    items.miningTea = makeItem("minecraft:honey_bottle", item => {
+        item.nameTag = "§r§fMining Tea"
+        item.setLore(["", "§r§uConsume: §e§lRIGHT CLICK/LT", "§r§7Consume to gain §fHaste 1", "§r§7for §a15 minutes"])
+    })
+
 
 
 
@@ -428,6 +438,17 @@ system.run(() => {
         get() {
             return makeItem("minecraft:iron_axe", item => {
                 item.nameTag = "§r§fIron Axe"
+            })
+        }
+    })
+
+    Object.defineProperty(items, "rookieHoe", {
+        get() {
+            return makeItem("minecraft:stone_hoe", item => {
+                const stars = rollStars()
+                const starCount = (stars.match(/\*/g) || []).length
+                item.nameTag = "§r§fRookie Hoe"
+                item.setLore(["", `§r§7Luck: §a${(starCount*0.2).toFixed(1)}`, `§r§7Wheat Harvesting: §a${(65+starCount*1)}`, '', `§r§e${stars}`])
             })
         }
     })
